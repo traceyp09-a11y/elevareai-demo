@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import cors from 'cors';
 import path from 'path';
 import { KPICalculationService } from './services/kpiCalculations';
+import { HSEKPICalculationService } from './services/kpiCalculationsHSE';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -10,9 +11,10 @@ const PORT = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.json());
 
-// Initialize KPI service
+// Initialize KPI services
 const dbPath = path.join(__dirname, '../database/elevareiq.db');
 const kpiService = new KPICalculationService(dbPath);
+const hseKpiService = new HSEKPICalculationService(dbPath);
 
 // Health check
 app.get('/api/health', (req: Request, res: Response) => {
@@ -281,6 +283,250 @@ app.get('/api/company', (req: Request, res: Response) => {
   });
 });
 
+// ========== HSE (Health, Safety & Environment) API Endpoints ==========
+
+// Get all HSE KPIs for current quarter
+app.get('/api/hse/kpis/current', (req: Request, res: Response) => {
+  try {
+    const startDate = '2024-10-01';
+    const endDate = '2024-12-31';
+
+    const kpis = hseKpiService.getAllHSEKPIs(startDate, endDate);
+
+    res.json({
+      success: true,
+      period: { startDate, endDate, label: 'Q4 2024' },
+      kpis: kpis
+    });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Get all HSE KPIs for custom period
+app.get('/api/hse/kpis/period', (req: Request, res: Response) => {
+  try {
+    const { startDate, endDate } = req.query;
+
+    if (!startDate || !endDate) {
+      return res.status(400).json({
+        success: false,
+        error: 'startDate and endDate query parameters are required'
+      });
+    }
+
+    const kpis = hseKpiService.getAllHSEKPIs(startDate as string, endDate as string);
+
+    res.json({
+      success: true,
+      period: { startDate, endDate },
+      kpis: kpis
+    });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Individual HSE KPI endpoints
+
+app.get('/api/hse/kpis/trir', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = hseKpiService.calculateTRIR(startDate, endDate);
+    res.json({ success: true, kpi: 'TRIR (Total Recordable Incident Rate)', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/hse/kpis/ltifr', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = hseKpiService.calculateLTIFR(startDate, endDate);
+    res.json({ success: true, kpi: 'LTIFR (Lost Time Injury Frequency Rate)', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/hse/kpis/near-miss-rate', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = hseKpiService.calculateNearMissRate(startDate, endDate);
+    res.json({ success: true, kpi: 'Near Miss Reporting Rate', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/hse/kpis/safety-training-rate', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = hseKpiService.calculateSafetyTrainingRate(startDate, endDate);
+    res.json({ success: true, kpi: 'Safety Training Completion Rate', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/hse/kpis/ppe-compliance', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = hseKpiService.calculatePPEComplianceRate(startDate, endDate);
+    res.json({ success: true, kpi: 'PPE Compliance Rate', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/hse/kpis/environmental-compliance', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = hseKpiService.calculateEnvironmentalCompliance(startDate, endDate);
+    res.json({ success: true, kpi: 'Environmental Compliance Score', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/hse/kpis/safety-audit-score', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = hseKpiService.calculateSafetyAuditScore(startDate, endDate);
+    res.json({ success: true, kpi: 'Safety Audit Score', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/hse/kpis/investigation-closure-time', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = hseKpiService.calculateInvestigationClosureTime(startDate, endDate);
+    res.json({ success: true, kpi: 'Incident Investigation Closure Time', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/hse/kpis/hazard-identification-rate', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = hseKpiService.calculateHazardIdentificationRate(startDate, endDate);
+    res.json({ success: true, kpi: 'Hazard Identification Rate', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/hse/kpis/emergency-preparedness', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = hseKpiService.calculateEmergencyPreparednessScore(startDate, endDate);
+    res.json({ success: true, kpi: 'Emergency Preparedness Score', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// HSE Pain Points endpoint
+app.get('/api/hse/pain-points', (req: Request, res: Response) => {
+  const painPoints = [
+    {
+      rank: 1,
+      title: 'Workplace Injuries & Lost Time Incidents',
+      description: 'High-risk environments lead to injuries that cost companies directly and indirectly through lost productivity, workers comp, and morale impacts.',
+      relatedKPIs: ['TRIR', 'LTIFR', 'Investigation Closure Time'],
+      severity: 'Critical'
+    },
+    {
+      rank: 2,
+      title: 'Safety Compliance & Regulatory Requirements',
+      description: 'OSHA regulations, EPA requirements, and industry standards require constant vigilance. Non-compliance results in fines and shutdowns.',
+      relatedKPIs: ['Safety Audit Score', 'Environmental Compliance', 'Safety Training Rate'],
+      severity: 'Critical'
+    },
+    {
+      rank: 3,
+      title: 'PPE Compliance & Enforcement',
+      description: 'Ensuring consistent use of personal protective equipment across all operations remains a daily challenge, especially in fast-paced environments.',
+      relatedKPIs: ['PPE Compliance', 'Safety Observations', 'Incident Rate'],
+      severity: 'High'
+    },
+    {
+      rank: 4,
+      title: 'Safety Culture & Behavior Change',
+      description: 'Moving from compliance-based to proactive safety culture requires behavioral change, leadership commitment, and employee buy-in.',
+      relatedKPIs: ['Near Miss Rate', 'Hazard Identification Rate', 'Emergency Preparedness'],
+      severity: 'High'
+    },
+    {
+      rank: 5,
+      title: 'Incident Investigation & Root Cause Analysis',
+      description: 'Thorough investigations are time-consuming but critical. Many incidents repeat because root causes aren\'t properly identified and addressed.',
+      relatedKPIs: ['Investigation Closure Time', 'Repeat Incidents', 'Corrective Actions'],
+      severity: 'High'
+    },
+    {
+      rank: 6,
+      title: 'Environmental Impact & Sustainability',
+      description: 'Managing emissions, waste, water usage, and energy consumption while meeting production targets and staying within regulatory limits.',
+      relatedKPIs: ['Environmental Compliance', 'Emissions', 'Waste Management'],
+      severity: 'High'
+    },
+    {
+      rank: 7,
+      title: 'Safety Training & Certification Management',
+      description: 'Ensuring all employees maintain required certifications, complete training on time, and demonstrate competency in safety procedures.',
+      relatedKPIs: ['Safety Training Rate', 'Certification Status', 'Training Hours'],
+      severity: 'Medium'
+    },
+    {
+      rank: 8,
+      title: 'Near Miss & Hazard Reporting',
+      description: 'Encouraging proactive reporting of near misses and hazards without fear of punishment. Many incidents could be prevented with better reporting.',
+      relatedKPIs: ['Near Miss Rate', 'Hazard Identification Rate', 'Reporting Engagement'],
+      severity: 'Medium'
+    },
+    {
+      rank: 9,
+      title: 'Emergency Preparedness & Response',
+      description: 'Maintaining readiness for fires, chemical spills, natural disasters, and medical emergencies through regular drills and equipment maintenance.',
+      relatedKPIs: ['Emergency Preparedness', 'Drill Performance', 'Response Time'],
+      severity: 'Medium'
+    },
+    {
+      rank: 10,
+      title: 'Chemical Management & SDS Tracking',
+      description: 'Tracking hundreds of chemicals across multiple facilities, maintaining current Safety Data Sheets, and ensuring proper storage and handling.',
+      relatedKPIs: ['Chemical Inventory', 'SDS Current', 'Hazmat Incidents'],
+      severity: 'Medium'
+    }
+  ];
+
+  res.json({ success: true, painPoints });
+});
+
 // Error handling
 app.use((err: Error, req: Request, res: Response, next: any) => {
   console.error(err.stack);
@@ -295,13 +541,27 @@ app.use((err: Error, req: Request, res: Response, next: any) => {
 app.listen(PORT, () => {
   console.log(`\n🚀 ElevareIQ-MVP API Server running on port ${PORT}`);
   console.log(`📊 Dashboard: http://localhost:3000`);
-  console.log(`🔗 API Endpoints:`);
+  console.log(`\n🔗 HR Analytics API Endpoints:`);
   console.log(`   GET /api/health`);
   console.log(`   GET /api/company`);
   console.log(`   GET /api/pain-points`);
   console.log(`   GET /api/kpis/current`);
   console.log(`   GET /api/kpis/period?startDate=YYYY-MM-DD&endDate=YYYY-MM-DD`);
   console.log(`   GET /api/kpis/[metric-name]`);
+  console.log(`\n🦺 HSE Analytics API Endpoints:`);
+  console.log(`   GET /api/hse/pain-points`);
+  console.log(`   GET /api/hse/kpis/current`);
+  console.log(`   GET /api/hse/kpis/period?startDate=YYYY-MM-DD&endDate=YYYY-MM-DD`);
+  console.log(`   GET /api/hse/kpis/trir`);
+  console.log(`   GET /api/hse/kpis/ltifr`);
+  console.log(`   GET /api/hse/kpis/near-miss-rate`);
+  console.log(`   GET /api/hse/kpis/safety-training-rate`);
+  console.log(`   GET /api/hse/kpis/ppe-compliance`);
+  console.log(`   GET /api/hse/kpis/environmental-compliance`);
+  console.log(`   GET /api/hse/kpis/safety-audit-score`);
+  console.log(`   GET /api/hse/kpis/investigation-closure-time`);
+  console.log(`   GET /api/hse/kpis/hazard-identification-rate`);
+  console.log(`   GET /api/hse/kpis/emergency-preparedness`);
   console.log(`\n💡 All calculations are transparent and auditable\n`);
 });
 

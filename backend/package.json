@@ -8,7 +8,8 @@
     "build": "tsc",
     "start": "node dist/server.js",
     "init-db": "ts-node src/data/initDatabase.ts",
-    "seed-data": "ts-node src/data/seedData.ts"
+    "seed-data": "ts-node src/data/seedData.ts",
+    "seed-hse": "ts-node src/data/seedDataHSE.ts"
   },
   "keywords": ["hr", "analytics", "kpi", "dashboard"],
   "author": "ElevareIQ",
