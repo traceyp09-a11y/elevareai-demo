@@ -60,9 +60,6 @@ export default function ElevareLogo({ size = 'md', variant = 'dark' }: ElevareLo
         <div className={`font-bold text-xl tracking-tight ${textColor}`}>
           Elevare<span className={accentColor}>IQ</span>
         </div>
-        <div className="text-[10px] text-gray-400 uppercase tracking-wider">
-          HR Analytics
-        </div>
       </div>
     </div>
   );
