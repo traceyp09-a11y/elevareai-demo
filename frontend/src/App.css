@@ -1,0 +1,28 @@
+/* Additional custom styles */
+.metric-card {
+  @apply bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow duration-200;
+}
+
+.metric-value {
+  @apply text-3xl font-bold text-gray-900;
+}
+
+.metric-label {
+  @apply text-sm font-medium text-gray-600;
+}
+
+.status-good {
+  @apply text-green-600 bg-green-50;
+}
+
+.status-warning {
+  @apply text-yellow-600 bg-yellow-50;
+}
+
+.status-critical {
+  @apply text-red-600 bg-red-50;
+}
+
+.badge {
+  @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+}
