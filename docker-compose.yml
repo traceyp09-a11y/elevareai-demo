@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend
+    container_name: elevareiq-backend
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./backend/src:/app/src
+      - ./backend/database:/app/database
+    environment:
+      - NODE_ENV=development
+      - PORT=3001
+    restart: unless-stopped
+    networks:
+      - elevareiq-network
+
+  frontend:
+    build: ./frontend
+    container_name: elevareiq-frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend/src:/app/src
+      - ./frontend/public:/app/public
+      - ./frontend/index.html:/app/index.html
+    environment:
+      - NODE_ENV=development
+    restart: unless-stopped
+    depends_on:
+      - backend
+    networks:
+      - elevareiq-network
+
+networks:
+  elevareiq-network:
+    driver: bridge
