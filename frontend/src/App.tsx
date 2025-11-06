@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Dashboard from './pages/Dashboard';
 import KPIDetail from './pages/KPIDetail';
 import PainPoints from './pages/PainPoints';
+import CustomReports from './pages/CustomReports';
 import ElevareLogo from './components/ElevareLogo';
 import './App.css';
 
@@ -21,12 +22,19 @@ function App() {
               </div>
 
               {/* Navigation */}
-              <nav className="flex space-x-8">
+              <nav className="flex space-x-6">
                 <Link
                   to="/"
                   className="text-gray-300 hover:text-cyan-400 px-4 py-2 text-sm font-medium transition-all duration-200 relative group"
                 >
                   <span className="relative z-10">Dashboard</span>
+                  <div className="absolute inset-0 bg-cyan-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                </Link>
+                <Link
+                  to="/reports"
+                  className="text-gray-300 hover:text-cyan-400 px-4 py-2 text-sm font-medium transition-all duration-200 relative group"
+                >
+                  <span className="relative z-10">Custom Reports</span>
                   <div className="absolute inset-0 bg-cyan-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
                 </Link>
                 <Link
@@ -52,6 +60,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/kpi/:kpiName" element={<KPIDetail />} />
+            <Route path="/reports" element={<CustomReports />} />
             <Route path="/pain-points" element={<PainPoints />} />
           </Routes>
         </main>
