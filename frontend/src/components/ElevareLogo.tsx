@@ -58,7 +58,7 @@ export default function ElevareLogo({ size = 'md', variant = 'dark' }: ElevareLo
 
       <div className="ml-3 flex flex-col justify-center">
         <div className={`font-bold text-xl tracking-tight ${textColor}`}>
-          Elevare<span className={accentColor}>IQ</span>
+          Elevare<span className={accentColor}>AI</span>
         </div>
       </div>
     </div>
