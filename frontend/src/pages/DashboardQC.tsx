@@ -3,25 +3,22 @@ import { LineChart, Line, AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell, X
 import { TrendingUp, TrendingDown, Minus, AlertTriangle, CheckCircle2, XCircle, Activity } from 'lucide-react';
 
 interface KPIData {
-  name: string;
   value: number;
   displayValue: string;
-  unit: string;
-  status: 'excellent' | 'good' | 'warning' | 'critical';
-  trend: 'up' | 'down' | 'stable';
-  change: string;
   calculation: {
-    description: string;
     formula: string;
-    numerator: number;
-    denominator: number;
+    components: { [key: string]: any };
+    steps: string[];
   };
-  benchmark: {
+  trend?: {
+    previous: number;
+    change: number;
+    changePercent: number;
+  };
+  benchmark?: {
     value: number;
     status: 'below' | 'at' | 'above';
-    label: string;
   };
-  trend_data: Array<{ date: string; value: number }>;
 }
 
 interface APIResponse {
@@ -75,6 +72,26 @@ const DashboardQC: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
+  // Derive status from benchmark (simple logic for now)
+  const getKpiStatus = (kpi: KPIData, kpiName: string): string => {
+    if (!kpi.benchmark) return 'good';
+
+    const badMetrics = ['defectRatePPM', 'scrapRate', 'reworkRate', 'customerReturnRate', 'ncrRate', 'copq'];
+    const isBadMetric = badMetrics.includes(kpiName);
+
+    if (isBadMetric) {
+      // For "lower is better" metrics
+      if (kpi.benchmark.status === 'below') return 'excellent';
+      if (kpi.benchmark.status === 'at') return 'good';
+      return 'critical';
+    } else {
+      // For "higher is better" metrics
+      if (kpi.benchmark.status === 'above') return 'excellent';
+      if (kpi.benchmark.status === 'at') return 'good';
+      return 'warning';
+    }
+  };
+
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'excellent': return 'text-emerald-400';
@@ -105,23 +122,17 @@ const DashboardQC: React.FC = () => {
     }
   };
 
-  const getTrendIcon = (trend: string) => {
-    switch (trend) {
-      case 'up': return <TrendingUp className="w-4 h-4" />;
-      case 'down': return <TrendingDown className="w-4 h-4" />;
-      case 'stable': return <Minus className="w-4 h-4" />;
-      default: return <Minus className="w-4 h-4" />;
+  const getTrendDisplay = (kpi: KPIData) => {
+    if (!kpi.trend) return { icon: <Minus className="w-4 h-4" />, color: 'text-gray-400', text: 'No change' };
+
+    const changePercent = kpi.trend.changePercent;
+    if (Math.abs(changePercent) < 1) {
+      return { icon: <Minus className="w-4 h-4" />, color: 'text-gray-400', text: 'Stable' };
+    } else if (changePercent > 0) {
+      return { icon: <TrendingUp className="w-4 h-4" />, color: 'text-green-400', text: `+${changePercent.toFixed(1)}%` };
+    } else {
+      return { icon: <TrendingDown className="w-4 h-4" />, color: 'text-red-400', text: `${changePercent.toFixed(1)}%` };
     }
-  };
-
-  const getTrendColor = (trend: string, name: string) => {
-    // For some metrics, "up" is bad (defect rate, scrap rate, etc.)
-    const inverseTrendMetrics = ['defect_rate_ppm', 'scrap_rate', 'rework_rate', 'customer_return_rate', 'ncr_rate', 'copq'];
-    const isInverse = inverseTrendMetrics.includes(name);
-
-    if (trend === 'up') return isInverse ? 'text-red-400' : 'text-green-400';
-    if (trend === 'down') return isInverse ? 'text-green-400' : 'text-red-400';
-    return 'text-gray-400';
   };
 
   if (loading) {
@@ -186,172 +197,81 @@ const DashboardQC: React.FC = () => {
 
       {/* Alert Banner */}
       <div className="mb-6">
-        {kpiArray.filter(kpi => kpi.status === 'critical' || kpi.status === 'warning').length > 0 && (
-          <div className="bg-yellow-500/10 border border-yellow-500/50 rounded-lg p-4 flex items-start gap-3">
-            <AlertTriangle className="w-6 h-6 text-yellow-400 flex-shrink-0 mt-1" />
-            <div>
-              <h3 className="text-yellow-400 font-semibold mb-1">Quality Alerts Detected</h3>
-              <p className="text-gray-300 text-sm">
-                {kpiArray.filter(kpi => kpi.status === 'critical').length} critical and{' '}
-                {kpiArray.filter(kpi => kpi.status === 'warning').length} warning metrics require attention.
-              </p>
+        {(() => {
+          const criticalCount = kpiArray.filter(([key, kpi]) => getKpiStatus(kpi, key) === 'critical').length;
+          const warningCount = kpiArray.filter(([key, kpi]) => getKpiStatus(kpi, key) === 'warning').length;
+          return (criticalCount + warningCount) > 0 && (
+            <div className="bg-yellow-500/10 border border-yellow-500/50 rounded-lg p-4 flex items-start gap-3">
+              <AlertTriangle className="w-6 h-6 text-yellow-400 flex-shrink-0 mt-1" />
+              <div>
+                <h3 className="text-yellow-400 font-semibold mb-1">Quality Alerts Detected</h3>
+                <p className="text-gray-300 text-sm">
+                  {criticalCount} critical and {warningCount} warning metrics require attention.
+                </p>
+              </div>
             </div>
-          </div>
-        )}
+          );
+        })()}
       </div>
 
       {/* KPI Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
-        {kpiArray.map((kpi) => (
-          <div
-            key={kpi.key}
-            className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm border border-teal-500/30 rounded-xl p-6 hover:border-teal-400/50 transition-all duration-300 hover:shadow-lg hover:shadow-teal-500/20"
-          >
-            {/* KPI Header */}
-            <div className="flex items-start justify-between mb-4">
-              <div className="flex-1">
-                <h3 className="text-gray-400 text-sm font-medium mb-1">
-                  {kpi.name.replace(/_/g, ' ').toUpperCase()}
-                </h3>
-                <div className="flex items-baseline gap-2">
-                  <span className="text-3xl font-bold text-white">{kpi.displayValue}</span>
+        {kpiArray.map(([key, kpi]) => {
+          const status = getKpiStatus(kpi, key);
+          const trendInfo = getTrendDisplay(kpi);
+          return (
+            <div
+              key={key}
+              className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm border border-teal-500/30 rounded-xl p-6 hover:border-teal-400/50 transition-all duration-300 hover:shadow-lg hover:shadow-teal-500/20"
+            >
+              {/* KPI Header */}
+              <div className="flex items-start justify-between mb-4">
+                <div className="flex-1">
+                  <h3 className="text-gray-400 text-sm font-medium mb-1">
+                    {key.replace(/([A-Z])/g, ' $1').toUpperCase().trim()}
+                  </h3>
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-3xl font-bold text-white">{kpi.displayValue}</span>
+                  </div>
+                </div>
+                <div className={`${getStatusBgColor(status)} p-2 rounded-lg`}>
+                  {getStatusIcon(status)}
                 </div>
               </div>
-              <div className={`${getStatusBgColor(kpi.status)} p-2 rounded-lg`}>
-                {getStatusIcon(kpi.status)}
+
+              {/* Trend Indicator */}
+              <div className={`flex items-center gap-2 mb-4 ${trendInfo.color}`}>
+                {trendInfo.icon}
+                <span className="text-sm font-medium">{trendInfo.text}</span>
+              </div>
+
+              {/* Benchmark Comparison */}
+              <div className="border-t border-teal-500/20 pt-3 mt-auto">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="text-gray-500">Benchmark</span>
+                  <span className={getStatusColor(status)}>
+                    {kpi.benchmark ? kpi.benchmark.status : 'N/A'}
+                  </span>
+                </div>
               </div>
             </div>
-
-            {/* Trend Indicator */}
-            <div className={`flex items-center gap-2 mb-4 ${getTrendColor(kpi.trend, kpi.key)}`}>
-              {getTrendIcon(kpi.trend)}
-              <span className="text-sm font-medium">{kpi.change}</span>
-            </div>
-
-            {/* Mini Trend Chart */}
-            <div className="h-16 mb-4">
-              <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={kpi.trend_data}>
-                  <defs>
-                    <linearGradient id={`gradient-${kpi.key}`} x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#14b8a6" stopOpacity={0.3} />
-                      <stop offset="95%" stopColor="#14b8a6" stopOpacity={0} />
-                    </linearGradient>
-                  </defs>
-                  <Area
-                    type="monotone"
-                    dataKey="value"
-                    stroke="#14b8a6"
-                    strokeWidth={2}
-                    fill={`url(#gradient-${kpi.key})`}
-                    isAnimationActive={false}
-                  />
-                </AreaChart>
-              </ResponsiveContainer>
-            </div>
-
-            {/* Benchmark Comparison */}
-            <div className="border-t border-teal-500/20 pt-3">
-              <div className="flex items-center justify-between text-xs">
-                <span className="text-gray-500">Benchmark</span>
-                <span className={getStatusColor(kpi.status)}>{kpi.benchmark.label}</span>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Detailed Charts Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-        {/* Defect Rate PPM Trend */}
-        <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm border border-teal-500/30 rounded-xl p-6">
-          <h3 className="text-xl font-semibold text-teal-400 mb-4">Defect Rate Trend (PPM)</h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={kpiData.kpis.defect_rate_ppm.trend_data}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-              <XAxis dataKey="date" stroke="#94a3b8" style={{ fontSize: '12px' }} />
-              <YAxis stroke="#94a3b8" style={{ fontSize: '12px' }} />
-              <Tooltip
-                contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #14b8a6', borderRadius: '8px' }}
-                labelStyle={{ color: '#94a3b8' }}
-              />
-              <Line type="monotone" dataKey="value" stroke="#14b8a6" strokeWidth={3} dot={{ fill: '#14b8a6', r: 4 }} />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
-
-        {/* First Pass Yield Trend */}
-        <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm border border-teal-500/30 rounded-xl p-6">
-          <h3 className="text-xl font-semibold text-teal-400 mb-4">First Pass Yield Trend (%)</h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <AreaChart data={kpiData.kpis.first_pass_yield.trend_data}>
-              <defs>
-                <linearGradient id="fpyGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#10b981" stopOpacity={0.8} />
-                  <stop offset="95%" stopColor="#10b981" stopOpacity={0.1} />
-                </linearGradient>
-              </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-              <XAxis dataKey="date" stroke="#94a3b8" style={{ fontSize: '12px' }} />
-              <YAxis stroke="#94a3b8" style={{ fontSize: '12px' }} />
-              <Tooltip
-                contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #10b981', borderRadius: '8px' }}
-                labelStyle={{ color: '#94a3b8' }}
-              />
-              <Area type="monotone" dataKey="value" stroke="#10b981" strokeWidth={3} fill="url(#fpyGradient)" />
-            </AreaChart>
-          </ResponsiveContainer>
-        </div>
-
-        {/* Cost of Poor Quality Trend */}
-        <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm border border-teal-500/30 rounded-xl p-6">
-          <h3 className="text-xl font-semibold text-teal-400 mb-4">Cost of Poor Quality (% of Sales)</h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={kpiData.kpis.copq.trend_data}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-              <XAxis dataKey="date" stroke="#94a3b8" style={{ fontSize: '12px' }} />
-              <YAxis stroke="#94a3b8" style={{ fontSize: '12px' }} />
-              <Tooltip
-                contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #14b8a6', borderRadius: '8px' }}
-                labelStyle={{ color: '#94a3b8' }}
-              />
-              <Bar dataKey="value" fill="#14b8a6" radius={[8, 8, 0, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-
-        {/* Quality Audit Score Trend */}
-        <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm border border-teal-500/30 rounded-xl p-6">
-          <h3 className="text-xl font-semibold text-teal-400 mb-4">Quality Audit Score Trend</h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={kpiData.kpis.quality_audit_score.trend_data}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-              <XAxis dataKey="date" stroke="#94a3b8" style={{ fontSize: '12px' }} />
-              <YAxis stroke="#94a3b8" style={{ fontSize: '12px' }} domain={[0, 100]} />
-              <Tooltip
-                contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #10b981', borderRadius: '8px' }}
-                labelStyle={{ color: '#94a3b8' }}
-              />
-              <Line type="monotone" dataKey="value" stroke="#10b981" strokeWidth={3} dot={{ fill: '#10b981', r: 4 }} />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
+          );
+        })}
       </div>
 
       {/* Calculation Transparency Section */}
       <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm border border-teal-500/30 rounded-xl p-6">
         <h2 className="text-2xl font-bold text-teal-400 mb-6">KPI Calculation Details</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {kpiArray.slice(0, 4).map((kpi) => (
-            <div key={kpi.key} className="bg-slate-900/50 rounded-lg p-4 border border-teal-500/20">
-              <h4 className="text-teal-300 font-semibold mb-2">{kpi.name.replace(/_/g, ' ').toUpperCase()}</h4>
-              <p className="text-gray-400 text-sm mb-2">{kpi.calculation.description}</p>
+          {kpiArray.slice(0, 4).map(([key, kpi]) => (
+            <div key={key} className="bg-slate-900/50 rounded-lg p-4 border border-teal-500/20">
+              <h4 className="text-teal-300 font-semibold mb-2">{key.replace(/([A-Z])/g, ' $1').toUpperCase().trim()}</h4>
               <div className="bg-slate-950/50 rounded p-3 font-mono text-xs text-gray-300">
-                <div className="mb-1">{kpi.calculation.formula}</div>
-                <div className="text-teal-400">
-                  = {kpi.calculation.numerator.toLocaleString()} / {kpi.calculation.denominator.toLocaleString()}
-                </div>
-                <div className="text-emerald-400 font-semibold mt-1">= {kpi.displayValue}</div>
+                <div className="mb-2 text-gray-400">{kpi.calculation.formula}</div>
+                {kpi.calculation.steps.slice(0, 3).map((step, idx) => (
+                  <div key={idx} className="text-teal-400 mb-1">{step}</div>
+                ))}
+                <div className="text-emerald-400 font-semibold mt-2">Result: {kpi.displayValue}</div>
               </div>
             </div>
           ))}
