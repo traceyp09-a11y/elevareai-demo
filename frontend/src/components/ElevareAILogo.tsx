@@ -1,13 +1,14 @@
-interface ElevareLogoProps {
-  size?: 'sm' | 'md' | 'lg';
+interface ElevareAILogoProps {
+  size?: 'sm' | 'md' | 'lg' | 'xl';
   variant?: 'light' | 'dark';
 }
 
-export default function ElevareLogo({ size = 'md', variant = 'dark' }: ElevareLogoProps) {
+export default function ElevareAILogo({ size = 'md', variant = 'dark' }: ElevareAILogoProps) {
   const sizes = {
     sm: 'w-32 h-10',
     md: 'w-40 h-12',
-    lg: 'w-48 h-14'
+    lg: 'w-48 h-14',
+    xl: 'w-64 h-18'
   };
 
   const textColor = variant === 'dark' ? 'text-white' : 'text-gray-900';
@@ -23,19 +24,19 @@ export default function ElevareLogo({ size = 'md', variant = 'dark' }: ElevareLo
       >
         {/* Futuristic E icon with upward trend */}
         <defs>
-          <linearGradient id="elevareGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+          <linearGradient id="elevareAIGradient" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" style={{ stopColor: '#06b6d4', stopOpacity: 1 }} />
             <stop offset="100%" style={{ stopColor: '#3b82f6', stopOpacity: 1 }} />
           </linearGradient>
         </defs>
 
         {/* Outer ring */}
-        <circle cx="24" cy="24" r="22" stroke="url(#elevareGradient)" strokeWidth="2" opacity="0.3" />
+        <circle cx="24" cy="24" r="22" stroke="url(#elevareAIGradient)" strokeWidth="2" opacity="0.3" />
 
         {/* Inner design - stylized E with upward arrow */}
         <path
           d="M16 14 L32 14 M16 14 L16 34 M16 24 L28 24 M16 34 L32 34"
-          stroke="url(#elevareGradient)"
+          stroke="url(#elevareAIGradient)"
           strokeWidth="3"
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -44,7 +45,7 @@ export default function ElevareLogo({ size = 'md', variant = 'dark' }: ElevareLo
         {/* Upward trend arrow */}
         <path
           d="M28 28 L34 20 M34 20 L30 20 M34 20 L34 24"
-          stroke="url(#elevareGradient)"
+          stroke="url(#elevareAIGradient)"
           strokeWidth="2.5"
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -58,7 +59,7 @@ export default function ElevareLogo({ size = 'md', variant = 'dark' }: ElevareLo
 
       <div className="ml-3 flex flex-col justify-center">
         <div className={`font-bold text-xl tracking-tight ${textColor}`}>
-          Elevare<span className={accentColor}>IQ</span>
+          Elevare<span className={accentColor}>AI</span>
         </div>
       </div>
     </div>

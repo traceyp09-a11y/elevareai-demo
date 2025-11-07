@@ -1,0 +1,44 @@
+<svg width="200" height="60" viewBox="0 0 200 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- ElevareAI Logo - Light Version (for dark backgrounds) -->
+
+  <defs>
+    <linearGradient id="elevareGradientLight" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#06b6d4;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Icon -->
+  <g transform="translate(6, 6)">
+    <!-- Outer ring -->
+    <circle cx="24" cy="24" r="22" stroke="url(#elevareGradientLight)" stroke-width="2" opacity="0.3" />
+
+    <!-- Stylized E -->
+    <path
+      d="M16 14 L32 14 M16 14 L16 34 M16 24 L28 24 M16 34 L32 34"
+      stroke="url(#elevareGradientLight)"
+      stroke-width="3"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+
+    <!-- Upward trend arrow -->
+    <path
+      d="M28 28 L34 20 M34 20 L30 20 M34 20 L34 24"
+      stroke="url(#elevareGradientLight)"
+      stroke-width="2.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+
+    <!-- Accent dots -->
+    <circle cx="24" cy="8" r="1.5" fill="#06b6d4" opacity="0.6" />
+    <circle cx="8" cy="24" r="1.5" fill="#3b82f6" opacity="0.6" />
+    <circle cx="40" cy="24" r="1.5" fill="#06b6d4" opacity="0.6" />
+  </g>
+
+  <!-- Text -->
+  <text x="66" y="38" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="bold" fill="#ffffff">
+    Elevare<tspan fill="#06b6d4">AI</tspan>
+  </text>
+</svg>
