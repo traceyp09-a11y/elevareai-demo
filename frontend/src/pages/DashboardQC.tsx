@@ -172,10 +172,7 @@ const DashboardQC: React.FC = () => {
     );
   }
 
-  const kpiArray = Object.entries(kpiData.kpis).map(([key, value]) => ({
-    key,
-    ...value
-  }));
+  const kpiArray = Object.entries(kpiData.kpis);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 p-8">
