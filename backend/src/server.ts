@@ -3,6 +3,7 @@ import cors from 'cors';
 import path from 'path';
 import { KPICalculationService } from './services/kpiCalculations';
 import { HSEKPICalculationService } from './services/kpiCalculationsHSE';
+import { OpsKPICalculationService } from './services/kpiCalculationsOps';
 import { PredictiveAnalyticsService } from './services/predictiveAnalytics';
 
 const app = express();
@@ -16,6 +17,7 @@ app.use(express.json());
 const dbPath = path.join(__dirname, '../database/elevareiq.db');
 const kpiService = new KPICalculationService(dbPath);
 const hseKpiService = new HSEKPICalculationService(dbPath);
+const opsKpiService = new OpsKPICalculationService(dbPath);
 const predictiveService = new PredictiveAnalyticsService(dbPath);
 
 // Health check
@@ -522,6 +524,250 @@ app.get('/api/hse/pain-points', (req: Request, res: Response) => {
       title: 'Chemical Management & SDS Tracking',
       description: 'Tracking hundreds of chemicals across multiple facilities, maintaining current Safety Data Sheets, and ensuring proper storage and handling.',
       relatedKPIs: ['Chemical Inventory', 'SDS Current', 'Hazmat Incidents'],
+      severity: 'Medium'
+    }
+  ];
+
+  res.json({ success: true, painPoints });
+});
+
+// ========== Operations KPI API Endpoints ==========
+
+// Get all Operations KPIs for current quarter
+app.get('/api/ops/kpis/current', (req: Request, res: Response) => {
+  try {
+    const startDate = '2024-10-01';
+    const endDate = '2024-12-31';
+
+    const kpis = opsKpiService.getAllKPIs(startDate, endDate);
+
+    res.json({
+      success: true,
+      period: { startDate, endDate, label: 'Q4 2024' },
+      kpis: kpis
+    });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Get all Operations KPIs for custom period
+app.get('/api/ops/kpis/period', (req: Request, res: Response) => {
+  try {
+    const { startDate, endDate } = req.query;
+
+    if (!startDate || !endDate) {
+      return res.status(400).json({
+        success: false,
+        error: 'startDate and endDate query parameters are required'
+      });
+    }
+
+    const kpis = opsKpiService.getAllKPIs(startDate as string, endDate as string);
+
+    res.json({
+      success: true,
+      period: { startDate, endDate },
+      kpis: kpis
+    });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Individual Operations KPI endpoints
+
+app.get('/api/ops/kpis/on-time-delivery', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = opsKpiService.calculateOnTimeDelivery(startDate, endDate);
+    res.json({ success: true, kpi: 'On-Time Delivery (OTIF)', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/ops/kpis/schedule-adherence', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = opsKpiService.calculateScheduleAdherence(startDate, endDate);
+    res.json({ success: true, kpi: 'Production Schedule Adherence', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/ops/kpis/oee', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = opsKpiService.calculateOEE(startDate, endDate);
+    res.json({ success: true, kpi: 'Overall Equipment Effectiveness (OEE)', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/ops/kpis/first-pass-yield', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = opsKpiService.calculateFirstPassYield(startDate, endDate);
+    res.json({ success: true, kpi: 'First Pass Yield (FPY)', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/ops/kpis/inventory-turnover', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = opsKpiService.calculateInventoryTurnover(startDate, endDate);
+    res.json({ success: true, kpi: 'Inventory Turnover Ratio', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/ops/kpis/supplier-otd', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = opsKpiService.calculateSupplierOTD(startDate, endDate);
+    res.json({ success: true, kpi: 'Supplier On-Time Delivery', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/ops/kpis/cycle-time', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = opsKpiService.calculateCycleTime(startDate, endDate);
+    res.json({ success: true, kpi: 'Manufacturing Cycle Time', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/ops/kpis/capacity-utilization', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = opsKpiService.calculateCapacityUtilization(startDate, endDate);
+    res.json({ success: true, kpi: 'Capacity Utilization', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/ops/kpis/maintenance-compliance', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = opsKpiService.calculateMaintenanceCompliance(startDate, endDate);
+    res.json({ success: true, kpi: 'Maintenance Compliance', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/ops/kpis/cost-of-quality', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = opsKpiService.calculateCostOfQuality(startDate, endDate);
+    res.json({ success: true, kpi: 'Cost of Quality (COQ)', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Operations Pain Points endpoint
+app.get('/api/ops/pain-points', (req: Request, res: Response) => {
+  const painPoints = [
+    {
+      rank: 1,
+      title: 'Production Delays & Missed Deadlines',
+      description: 'Schedule slippage due to equipment issues, material shortages, and capacity constraints leads to late deliveries and customer dissatisfaction.',
+      relatedKPIs: ['Schedule Adherence', 'On-Time Delivery', 'Cycle Time'],
+      severity: 'Critical'
+    },
+    {
+      rank: 2,
+      title: 'Equipment Downtime & Maintenance Costs',
+      description: 'Unplanned equipment failures result in production losses, emergency repairs, and increased maintenance spending that erodes profitability.',
+      relatedKPIs: ['OEE', 'Maintenance Compliance', 'Downtime Hours'],
+      severity: 'Critical'
+    },
+    {
+      rank: 3,
+      title: 'Quality Control & Defect Rates',
+      description: 'First-pass yield issues create rework costs, scrap waste, and potential customer returns that damage reputation and margins.',
+      relatedKPIs: ['First Pass Yield', 'Cost of Quality', 'Defect Rate'],
+      severity: 'Critical'
+    },
+    {
+      rank: 4,
+      title: 'Inventory Management & Working Capital',
+      description: 'Balancing inventory to avoid stockouts while minimizing carrying costs ties up working capital and impacts cash flow.',
+      relatedKPIs: ['Inventory Turnover', 'Days Inventory Outstanding', 'Stockout Rate'],
+      severity: 'High'
+    },
+    {
+      rank: 5,
+      title: 'Supply Chain Disruptions',
+      description: 'Supplier delays, quality issues, and unreliable deliveries disrupt production schedules and force expedited shipping costs.',
+      relatedKPIs: ['Supplier On-Time Delivery', 'Supplier Quality Rating', 'Lead Time Variance'],
+      severity: 'High'
+    },
+    {
+      rank: 6,
+      title: 'Labor Capacity & Utilization',
+      description: 'Mismatches between workforce capacity and demand create overtime costs or idle time, impacting productivity and costs.',
+      relatedKPIs: ['Capacity Utilization', 'Labor Efficiency', 'Overtime Hours'],
+      severity: 'High'
+    },
+    {
+      rank: 7,
+      title: 'Customer Delivery Performance',
+      description: 'Late shipments, partial deliveries, and delivery errors damage customer relationships and create service recovery costs.',
+      relatedKPIs: ['On-Time Delivery', 'Perfect Order Rate', 'Customer Complaints'],
+      severity: 'High'
+    },
+    {
+      rank: 8,
+      title: 'Manufacturing Cycle Time Variability',
+      description: 'Inconsistent production cycle times make scheduling difficult, increase WIP inventory, and reduce predictability.',
+      relatedKPIs: ['Cycle Time', 'Cycle Time Variance', 'Schedule Stability'],
+      severity: 'Medium'
+    },
+    {
+      rank: 9,
+      title: 'Preventive Maintenance Compliance',
+      description: 'Deferred maintenance to meet production targets leads to breakdowns, safety risks, and higher long-term repair costs.',
+      relatedKPIs: ['Maintenance Compliance', 'PM Completion Rate', 'Emergency Work Orders'],
+      severity: 'Medium'
+    },
+    {
+      rank: 10,
+      title: 'Overall Equipment Effectiveness (OEE)',
+      description: 'Low OEE from availability, performance, and quality losses indicates untapped production capacity and efficiency opportunities.',
+      relatedKPIs: ['OEE', 'Availability', 'Performance Efficiency'],
       severity: 'Medium'
     }
   ];

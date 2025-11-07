@@ -5,6 +5,7 @@ import * as path from 'path';
 const dbPath = path.join(__dirname, '../../database/elevareiq.db');
 const schemaPath = path.join(__dirname, '../../database/schema.sql');
 const hseSchemaPath = path.join(__dirname, '../../database/schema-hse.sql');
+const opsSchemaPath = path.join(__dirname, '../../database/schema-ops.sql');
 
 // Remove existing database
 if (fs.existsSync(dbPath)) {
@@ -25,6 +26,11 @@ console.log('Main database schema created successfully.');
 const hseSchema = fs.readFileSync(hseSchemaPath, 'utf8');
 db.exec(hseSchema);
 console.log('HSE database schema created successfully.');
+
+// Read and execute Operations schema
+const opsSchema = fs.readFileSync(opsSchemaPath, 'utf8');
+db.exec(opsSchema);
+console.log('Operations database schema created successfully.');
 
 // Enable foreign keys
 db.pragma('foreign_keys = ON');

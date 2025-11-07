@@ -9,7 +9,8 @@
     "start": "node dist/server.js",
     "init-db": "ts-node src/data/initDatabase.ts",
     "seed-data": "ts-node src/data/seedData.ts",
-    "seed-hse": "ts-node src/data/seedDataHSE.ts"
+    "seed-hse": "ts-node src/data/seedDataHSE.ts",
+    "seed-ops": "ts-node src/data/seedDataOps.ts"
   },
   "keywords": ["hr", "analytics", "kpi", "dashboard"],
   "author": "ElevareIQ",

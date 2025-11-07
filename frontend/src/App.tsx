@@ -7,14 +7,17 @@ import DashboardHSE from './pages/DashboardHSE';
 import PainPointsHSE from './pages/PainPointsHSE';
 import PredictiveAnalytics from './pages/PredictiveAnalytics';
 import MobileSafetyApp from './pages/MobileSafetyApp';
+import DashboardOps from './pages/DashboardOps';
+import PainPointsOps from './pages/PainPointsOps';
 import ElevareLogo from './components/ElevareLogo';
 import './App.css';
 
 function AppContent() {
   const location = useLocation();
   const isHSE = location.pathname.startsWith('/hse');
+  const isOps = location.pathname.startsWith('/ops');
   const isExecutive = location.pathname.startsWith('/executive');
-  const currentDept = isHSE ? 'hse' : isExecutive ? 'executive' : 'hr';
+  const currentDept = isHSE ? 'hse' : isOps ? 'ops' : isExecutive ? 'executive' : 'hr';
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black">
@@ -45,6 +48,16 @@ function AppContent() {
               🦺 HSE Analytics
             </Link>
             <Link
+              to="/ops"
+              className={`px-4 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                currentDept === 'ops'
+                  ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/50'
+                  : 'bg-gray-800/50 text-gray-400 hover:bg-gray-700/50 hover:text-gray-300'
+              }`}
+            >
+              ⚙️ Operations Analytics
+            </Link>
+            <Link
               to="/executive"
               className={`px-4 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                 currentDept === 'executive'
@@ -64,7 +77,7 @@ function AppContent() {
               </Link>
               <div className="h-6 w-px bg-gray-700"></div>
               <span className="text-sm font-semibold text-cyan-400">
-                {currentDept === 'hr' ? 'HR Analytics' : currentDept === 'hse' ? 'HSE Analytics' : 'Executive View'}
+                {currentDept === 'hr' ? 'HR Analytics' : currentDept === 'hse' ? 'HSE Analytics' : currentDept === 'ops' ? 'Operations Analytics' : 'Executive View'}
               </span>
             </div>
 
@@ -127,6 +140,31 @@ function AppContent() {
                   </Link>
                 </>
               )}
+              {currentDept === 'ops' && (
+                <>
+                  <Link
+                    to="/ops"
+                    className="text-gray-300 hover:text-blue-400 px-4 py-2 text-sm font-medium transition-all duration-200 relative group"
+                  >
+                    <span className="relative z-10">Dashboard</span>
+                    <div className="absolute inset-0 bg-blue-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                  </Link>
+                  <Link
+                    to="/ops/reports"
+                    className="text-gray-300 hover:text-blue-400 px-4 py-2 text-sm font-medium transition-all duration-200 relative group"
+                  >
+                    <span className="relative z-10">Operations Reports</span>
+                    <div className="absolute inset-0 bg-blue-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                  </Link>
+                  <Link
+                    to="/ops/pain-points"
+                    className="text-gray-300 hover:text-blue-400 px-4 py-2 text-sm font-medium transition-all duration-200 relative group"
+                  >
+                    <span className="relative z-10">Pain Points</span>
+                    <div className="absolute inset-0 bg-blue-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                  </Link>
+                </>
+              )}
               {currentDept === 'executive' && (
                 <>
                   <Link
@@ -173,6 +211,12 @@ function AppContent() {
           <Route path="/hse/pain-points" element={<PainPointsHSE />} />
           <Route path="/hse/mobile" element={<MobileSafetyApp />} />
 
+          {/* Operations Analytics Routes */}
+          <Route path="/ops" element={<DashboardOps />} />
+          <Route path="/ops/kpi/:kpiName" element={<KPIDetail />} />
+          <Route path="/ops/reports" element={<CustomReports />} />
+          <Route path="/ops/pain-points" element={<PainPointsOps />} />
+
           {/* Executive Routes - Placeholder for now */}
           <Route path="/executive" element={
             <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white p-8">
@@ -193,7 +237,7 @@ function AppContent() {
       <footer className="bg-gray-900/80 backdrop-blur-sm border-t border-cyan-500/30 mt-12">
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <p className="text-center text-sm text-gray-400">
-            © 2024 ElevareIQ Platform | Multi-Department Analytics for C-Suite Executives |
+            © 2024 ElevareIQ Platform | HR • HSE • Operations Analytics for C-Suite Executives |
             <span className="ml-2 text-cyan-400">All Calculations Transparent & Auditable</span>
           </p>
         </div>
