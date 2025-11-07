@@ -9,6 +9,8 @@ import PredictiveAnalytics from './pages/PredictiveAnalytics';
 import MobileSafetyApp from './pages/MobileSafetyApp';
 import DashboardOps from './pages/DashboardOps';
 import PainPointsOps from './pages/PainPointsOps';
+import DashboardQC from './pages/DashboardQC';
+import PainPointsQC from './pages/PainPointsQC';
 import ElevareLogo from './components/ElevareLogo';
 import './App.css';
 
@@ -16,8 +18,9 @@ function AppContent() {
   const location = useLocation();
   const isHSE = location.pathname.startsWith('/hse');
   const isOps = location.pathname.startsWith('/ops');
+  const isQC = location.pathname.startsWith('/qc');
   const isExecutive = location.pathname.startsWith('/executive');
-  const currentDept = isHSE ? 'hse' : isOps ? 'ops' : isExecutive ? 'executive' : 'hr';
+  const currentDept = isHSE ? 'hse' : isOps ? 'ops' : isQC ? 'qc' : isExecutive ? 'executive' : 'hr';
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black">
@@ -58,6 +61,16 @@ function AppContent() {
               ⚙️ Operations Analytics
             </Link>
             <Link
+              to="/qc"
+              className={`px-4 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                currentDept === 'qc'
+                  ? 'bg-teal-500 text-white shadow-lg shadow-teal-500/50'
+                  : 'bg-gray-800/50 text-gray-400 hover:bg-gray-700/50 hover:text-gray-300'
+              }`}
+            >
+              ✓ Quality Control Analytics
+            </Link>
+            <Link
               to="/executive"
               className={`px-4 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                 currentDept === 'executive'
@@ -77,7 +90,7 @@ function AppContent() {
               </Link>
               <div className="h-6 w-px bg-gray-700"></div>
               <span className="text-sm font-semibold text-cyan-400">
-                {currentDept === 'hr' ? 'HR Analytics' : currentDept === 'hse' ? 'HSE Analytics' : currentDept === 'ops' ? 'Operations Analytics' : 'Executive View'}
+                {currentDept === 'hr' ? 'HR Analytics' : currentDept === 'hse' ? 'HSE Analytics' : currentDept === 'ops' ? 'Operations Analytics' : currentDept === 'qc' ? 'Quality Control Analytics' : 'Executive View'}
               </span>
             </div>
 
@@ -165,6 +178,31 @@ function AppContent() {
                   </Link>
                 </>
               )}
+              {currentDept === 'qc' && (
+                <>
+                  <Link
+                    to="/qc"
+                    className="text-gray-300 hover:text-teal-400 px-4 py-2 text-sm font-medium transition-all duration-200 relative group"
+                  >
+                    <span className="relative z-10">Dashboard</span>
+                    <div className="absolute inset-0 bg-teal-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                  </Link>
+                  <Link
+                    to="/qc/reports"
+                    className="text-gray-300 hover:text-teal-400 px-4 py-2 text-sm font-medium transition-all duration-200 relative group"
+                  >
+                    <span className="relative z-10">QC Reports</span>
+                    <div className="absolute inset-0 bg-teal-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                  </Link>
+                  <Link
+                    to="/qc/pain-points"
+                    className="text-gray-300 hover:text-teal-400 px-4 py-2 text-sm font-medium transition-all duration-200 relative group"
+                  >
+                    <span className="relative z-10">Pain Points</span>
+                    <div className="absolute inset-0 bg-teal-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                  </Link>
+                </>
+              )}
               {currentDept === 'executive' && (
                 <>
                   <Link
@@ -217,6 +255,12 @@ function AppContent() {
           <Route path="/ops/reports" element={<CustomReports />} />
           <Route path="/ops/pain-points" element={<PainPointsOps />} />
 
+          {/* Quality Control Analytics Routes */}
+          <Route path="/qc" element={<DashboardQC />} />
+          <Route path="/qc/kpi/:kpiName" element={<KPIDetail />} />
+          <Route path="/qc/reports" element={<CustomReports />} />
+          <Route path="/qc/pain-points" element={<PainPointsQC />} />
+
           {/* Executive Routes - Placeholder for now */}
           <Route path="/executive" element={
             <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white p-8">
@@ -237,7 +281,7 @@ function AppContent() {
       <footer className="bg-gray-900/80 backdrop-blur-sm border-t border-cyan-500/30 mt-12">
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <p className="text-center text-sm text-gray-400">
-            © 2024 ElevareIQ Platform | HR • HSE • Operations Analytics for C-Suite Executives |
+            © 2024 ElevareIQ Platform | HR • HSE • Operations • Quality Control Analytics for C-Suite Executives |
             <span className="ml-2 text-cyan-400">All Calculations Transparent & Auditable</span>
           </p>
         </div>

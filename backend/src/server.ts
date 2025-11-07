@@ -4,6 +4,7 @@ import path from 'path';
 import { KPICalculationService } from './services/kpiCalculations';
 import { HSEKPICalculationService } from './services/kpiCalculationsHSE';
 import { OpsKPICalculationService } from './services/kpiCalculationsOps';
+import { QCKPICalculationService } from './services/kpiCalculationsQC';
 import { PredictiveAnalyticsService } from './services/predictiveAnalytics';
 
 const app = express();
@@ -18,6 +19,7 @@ const dbPath = path.join(__dirname, '../database/elevareiq.db');
 const kpiService = new KPICalculationService(dbPath);
 const hseKpiService = new HSEKPICalculationService(dbPath);
 const opsKpiService = new OpsKPICalculationService(dbPath);
+const qcKpiService = new QCKPICalculationService(dbPath);
 const predictiveService = new PredictiveAnalyticsService(dbPath);
 
 // Health check
@@ -768,6 +770,250 @@ app.get('/api/ops/pain-points', (req: Request, res: Response) => {
       title: 'Overall Equipment Effectiveness (OEE)',
       description: 'Low OEE from availability, performance, and quality losses indicates untapped production capacity and efficiency opportunities.',
       relatedKPIs: ['OEE', 'Availability', 'Performance Efficiency'],
+      severity: 'Medium'
+    }
+  ];
+
+  res.json({ success: true, painPoints });
+});
+
+// ========== Quality Control (QC) KPI API Endpoints ==========
+
+// Get all QC KPIs for current quarter
+app.get('/api/qc/kpis/current', (req: Request, res: Response) => {
+  try {
+    const startDate = '2024-10-01';
+    const endDate = '2024-12-31';
+
+    const kpis = qcKpiService.getAllKPIs(startDate, endDate);
+
+    res.json({
+      success: true,
+      period: { startDate, endDate, label: 'Q4 2024' },
+      kpis: kpis
+    });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Get all QC KPIs for custom period
+app.get('/api/qc/kpis/period', (req: Request, res: Response) => {
+  try {
+    const { startDate, endDate } = req.query;
+
+    if (!startDate || !endDate) {
+      return res.status(400).json({
+        success: false,
+        error: 'startDate and endDate query parameters are required'
+      });
+    }
+
+    const kpis = qcKpiService.getAllKPIs(startDate as string, endDate as string);
+
+    res.json({
+      success: true,
+      period: { startDate, endDate },
+      kpis: kpis
+    });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Individual QC KPI endpoints
+
+app.get('/api/qc/kpis/defect-rate-ppm', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = qcKpiService.calculateDefectRatePPM(startDate, endDate);
+    res.json({ success: true, kpi: 'Defect Rate (PPM)', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/qc/kpis/first-pass-yield', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = qcKpiService.calculateFirstPassYield(startDate, endDate);
+    res.json({ success: true, kpi: 'First Pass Yield', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/qc/kpis/scrap-rate', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = qcKpiService.calculateScrapRate(startDate, endDate);
+    res.json({ success: true, kpi: 'Scrap Rate', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/qc/kpis/rework-rate', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = qcKpiService.calculateReworkRate(startDate, endDate);
+    res.json({ success: true, kpi: 'Rework Rate', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/qc/kpis/customer-return-rate', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = qcKpiService.calculateCustomerReturnRate(startDate, endDate);
+    res.json({ success: true, kpi: 'Customer Return Rate', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/qc/kpis/supplier-quality-index', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = qcKpiService.calculateSupplierQualityIndex(startDate, endDate);
+    res.json({ success: true, kpi: 'Supplier Quality Index', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/qc/kpis/ncr-rate', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = qcKpiService.calculateNCRRate(startDate, endDate);
+    res.json({ success: true, kpi: 'Non-Conformance Report Rate', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/qc/kpis/capa-effectiveness', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = qcKpiService.calculateCAPAEffectiveness(startDate, endDate);
+    res.json({ success: true, kpi: 'CAPA Effectiveness', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/qc/kpis/copq', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = qcKpiService.calculateCOPQ(startDate, endDate);
+    res.json({ success: true, kpi: 'Cost of Poor Quality (COPQ)', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/qc/kpis/quality-audit-score', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = qcKpiService.calculateQualityAuditScore(startDate, endDate);
+    res.json({ success: true, kpi: 'Quality Audit Score', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// QC Pain Points endpoint
+app.get('/api/qc/pain-points', (req: Request, res: Response) => {
+  const painPoints = [
+    {
+      rank: 1,
+      title: 'High Defect Rates Impacting Customer Satisfaction',
+      description: 'Excessive defects lead to customer complaints, returns, warranty claims, and damage to brand reputation and market position.',
+      relatedKPIs: ['Defect Rate (PPM)', 'First Pass Yield', 'Customer Return Rate'],
+      severity: 'Critical'
+    },
+    {
+      rank: 2,
+      title: 'Inconsistent Quality Across Production Batches',
+      description: 'Variation between batches creates unpredictable quality levels, making it difficult to maintain consistent product standards.',
+      relatedKPIs: ['First Pass Yield', 'Defect Rate (PPM)', 'Quality Audit Score'],
+      severity: 'Critical'
+    },
+    {
+      rank: 3,
+      title: 'Supplier Quality Issues & Incoming Defects',
+      description: 'Poor supplier quality disrupts production, increases inspection costs, and leads to production delays and rework.',
+      relatedKPIs: ['Supplier Quality Index', 'NCR Rate', 'Scrap Rate'],
+      severity: 'Critical'
+    },
+    {
+      rank: 4,
+      title: 'Rework Costs Eroding Profit Margins',
+      description: 'High rework rates consume labor hours, materials, and capacity that could be used for value-added production activities.',
+      relatedKPIs: ['Rework Rate', 'Cost of Poor Quality', 'First Pass Yield'],
+      severity: 'High'
+    },
+    {
+      rank: 5,
+      title: 'Customer Complaints & Warranty Claims',
+      description: 'Field failures and customer dissatisfaction result in costly warranty work, product replacements, and potential liability exposure.',
+      relatedKPIs: ['Customer Return Rate', 'Cost of Poor Quality', 'CAPA Effectiveness'],
+      severity: 'High'
+    },
+    {
+      rank: 6,
+      title: 'Slow Root Cause Analysis & Corrective Actions',
+      description: 'Delayed problem resolution allows quality issues to persist and repeat, increasing costs and customer impact.',
+      relatedKPIs: ['CAPA Effectiveness', 'NCR Rate', 'Quality Audit Score'],
+      severity: 'High'
+    },
+    {
+      rank: 7,
+      title: 'Lack of Real-Time Quality Visibility',
+      description: 'Without real-time quality data, problems are discovered too late, missing opportunities for early intervention and prevention.',
+      relatedKPIs: ['Defect Rate (PPM)', 'First Pass Yield', 'NCR Rate'],
+      severity: 'High'
+    },
+    {
+      rank: 8,
+      title: 'Inspector Training & Competency Gaps',
+      description: 'Inadequate inspector training leads to inconsistent inspection results, missed defects, and false rejections.',
+      relatedKPIs: ['Quality Audit Score', 'First Pass Yield', 'NCR Rate'],
+      severity: 'Medium'
+    },
+    {
+      rank: 9,
+      title: 'Documentation & Traceability Challenges',
+      description: 'Poor documentation makes it difficult to trace defects to root causes, conduct recalls, and demonstrate regulatory compliance.',
+      relatedKPIs: ['Quality Audit Score', 'CAPA Effectiveness', 'NCR Rate'],
+      severity: 'Medium'
+    },
+    {
+      rank: 10,
+      title: 'Measurement System Accuracy & Calibration',
+      description: 'Inaccurate or uncalibrated measurement equipment produces unreliable data, leading to wrong decisions and quality escapes.',
+      relatedKPIs: ['Quality Audit Score', 'Defect Rate (PPM)', 'Supplier Quality Index'],
       severity: 'Medium'
     }
   ];
