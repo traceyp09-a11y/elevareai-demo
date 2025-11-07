@@ -39,7 +39,7 @@ function weightedPick<T>(items: T[], weights: number[]): T {
 
 // Get facility and employee data
 const facilities = db.prepare('SELECT id, name, type FROM facilities').all() as any[];
-const employees = db.prepare('SELECT id, employee_id, department FROM employees WHERE status = "Active" LIMIT 200').all() as any[];
+const employees = db.prepare("SELECT id, employee_id, department FROM employees WHERE status = 'Active' LIMIT 200").all() as any[];
 
 console.log('1. Seeding Near Miss Reports...');
 const insertNearMiss = db.prepare(`
