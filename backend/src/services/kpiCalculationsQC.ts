@@ -56,7 +56,7 @@ export class QCKPICalculationService {
         components: {
           totalInspected: inspectionData.total_inspected || 0,
           totalFailed: inspectionData.total_failed || 0,
-          defectTypes: defect_types.defect_types || 0,
+          defectTypes: defectData.defect_types || 0,
           period: `${startDate} to ${endDate}`
         },
         steps: [
