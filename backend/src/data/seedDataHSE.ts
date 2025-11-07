@@ -358,7 +358,7 @@ const certificationTypes = [
 
 employees.slice(0, 150).forEach(employee => {
   const numCerts = randomInt(1, 3);
-  const selectedCerts = [];
+  const selectedCerts: string[] = [];
 
   for (let i = 0; i < numCerts; i++) {
     let cert = randomPick(certificationTypes);
