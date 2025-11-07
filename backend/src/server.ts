@@ -3,6 +3,7 @@ import cors from 'cors';
 import path from 'path';
 import { KPICalculationService } from './services/kpiCalculations';
 import { HSEKPICalculationService } from './services/kpiCalculationsHSE';
+import { PredictiveAnalyticsService } from './services/predictiveAnalytics';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -11,10 +12,11 @@ const PORT = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.json());
 
-// Initialize KPI services
+// Initialize services
 const dbPath = path.join(__dirname, '../database/elevareiq.db');
 const kpiService = new KPICalculationService(dbPath);
 const hseKpiService = new HSEKPICalculationService(dbPath);
+const predictiveService = new PredictiveAnalyticsService(dbPath);
 
 // Health check
 app.get('/api/health', (req: Request, res: Response) => {
@@ -527,6 +529,58 @@ app.get('/api/hse/pain-points', (req: Request, res: Response) => {
   res.json({ success: true, painPoints });
 });
 
+// ========== Predictive Analytics API Endpoints ==========
+
+// Get all predictive analytics
+app.get('/api/predictive/all', (req: Request, res: Response) => {
+  try {
+    const analytics = predictiveService.getAllPredictiveAnalytics();
+    res.json({ success: true, ...analytics });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Get risk scores
+app.get('/api/predictive/risk-scores', (req: Request, res: Response) => {
+  try {
+    const riskScores = predictiveService.calculateRiskScores();
+    res.json({ success: true, riskScores });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Get forecasts
+app.get('/api/predictive/forecasts', (req: Request, res: Response) => {
+  try {
+    const forecasts = predictiveService.forecastSafetyMetrics();
+    res.json({ success: true, forecasts });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Get anomalies
+app.get('/api/predictive/anomalies', (req: Request, res: Response) => {
+  try {
+    const anomalies = predictiveService.detectAnomalies();
+    res.json({ success: true, anomalies });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Get insights
+app.get('/api/predictive/insights', (req: Request, res: Response) => {
+  try {
+    const insights = predictiveService.generateInsights();
+    res.json({ success: true, insights });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
 // Error handling
 app.use((err: Error, req: Request, res: Response, next: any) => {
   console.error(err.stack);
@@ -562,6 +616,12 @@ app.listen(PORT, () => {
   console.log(`   GET /api/hse/kpis/investigation-closure-time`);
   console.log(`   GET /api/hse/kpis/hazard-identification-rate`);
   console.log(`   GET /api/hse/kpis/emergency-preparedness`);
+  console.log(`\n🔮 Predictive Analytics API Endpoints:`);
+  console.log(`   GET /api/predictive/all`);
+  console.log(`   GET /api/predictive/risk-scores`);
+  console.log(`   GET /api/predictive/forecasts`);
+  console.log(`   GET /api/predictive/anomalies`);
+  console.log(`   GET /api/predictive/insights`);
   console.log(`\n💡 All calculations are transparent and auditable\n`);
 });
 

@@ -5,6 +5,7 @@ import PainPoints from './pages/PainPoints';
 import CustomReports from './pages/CustomReports';
 import DashboardHSE from './pages/DashboardHSE';
 import PainPointsHSE from './pages/PainPointsHSE';
+import PredictiveAnalytics from './pages/PredictiveAnalytics';
 import ElevareLogo from './components/ElevareLogo';
 import './App.css';
 
@@ -103,6 +104,13 @@ function AppContent() {
                     <div className="absolute inset-0 bg-cyan-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   </Link>
                   <Link
+                    to="/hse/predictive"
+                    className="text-gray-300 hover:text-purple-400 px-4 py-2 text-sm font-medium transition-all duration-200 relative group"
+                  >
+                    <span className="relative z-10">🔮 Predictive Analytics</span>
+                    <div className="absolute inset-0 bg-purple-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                  </Link>
+                  <Link
                     to="/hse/reports"
                     className="text-gray-300 hover:text-cyan-400 px-4 py-2 text-sm font-medium transition-all duration-200 relative group"
                   >
@@ -159,6 +167,7 @@ function AppContent() {
           {/* HSE Analytics Routes */}
           <Route path="/hse" element={<DashboardHSE />} />
           <Route path="/hse/kpi/:kpiName" element={<KPIDetail />} />
+          <Route path="/hse/predictive" element={<PredictiveAnalytics />} />
           <Route path="/hse/reports" element={<CustomReports />} />
           <Route path="/hse/pain-points" element={<PainPointsHSE />} />
 

@@ -440,6 +440,15 @@ export default function DashboardHSE() {
         {/* Quick Actions */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Link
+            to="/hse/predictive"
+            className="bg-gradient-to-r from-purple-500/10 via-pink-500/10 to-purple-500/10 border border-purple-500/30 rounded-xl p-6 hover:border-purple-400/60 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-purple-500/50"
+          >
+            <div className="text-2xl mb-2">🔮</div>
+            <h3 className="text-lg font-semibold mb-2">Predictive Analytics</h3>
+            <p className="text-gray-400 text-sm">AI-powered risk prediction and forecasting</p>
+          </Link>
+
+          <Link
             to="/hse/pain-points"
             className="bg-gradient-to-r from-cyan-500/10 to-blue-500/10 border border-cyan-500/30 rounded-xl p-6 hover:border-cyan-400/60 transition-all duration-300 hover:scale-105"
           >
@@ -455,15 +464,6 @@ export default function DashboardHSE() {
             <div className="text-2xl mb-2">📊</div>
             <h3 className="text-lg font-semibold mb-2">Custom Reports</h3>
             <p className="text-gray-400 text-sm">Generate detailed HSE reports</p>
-          </Link>
-
-          <Link
-            to="/hse/incidents"
-            className="bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/30 rounded-xl p-6 hover:border-purple-400/60 transition-all duration-300 hover:scale-105"
-          >
-            <div className="text-2xl mb-2">📋</div>
-            <h3 className="text-lg font-semibold mb-2">Incident Tracker</h3>
-            <p className="text-gray-400 text-sm">Track and manage safety incidents</p>
           </Link>
         </div>
       </div>
