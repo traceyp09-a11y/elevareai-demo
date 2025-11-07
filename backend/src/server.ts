@@ -529,7 +529,174 @@ app.get('/api/hse/pain-points', (req: Request, res: Response) => {
   res.json({ success: true, painPoints });
 });
 
-// ========== Predictive Analytics API Endpoints ==========
+// ========== Mobile Safety Reporting API Endpoints ==========
+
+// Submit incident report
+app.post('/api/mobile/report/incident', (req: Request, res: Response) => {
+  try {
+    const { facilityId, department, employeeId, description, incidentType, severity, location, latitude, longitude, photoUrls } = req.body;
+
+    const db = new (require('better-sqlite3'))(require('path').join(__dirname, '../database/elevareiq.db'));
+
+    const incidentId = `INC-MOB-${Date.now()}`;
+    const incidentDate = new Date().toISOString().split('T')[0];
+
+    const insert = db.prepare(`
+      INSERT INTO safety_incidents (
+        incident_id, incident_date, facility_id, department, employee_id,
+        incident_type, severity, description, recordable, lost_work_days
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1, 0)
+    `);
+
+    const result = insert.run(incidentId, incidentDate, facilityId, department, employeeId, incidentType, severity, description);
+
+    db.close();
+
+    res.json({
+      success: true,
+      message: 'Incident report submitted successfully',
+      incidentId,
+      reportId: result.lastInsertRowid
+    });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Submit near miss report
+app.post('/api/mobile/report/near-miss', (req: Request, res: Response) => {
+  try {
+    const { facilityId, department, employeeId, description, potentialSeverity, hazardType, location, latitude, longitude } = req.body;
+
+    const db = new (require('better-sqlite3'))(require('path').join(__dirname, '../database/elevareiq.db'));
+
+    const nearMissId = `NM-MOB-${Date.now()}`;
+    const reportDate = new Date().toISOString().split('T')[0];
+
+    const insert = db.prepare(`
+      INSERT INTO hse_near_misses (
+        near_miss_id, report_date, facility_id, department, reported_by_employee_id,
+        description, potential_severity, hazard_type, corrective_action, action_completed
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'Under review', 0)
+    `);
+
+    const result = insert.run(nearMissId, reportDate, facilityId, department, employeeId, description, potentialSeverity, hazardType);
+
+    db.close();
+
+    res.json({
+      success: true,
+      message: 'Near miss report submitted successfully',
+      nearMissId,
+      reportId: result.lastInsertRowid
+    });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Submit hazard report
+app.post('/api/mobile/report/hazard', (req: Request, res: Response) => {
+  try {
+    const { facilityId, department, employeeId, hazardType, hazardCategory, locationDescription, severityLevel, probability, description, latitude, longitude } = req.body;
+
+    const db = new (require('better-sqlite3'))(require('path').join(__dirname, '../database/elevareiq.db'));
+
+    const hazardId = `HAZ-MOB-${Date.now()}`;
+    const reportDate = new Date().toISOString().split('T')[0];
+
+    const severityMap: { [key: string]: number } = { 'Low': 1, 'Medium': 2, 'High': 3, 'Critical': 4 };
+    const probabilityMap: { [key: string]: number } = { 'Rare': 1, 'Unlikely': 2, 'Possible': 3, 'Likely': 4, 'Almost Certain': 5 };
+    const riskRating = (severityMap[severityLevel] || 2) * (probabilityMap[probability] || 3);
+
+    const insert = db.prepare(`
+      INSERT INTO hse_hazard_reports (
+        hazard_id, report_date, facility_id, department, reported_by_employee_id,
+        hazard_type, hazard_category, location_description, severity_level, probability,
+        risk_rating, description, photos_attached, status
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 'Open')
+    `);
+
+    const result = insert.run(hazardId, reportDate, facilityId, department, employeeId, hazardType, hazardCategory, locationDescription, severityLevel, probability, riskRating, description);
+
+    db.close();
+
+    res.json({
+      success: true,
+      message: 'Hazard report submitted successfully',
+      hazardId,
+      reportId: result.lastInsertRowid,
+      riskRating
+    });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Get mobile user's submitted reports
+app.get('/api/mobile/reports/:employeeId', (req: Request, res: Response) => {
+  try {
+    const { employeeId } = req.params;
+    const db = new (require('better-sqlite3'))(require('path').join(__dirname, '../database/elevareiq.db'));
+
+    const incidents = db.prepare(`
+      SELECT incident_id as id, incident_date as date, incident_type as type, severity, description, 'incident' as reportType
+      FROM safety_incidents
+      WHERE employee_id = ?
+      ORDER BY incident_date DESC
+      LIMIT 20
+    `).all(employeeId);
+
+    const nearMisses = db.prepare(`
+      SELECT near_miss_id as id, report_date as date, hazard_type as type, potential_severity as severity, description, 'near-miss' as reportType
+      FROM hse_near_misses
+      WHERE reported_by_employee_id = ?
+      ORDER BY report_date DESC
+      LIMIT 20
+    `).all(employeeId);
+
+    const hazards = db.prepare(`
+      SELECT hazard_id as id, report_date as date, hazard_category as type, severity_level as severity, description, status, 'hazard' as reportType
+      FROM hse_hazard_reports
+      WHERE reported_by_employee_id = ?
+      ORDER BY report_date DESC
+      LIMIT 20
+    `).all(employeeId);
+
+    db.close();
+
+    const allReports = [...incidents, ...nearMisses, ...hazards].sort((a: any, b: any) =>
+      new Date(b.date).getTime() - new Date(a.date).getTime()
+    );
+
+    res.json({
+      success: true,
+      reports: allReports,
+      totals: {
+        incidents: incidents.length,
+        nearMisses: nearMisses.length,
+        hazards: hazards.length
+      }
+    });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Get facilities list for mobile
+app.get('/api/mobile/facilities', (req: Request, res: Response) => {
+  try {
+    const db = new (require('better-sqlite3'))(require('path').join(__dirname, '../database/elevareiq.db'));
+    const facilities = db.prepare('SELECT id, name, type, city, state FROM facilities').all();
+    db.close();
+
+    res.json({ success: true, facilities });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Error handling
 
 // Get all predictive analytics
 app.get('/api/predictive/all', (req: Request, res: Response) => {
@@ -622,6 +789,12 @@ app.listen(PORT, () => {
   console.log(`   GET /api/predictive/forecasts`);
   console.log(`   GET /api/predictive/anomalies`);
   console.log(`   GET /api/predictive/insights`);
+  console.log(`\n📱 Mobile Safety Reporting API Endpoints:`);
+  console.log(`   POST /api/mobile/report/incident`);
+  console.log(`   POST /api/mobile/report/near-miss`);
+  console.log(`   POST /api/mobile/report/hazard`);
+  console.log(`   GET /api/mobile/reports/:employeeId`);
+  console.log(`   GET /api/mobile/facilities`);
   console.log(`\n💡 All calculations are transparent and auditable\n`);
 });
 

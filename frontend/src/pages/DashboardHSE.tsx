@@ -438,7 +438,7 @@ export default function DashboardHSE() {
         </div>
 
         {/* Quick Actions */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <Link
             to="/hse/predictive"
             className="bg-gradient-to-r from-purple-500/10 via-pink-500/10 to-purple-500/10 border border-purple-500/30 rounded-xl p-6 hover:border-purple-400/60 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-purple-500/50"
@@ -446,6 +446,15 @@ export default function DashboardHSE() {
             <div className="text-2xl mb-2">🔮</div>
             <h3 className="text-lg font-semibold mb-2">Predictive Analytics</h3>
             <p className="text-gray-400 text-sm">AI-powered risk prediction and forecasting</p>
+          </Link>
+
+          <Link
+            to="/hse/mobile"
+            className="bg-gradient-to-r from-green-500/10 to-emerald-500/10 border border-green-500/30 rounded-xl p-6 hover:border-green-400/60 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-green-500/50"
+          >
+            <div className="text-2xl mb-2">📱</div>
+            <h3 className="text-lg font-semibold mb-2">Mobile Reporter</h3>
+            <p className="text-gray-400 text-sm">Report incidents from mobile devices</p>
           </Link>
 
           <Link

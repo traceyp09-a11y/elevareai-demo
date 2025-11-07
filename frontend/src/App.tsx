@@ -6,6 +6,7 @@ import CustomReports from './pages/CustomReports';
 import DashboardHSE from './pages/DashboardHSE';
 import PainPointsHSE from './pages/PainPointsHSE';
 import PredictiveAnalytics from './pages/PredictiveAnalytics';
+import MobileSafetyApp from './pages/MobileSafetyApp';
 import ElevareLogo from './components/ElevareLogo';
 import './App.css';
 
@@ -170,6 +171,7 @@ function AppContent() {
           <Route path="/hse/predictive" element={<PredictiveAnalytics />} />
           <Route path="/hse/reports" element={<CustomReports />} />
           <Route path="/hse/pain-points" element={<PainPointsHSE />} />
+          <Route path="/hse/mobile" element={<MobileSafetyApp />} />
 
           {/* Executive Routes - Placeholder for now */}
           <Route path="/executive" element={
