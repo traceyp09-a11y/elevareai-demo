@@ -945,80 +945,208 @@ app.get('/api/qc/kpis/quality-audit-score', (req: Request, res: Response) => {
 
 // QC Pain Points endpoint
 app.get('/api/qc/pain-points', (req: Request, res: Response) => {
-  const painPoints = [
+  const pain_points = [
     {
-      rank: 1,
+      id: 'qc-pp-001',
       title: 'High Defect Rates Impacting Customer Satisfaction',
-      description: 'Excessive defects lead to customer complaints, returns, warranty claims, and damage to brand reputation and market position.',
-      relatedKPIs: ['Defect Rate (PPM)', 'First Pass Yield', 'Customer Return Rate'],
-      severity: 'Critical'
+      description: 'Defect rate at 31,440 PPM is 6x above industry benchmark of 5,000 PPM, leading to customer complaints, returns, and brand damage.',
+      impact: 'Revenue loss from customer attrition, warranty costs, and potential regulatory penalties',
+      severity: 'Critical',
+      affected_metric: 'Defect Rate (PPM)',
+      current_value: '31,440 PPM',
+      target_value: '5,000 PPM',
+      estimated_cost: '$450,000/year',
+      recommended_actions: [
+        'Implement Statistical Process Control (SPC) on critical processes',
+        'Conduct root cause analysis on top 3 defect types',
+        'Invest in automated inspection systems to catch defects earlier',
+        'Train production staff on quality standards and defect prevention'
+      ],
+      responsible_department: 'Quality Control',
+      timeline: '90 days'
     },
     {
-      rank: 2,
-      title: 'Inconsistent Quality Across Production Batches',
-      description: 'Variation between batches creates unpredictable quality levels, making it difficult to maintain consistent product standards.',
-      relatedKPIs: ['First Pass Yield', 'Defect Rate (PPM)', 'Quality Audit Score'],
-      severity: 'Critical'
+      id: 'qc-pp-002',
+      title: 'Customer Return Rate Exceeding Acceptable Limits',
+      description: 'Customer return rate at 31.37% is 15x higher than the 2% benchmark, indicating serious quality escapes to the field.',
+      impact: 'Direct financial loss, customer dissatisfaction, and competitive disadvantage',
+      severity: 'Critical',
+      affected_metric: 'Customer Return Rate',
+      current_value: '31.37%',
+      target_value: '2.0%',
+      estimated_cost: '$380,000/year',
+      recommended_actions: [
+        'Strengthen final inspection protocols before shipment',
+        'Implement customer complaint tracking and trend analysis',
+        'Conduct field failure analysis on returned products',
+        'Improve packaging and handling procedures to prevent damage'
+      ],
+      responsible_department: 'Quality Control & Customer Service',
+      timeline: '60 days'
     },
     {
-      rank: 3,
-      title: 'Supplier Quality Issues & Incoming Defects',
-      description: 'Poor supplier quality disrupts production, increases inspection costs, and leads to production delays and rework.',
-      relatedKPIs: ['Supplier Quality Index', 'NCR Rate', 'Scrap Rate'],
-      severity: 'Critical'
+      id: 'qc-pp-003',
+      title: 'Excessive Scrap Costs Reducing Profitability',
+      description: 'Scrap rate at 15.90% is 5x above the 3% target, consuming $320K in materials and reducing profit margins.',
+      impact: 'Material waste, increased production costs, and reduced competitiveness',
+      severity: 'Critical',
+      affected_metric: 'Scrap Rate',
+      current_value: '15.90%',
+      target_value: '3.0%',
+      estimated_cost: '$320,873/year',
+      recommended_actions: [
+        'Analyze scrap by root cause (operator error, design, setup)',
+        'Implement mistake-proofing (poka-yoke) on high-scrap processes',
+        'Improve setup procedures and operator training',
+        'Review design specifications for manufacturability'
+      ],
+      responsible_department: 'Manufacturing & Engineering',
+      timeline: '90 days'
     },
     {
-      rank: 4,
-      title: 'Rework Costs Eroding Profit Margins',
-      description: 'High rework rates consume labor hours, materials, and capacity that could be used for value-added production activities.',
-      relatedKPIs: ['Rework Rate', 'Cost of Poor Quality', 'First Pass Yield'],
-      severity: 'High'
+      id: 'qc-pp-004',
+      title: 'High Non-Conformance Report (NCR) Rate',
+      description: 'NCR rate at 20.42% indicates frequent quality issues requiring formal investigation and corrective action.',
+      impact: 'Administrative burden, production delays, and systemic quality problems',
+      severity: 'High',
+      affected_metric: 'NCR Rate',
+      current_value: '20.42%',
+      target_value: '5.0%',
+      estimated_cost: '$180,000/year',
+      recommended_actions: [
+        'Categorize NCRs by type (supplier, internal, customer) and address root causes',
+        'Implement preventive controls to reduce recurrence',
+        'Streamline NCR investigation and closure process',
+        'Track CAPA effectiveness to ensure problems don\'t repeat'
+      ],
+      responsible_department: 'Quality Assurance',
+      timeline: '120 days'
     },
     {
-      rank: 5,
-      title: 'Customer Complaints & Warranty Claims',
-      description: 'Field failures and customer dissatisfaction result in costly warranty work, product replacements, and potential liability exposure.',
-      relatedKPIs: ['Customer Return Rate', 'Cost of Poor Quality', 'CAPA Effectiveness'],
-      severity: 'High'
+      id: 'qc-pp-005',
+      title: 'Cost of Poor Quality (COPQ) Above Target',
+      description: 'COPQ at 11.71% of sales is more than double the 5% target, representing significant financial waste.',
+      impact: 'Direct hit to bottom line profitability and competitiveness',
+      severity: 'High',
+      affected_metric: 'Cost of Poor Quality',
+      current_value: '11.71% of sales',
+      target_value: '5.0% of sales',
+      estimated_cost: '$443,640/year',
+      recommended_actions: [
+        'Break down COPQ into prevention, appraisal, internal, and external failure costs',
+        'Shift spending from failure costs to prevention activities',
+        'Benchmark COPQ against industry leaders',
+        'Set quarterly COPQ reduction targets and track progress'
+      ],
+      responsible_department: 'Finance & Quality',
+      timeline: '180 days'
     },
     {
-      rank: 6,
-      title: 'Slow Root Cause Analysis & Corrective Actions',
-      description: 'Delayed problem resolution allows quality issues to persist and repeat, increasing costs and customer impact.',
-      relatedKPIs: ['CAPA Effectiveness', 'NCR Rate', 'Quality Audit Score'],
-      severity: 'High'
+      id: 'qc-pp-006',
+      title: 'Inconsistent Supplier Quality Performance',
+      description: 'Supplier Quality Index at 96.38% is below the 97% target, with 238 rejected parts out of 6,568 inspected.',
+      impact: 'Production delays, increased incoming inspection costs, and quality escapes',
+      severity: 'High',
+      affected_metric: 'Supplier Quality Index',
+      current_value: '96.38%',
+      target_value: '97.0%',
+      estimated_cost: '$125,000/year',
+      recommended_actions: [
+        'Conduct supplier quality audits for underperforming vendors',
+        'Implement supplier scorecards with quality, delivery, and cost metrics',
+        'Require supplier CAPAs for quality issues',
+        'Consider supplier consolidation or replacement for chronic poor performers'
+      ],
+      responsible_department: 'Procurement & Quality',
+      timeline: '90 days'
     },
     {
-      rank: 7,
-      title: 'Lack of Real-Time Quality Visibility',
-      description: 'Without real-time quality data, problems are discovered too late, missing opportunities for early intervention and prevention.',
-      relatedKPIs: ['Defect Rate (PPM)', 'First Pass Yield', 'NCR Rate'],
-      severity: 'High'
+      id: 'qc-pp-007',
+      title: 'Rework Consuming Production Capacity',
+      description: 'Rework rate at 3.04% consumes 2,030 labor hours and $158K annually that could be used for value-added production.',
+      impact: 'Reduced capacity, increased lead times, and higher labor costs',
+      severity: 'Medium',
+      affected_metric: 'Rework Rate',
+      current_value: '3.04%',
+      target_value: '1.0%',
+      estimated_cost: '$158,113/year',
+      recommended_actions: [
+        'Analyze rework by process and identify top contributors',
+        'Implement in-process inspection to catch defects earlier',
+        'Improve work instructions and operator training',
+        'Invest in process capability improvements (Cpk targets)'
+      ],
+      responsible_department: 'Manufacturing',
+      timeline: '120 days'
     },
     {
-      rank: 8,
-      title: 'Inspector Training & Competency Gaps',
-      description: 'Inadequate inspector training leads to inconsistent inspection results, missed defects, and false rejections.',
-      relatedKPIs: ['Quality Audit Score', 'First Pass Yield', 'NCR Rate'],
-      severity: 'Medium'
+      id: 'qc-pp-008',
+      title: 'CAPA Closure Delays and Effectiveness Gaps',
+      description: 'While CAPA effectiveness is 90%, 2 CAPAs are overdue, and average closure time of 24.9 days needs improvement.',
+      impact: 'Recurring quality issues and delayed problem resolution',
+      severity: 'Medium',
+      affected_metric: 'CAPA Effectiveness',
+      current_value: '90.0%',
+      target_value: '95.0%',
+      estimated_cost: '$75,000/year',
+      recommended_actions: [
+        'Assign CAPA owners with clear accountability and deadlines',
+        'Implement CAPA tracking dashboard for management visibility',
+        'Verify CAPA effectiveness through follow-up audits',
+        'Train staff on effective root cause analysis techniques (5-Why, Fishbone)'
+      ],
+      responsible_department: 'Quality Assurance',
+      timeline: '60 days'
     },
     {
-      rank: 9,
-      title: 'Documentation & Traceability Challenges',
-      description: 'Poor documentation makes it difficult to trace defects to root causes, conduct recalls, and demonstrate regulatory compliance.',
-      relatedKPIs: ['Quality Audit Score', 'CAPA Effectiveness', 'NCR Rate'],
-      severity: 'Medium'
+      id: 'qc-pp-009',
+      title: 'Quality Audit Findings Requiring Follow-Up',
+      description: 'Audit score at 85.5 is acceptable, but 2 critical findings and 10 major findings need corrective action.',
+      impact: 'Regulatory risk, certification issues, and potential customer audit failures',
+      severity: 'Medium',
+      affected_metric: 'Quality Audit Score',
+      current_value: '85.5/100',
+      target_value: '90.0/100',
+      estimated_cost: '$50,000/year',
+      recommended_actions: [
+        'Address all critical and major audit findings within 30 days',
+        'Conduct internal audits more frequently to catch issues early',
+        'Provide auditor training on ISO 9001 and industry standards',
+        'Implement audit finding tracking and verification system'
+      ],
+      responsible_department: 'Quality Management',
+      timeline: '30 days (critical findings)'
     },
     {
-      rank: 10,
-      title: 'Measurement System Accuracy & Calibration',
-      description: 'Inaccurate or uncalibrated measurement equipment produces unreliable data, leading to wrong decisions and quality escapes.',
-      relatedKPIs: ['Quality Audit Score', 'Defect Rate (PPM)', 'Supplier Quality Index'],
-      severity: 'Medium'
+      id: 'qc-pp-010',
+      title: 'Lack of Real-Time Quality Data Visibility',
+      description: 'Quality data is collected but not analyzed in real-time, missing opportunities for early intervention and prevention.',
+      impact: 'Delayed problem detection, reactive firefighting, and missed improvement opportunities',
+      severity: 'Medium',
+      affected_metric: 'Multiple KPIs',
+      current_value: 'Daily/Weekly reporting',
+      target_value: 'Real-time dashboards',
+      estimated_cost: '$100,000/year (opportunity cost)',
+      recommended_actions: [
+        'Implement real-time quality dashboards with alerts for out-of-control conditions',
+        'Integrate inspection data with production systems for live tracking',
+        'Train managers on data-driven decision making',
+        'Deploy mobile quality apps for shop floor visibility'
+      ],
+      responsible_department: 'IT & Quality',
+      timeline: '90 days'
     }
   ];
 
-  res.json({ success: true, painPoints });
+  res.json({
+    success: true,
+    period: {
+      startDate: '2024-10-01',
+      endDate: '2024-12-31',
+      label: 'Q4 2024'
+    },
+    pain_points
+  });
 });
 
 // ========== Mobile Safety Reporting API Endpoints ==========
