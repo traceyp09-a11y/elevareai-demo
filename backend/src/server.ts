@@ -5,6 +5,7 @@ import { KPICalculationService } from './services/kpiCalculations';
 import { HSEKPICalculationService } from './services/kpiCalculationsHSE';
 import { OpsKPICalculationService } from './services/kpiCalculationsOps';
 import { QCKPICalculationService } from './services/kpiCalculationsQC';
+import { SupplyChainKPICalculationService } from './services/kpiCalculationsSupplyChain';
 import { PredictiveAnalyticsService } from './services/predictiveAnalytics';
 
 const app = express();
@@ -20,6 +21,7 @@ const kpiService = new KPICalculationService(dbPath);
 const hseKpiService = new HSEKPICalculationService(dbPath);
 const opsKpiService = new OpsKPICalculationService(dbPath);
 const qcKpiService = new QCKPICalculationService(dbPath);
+const scKpiService = new SupplyChainKPICalculationService(dbPath);
 const predictiveService = new PredictiveAnalyticsService(dbPath);
 
 // Health check
@@ -1135,6 +1137,378 @@ app.get('/api/qc/pain-points', (req: Request, res: Response) => {
       ],
       responsible_department: 'IT & Quality',
       timeline: '90 days'
+    }
+  ];
+
+  res.json({
+    success: true,
+    period: {
+      startDate: '2024-10-01',
+      endDate: '2024-12-31',
+      label: 'Q4 2024'
+    },
+    pain_points
+  });
+});
+
+// ========== Supply Chain Analytics API Endpoints ==========
+
+// Get all Supply Chain KPIs for current quarter
+app.get('/api/supplychain/kpis/current', (req: Request, res: Response) => {
+  try {
+    const startDate = '2024-10-01';
+    const endDate = '2024-12-31';
+
+    const kpis = scKpiService.getAllKPIs(startDate, endDate);
+
+    res.json({
+      success: true,
+      period: { startDate, endDate, label: 'Q4 2024' },
+      kpis: kpis
+    });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Get all Supply Chain KPIs for custom period
+app.get('/api/supplychain/kpis/period', (req: Request, res: Response) => {
+  try {
+    const { startDate, endDate } = req.query;
+
+    if (!startDate || !endDate) {
+      return res.status(400).json({
+        success: false,
+        error: 'startDate and endDate query parameters are required'
+      });
+    }
+
+    const kpis = scKpiService.getAllKPIs(startDate as string, endDate as string);
+
+    res.json({
+      success: true,
+      period: { startDate, endDate },
+      kpis: kpis
+    });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Individual Supply Chain KPI endpoints
+
+app.get('/api/supplychain/kpi/perfect-order-rate', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = scKpiService.calculatePerfectOrderRate(startDate, endDate);
+    res.json({ success: true, kpi: 'Perfect Order Rate', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/supplychain/kpi/otif', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = scKpiService.calculateOTIF(startDate, endDate);
+    res.json({ success: true, kpi: 'OTIF (On-Time In-Full)', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/supplychain/kpi/inventory-turnover', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = scKpiService.calculateInventoryTurnover(startDate, endDate);
+    res.json({ success: true, kpi: 'Inventory Turnover', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/supplychain/kpi/dso', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = scKpiService.calculateDSO(startDate, endDate);
+    res.json({ success: true, kpi: 'Days Sales Outstanding (DSO)', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/supplychain/kpi/cash-to-cash-cycle', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = scKpiService.calculateCashToCashCycle(startDate, endDate);
+    res.json({ success: true, kpi: 'Cash-to-Cash Cycle Time', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/supplychain/kpi/supplier-lead-time', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = scKpiService.calculateSupplierLeadTime(startDate, endDate);
+    res.json({ success: true, kpi: 'Supplier Lead Time', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/supplychain/kpi/freight-cost-pct', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = scKpiService.calculateFreightCostPercentage(startDate, endDate);
+    res.json({ success: true, kpi: 'Freight Cost % of Sales', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/supplychain/kpi/warehouse-utilization', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = scKpiService.calculateWarehouseUtilization(startDate, endDate);
+    res.json({ success: true, kpi: 'Warehouse Capacity Utilization', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/supplychain/kpi/order-accuracy', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = scKpiService.calculateOrderAccuracy(startDate, endDate);
+    res.json({ success: true, kpi: 'Order Accuracy Rate', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/supplychain/kpi/sc-cost-pct', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = scKpiService.calculateSCCostPercentage(startDate, endDate);
+    res.json({ success: true, kpi: 'Supply Chain Cost % of Revenue', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Supply Chain Pain Points endpoint
+app.get('/api/supplychain/pain-points', (req: Request, res: Response) => {
+  const pain_points = [
+    {
+      id: 'sc-pp-001',
+      title: 'Low Perfect Order Rate Impacting Customer Satisfaction',
+      description: 'Perfect Order Rate at 72.58% is significantly below the industry benchmark of 92.5%, indicating frequent issues with on-time, in-full, and accurate deliveries.',
+      impact: 'Customer dissatisfaction, increased service costs, and potential loss of key accounts',
+      severity: 'Critical',
+      affected_metric: 'Perfect Order Rate',
+      current_value: '72.58%',
+      target_value: '92.5%',
+      estimated_cost: '$580,000/year',
+      recommended_actions: [
+        'Implement real-time order tracking and exception management system',
+        'Root cause analysis on delivery failures (late, incomplete, inaccurate)',
+        'Improve coordination between warehousing, transportation, and customer service',
+        'Establish order fulfillment process controls and performance dashboards'
+      ],
+      responsible_department: 'Supply Chain & Logistics',
+      timeline: '120 days'
+    },
+    {
+      id: 'sc-pp-002',
+      title: 'OTIF Performance Below Target Affecting Reliability',
+      description: 'On-Time In-Full delivery at 70.96% is well below the 87.5% benchmark, damaging customer trust and competitiveness.',
+      impact: 'Penalties from retail customers, reduced order volumes, and competitive disadvantage',
+      severity: 'Critical',
+      affected_metric: 'OTIF Delivery Rate',
+      current_value: '70.96%',
+      target_value: '87.5%',
+      estimated_cost: '$420,000/year',
+      recommended_actions: [
+        'Analyze delivery failures by root cause (inventory, transportation, forecasting)',
+        'Improve demand forecasting accuracy to ensure product availability',
+        'Optimize transportation routes and carrier performance',
+        'Implement safety stock policies for critical SKUs'
+      ],
+      responsible_department: 'Logistics & Demand Planning',
+      timeline: '90 days'
+    },
+    {
+      id: 'sc-pp-003',
+      title: 'Slow Inventory Turnover Tying Up Working Capital',
+      description: 'Inventory turnover at 6.78x is below the 10x benchmark, indicating excess inventory and slow-moving stock.',
+      impact: 'Cash tied up in inventory, increased carrying costs, and risk of obsolescence',
+      severity: 'High',
+      affected_metric: 'Inventory Turnover',
+      current_value: '6.78x',
+      target_value: '10x',
+      estimated_cost: '$650,000/year (opportunity cost)',
+      recommended_actions: [
+        'Conduct ABC analysis to identify slow-moving and obsolete inventory',
+        'Implement inventory optimization tools (EOQ, safety stock calculations)',
+        'Improve demand forecasting to reduce overstocking',
+        'Establish consignment or vendor-managed inventory (VMI) with key suppliers'
+      ],
+      responsible_department: 'Inventory Management & Planning',
+      timeline: '180 days'
+    },
+    {
+      id: 'sc-pp-004',
+      title: 'Extended Days Sales Outstanding (DSO) Straining Cash Flow',
+      description: 'DSO at 47.3 days exceeds the 38-day benchmark, delaying cash collection and impacting working capital.',
+      impact: 'Cash flow constraints, increased need for credit facilities, and reduced financial flexibility',
+      severity: 'High',
+      affected_metric: 'Days Sales Outstanding',
+      current_value: '47.3 days',
+      target_value: '38 days',
+      estimated_cost: '$290,000/year (financing costs)',
+      recommended_actions: [
+        'Implement automated invoicing and payment reminder systems',
+        'Offer early payment discounts to incentivize faster payment',
+        'Review customer credit terms and enforce payment policies',
+        'Segment customers by payment behavior and manage proactively'
+      ],
+      responsible_department: 'Finance & Accounts Receivable',
+      timeline: '60 days'
+    },
+    {
+      id: 'sc-pp-005',
+      title: 'Long Cash-to-Cash Cycle Time Reducing Liquidity',
+      description: 'Cash-to-Cash cycle at 76.4 days is above the 45-day target, indicating cash is tied up too long in operations.',
+      impact: 'Limited cash availability for growth initiatives and increased financing requirements',
+      severity: 'High',
+      affected_metric: 'Cash-to-Cash Cycle Time',
+      current_value: '76.4 days',
+      target_value: '45 days',
+      estimated_cost: '$520,000/year (opportunity cost)',
+      recommended_actions: [
+        'Reduce DIO through better inventory management (see inventory turnover)',
+        'Accelerate DSO through improved collections (see DSO)',
+        'Negotiate extended payment terms with suppliers to increase DPO',
+        'Implement supply chain finance solutions'
+      ],
+      responsible_department: 'CFO & Supply Chain Leadership',
+      timeline: '180 days'
+    },
+    {
+      id: 'sc-pp-006',
+      title: 'Supplier Lead Times Too Long for Market Responsiveness',
+      description: 'Average supplier lead time of 28.8 days exceeds the 21-day benchmark, reducing agility and increasing inventory needs.',
+      impact: 'Slower response to market changes, higher safety stock requirements, and competitive disadvantage',
+      severity: 'Medium',
+      affected_metric: 'Supplier Lead Time',
+      current_value: '28.8 days',
+      target_value: '21 days',
+      estimated_cost: '$180,000/year',
+      recommended_actions: [
+        'Conduct supplier segmentation and develop local/regional sourcing strategies',
+        'Negotiate lead time reductions with key suppliers',
+        'Implement vendor scorecards tracking lead time performance',
+        'Consider dual sourcing for critical components to improve flexibility'
+      ],
+      responsible_department: 'Procurement & Supplier Management',
+      timeline: '120 days'
+    },
+    {
+      id: 'sc-pp-007',
+      title: 'High Freight Costs Reducing Profit Margins',
+      description: 'Freight costs at 5.87% of sales exceed the 4.5% benchmark, directly impacting bottom-line profitability.',
+      impact: 'Reduced profit margins and price competitiveness',
+      severity: 'Medium',
+      affected_metric: 'Freight Cost % of Sales',
+      current_value: '5.87%',
+      target_value: '4.5%',
+      estimated_cost: '$520,000/year',
+      recommended_actions: [
+        'Conduct freight spend analysis by lane, mode, and carrier',
+        'Consolidate shipments and optimize truckload utilization',
+        'Renegotiate carrier contracts and explore multi-modal transportation',
+        'Implement transportation management system (TMS) for route optimization'
+      ],
+      responsible_department: 'Transportation & Logistics',
+      timeline: '90 days'
+    },
+    {
+      id: 'sc-pp-008',
+      title: 'Warehouse Space Inefficiencies Driving Up Costs',
+      description: 'Warehouse capacity utilization at 67.50% is below the optimal 80-85% range, indicating underutilized space or poor layout.',
+      impact: 'Higher fixed costs per unit stored and potential need for additional warehouse space',
+      severity: 'Medium',
+      affected_metric: 'Warehouse Capacity Utilization',
+      current_value: '67.50%',
+      target_value: '82.5%',
+      estimated_cost: '$220,000/year',
+      recommended_actions: [
+        'Conduct warehouse layout optimization and slotting analysis',
+        'Implement vertical storage solutions (racking, mezzanines)',
+        'Reduce slow-moving inventory to free up space',
+        'Consider warehouse automation for better space utilization'
+      ],
+      responsible_department: 'Warehousing & Distribution',
+      timeline: '120 days'
+    },
+    {
+      id: 'sc-pp-009',
+      title: 'Order Inaccuracy Creating Customer Service Issues',
+      description: 'Order accuracy at 92.13% is below the 96.5% benchmark, leading to returns, complaints, and rework.',
+      impact: 'Customer dissatisfaction, increased reverse logistics costs, and administrative burden',
+      severity: 'Medium',
+      affected_metric: 'Order Accuracy Rate',
+      current_value: '92.13%',
+      target_value: '96.5%',
+      estimated_cost: '$170,000/year',
+      recommended_actions: [
+        'Implement barcode scanning and pick-to-light systems in warehouse',
+        'Conduct error-proofing (poka-yoke) in picking and packing processes',
+        'Train warehouse staff on quality and accuracy standards',
+        'Track error types and implement targeted improvements'
+      ],
+      responsible_department: 'Warehouse Operations',
+      timeline: '60 days'
+    },
+    {
+      id: 'sc-pp-010',
+      title: 'Elevated Supply Chain Costs Impacting Competitiveness',
+      description: 'Supply Chain costs at 8.25% of revenue exceed the 6.5% benchmark, reducing overall company profitability.',
+      impact: 'Lower profit margins, reduced pricing flexibility, and competitive disadvantage',
+      severity: 'High',
+      affected_metric: 'Supply Chain Cost % of Revenue',
+      current_value: '8.25%',
+      target_value: '6.5%',
+      estimated_cost: '$665,000/year',
+      recommended_actions: [
+        'Conduct detailed cost breakdown by category (transport, warehouse, inventory carrying, procurement)',
+        'Benchmark costs against industry leaders and identify improvement opportunities',
+        'Implement lean supply chain initiatives to eliminate waste',
+        'Invest in supply chain technology (WMS, TMS, advanced planning) for efficiency'
+      ],
+      responsible_department: 'Chief Supply Chain Officer',
+      timeline: '180 days'
     }
   ];
 

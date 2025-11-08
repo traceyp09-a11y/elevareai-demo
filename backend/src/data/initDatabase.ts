@@ -7,6 +7,7 @@ const schemaPath = path.join(__dirname, '../../database/schema.sql');
 const hseSchemaPath = path.join(__dirname, '../../database/schema-hse.sql');
 const opsSchemaPath = path.join(__dirname, '../../database/schema-ops.sql');
 const qcSchemaPath = path.join(__dirname, '../../database/schema-qc.sql');
+const scSchemaPath = path.join(__dirname, '../../database/schema-supplychain.sql');
 
 // Remove existing database
 if (fs.existsSync(dbPath)) {
@@ -37,6 +38,11 @@ console.log('Operations database schema created successfully.');
 const qcSchema = fs.readFileSync(qcSchemaPath, 'utf8');
 db.exec(qcSchema);
 console.log('QC database schema created successfully.');
+
+// Read and execute Supply Chain schema
+const scSchema = fs.readFileSync(scSchemaPath, 'utf8');
+db.exec(scSchema);
+console.log('Supply Chain database schema created successfully.');
 
 // Enable foreign keys
 db.pragma('foreign_keys = ON');
