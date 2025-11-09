@@ -318,15 +318,29 @@ const DashboardFinance: React.FC = () => {
         </div>
       )}
 
+      {/* Separator */}
+      <div className="my-8 border-t-2 border-green-500/30"></div>
+
       {/* Pain Points Section */}
-      <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-6">
-        <h2 className="text-2xl font-bold text-white mb-6">
-          <span className="bg-gradient-to-r from-green-400 to-emerald-500 bg-clip-text text-transparent">
-            Critical Finance Pain Points
-          </span>
-        </h2>
-        <div className="space-y-4">
-          {painPoints.map((painPoint) => (
+      <div className="bg-gray-800/50 border-2 border-green-500 rounded-lg p-6">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-2xl font-bold text-white">
+            <span className="bg-gradient-to-r from-green-400 to-emerald-500 bg-clip-text text-transparent">
+              Critical Finance Pain Points
+            </span>
+          </h2>
+          <div className="bg-green-500/20 px-4 py-2 rounded-lg border border-green-500/50">
+            <span className="text-green-400 font-bold">{painPoints.length} Issues Identified</span>
+          </div>
+        </div>
+
+        {painPoints.length === 0 ? (
+          <div className="text-center py-8 text-gray-400">
+            <p>No pain points data available. Check API connection.</p>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {painPoints.map((painPoint) => (
             <details
               key={painPoint.id}
               className={`p-4 rounded-lg border ${getSeverityColor(painPoint.severity)}`}
@@ -377,8 +391,9 @@ const DashboardFinance: React.FC = () => {
                 </div>
               </div>
             </details>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
