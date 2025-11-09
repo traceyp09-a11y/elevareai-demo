@@ -16,7 +16,8 @@
     "init:finance": "ts-node src/scripts/initFinance.ts",
     "init:administration": "ts-node src/scripts/initAdministration.ts",
     "init:sales": "ts-node src/scripts/initSales.ts",
-    "init:customer-success": "ts-node src/scripts/initCustomerSuccess.ts"
+    "init:customer-success": "ts-node src/scripts/initCustomerSuccess.ts",
+    "init:marketing": "ts-node src/scripts/initMarketing.ts"
   },
   "keywords": ["hr", "analytics", "kpi", "dashboard"],
   "author": "ElevareIQ",

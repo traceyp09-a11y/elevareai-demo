@@ -10,6 +10,7 @@ import { FinanceKPICalculationService } from './services/kpiCalculationsFinance'
 import { AdminKPICalculationService } from './services/kpiCalculationsAdministration';
 import { SalesKPICalculationService } from './services/kpiCalculationsSales';
 import { CustomerSuccessKPICalculationService } from './services/kpiCalculationsCustomerSuccess';
+import { MarketingKPICalculationService } from './services/kpiCalculationsMarketing';
 import { PredictiveAnalyticsService } from './services/predictiveAnalytics';
 
 const app = express();
@@ -30,6 +31,7 @@ const financeKpiService = new FinanceKPICalculationService(dbPath);
 const adminKpiService = new AdminKPICalculationService(dbPath);
 const salesKpiService = new SalesKPICalculationService(dbPath);
 const csKpiService = new CustomerSuccessKPICalculationService(dbPath);
+const marketingKpiService = new MarketingKPICalculationService(dbPath);
 const predictiveService = new PredictiveAnalyticsService(dbPath);
 
 // Health check
@@ -2964,6 +2966,290 @@ app.get('/api/customer-success/pain-points', (req: Request, res: Response) => {
     impact: `Current: ${pp.current_value} | Target: ${pp.target_value}. ${pp.description}`,
     recommendation: pp.recommended_actions.join('. ') + '.',
     estimatedCost: pp.estimated_cost
+  }));
+
+  res.json({
+    success: true,
+    count: painPoints.length,
+    painPoints
+  });
+});
+
+// ========== Marketing Analytics API Endpoints ==========
+
+// Get current Marketing KPIs (Q4 2024)
+app.get('/api/marketing/kpis/current', (req: Request, res: Response) => {
+  const startDate = '2024-10-01';
+  const endDate = '2024-12-31';
+
+  const kpis = marketingKpiService.getAllKPIs(startDate, endDate);
+
+  res.json({
+    success: true,
+    period: { startDate, endDate, label: 'Q4 2024' },
+    kpis
+  });
+});
+
+// Get Marketing KPIs for custom period
+app.get('/api/marketing/kpis', (req: Request, res: Response) => {
+  const { startDate, endDate } = req.query;
+
+  if (!startDate || !endDate) {
+    return res.status(400).json({
+      success: false,
+      error: 'startDate and endDate query parameters are required'
+    });
+  }
+
+  const kpis = marketingKpiService.getAllKPIs(startDate as string, endDate as string);
+
+  res.json({
+    success: true,
+    period: { startDate, endDate },
+    kpis
+  });
+});
+
+// Individual Marketing KPI endpoints
+app.get('/api/marketing/kpi/marketing-roi', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = marketingKpiService.calculateMarketingROI(startDate, endDate);
+    res.json({ success: true, kpi: 'Marketing ROI', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/marketing/kpi/cost-per-lead', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = marketingKpiService.calculateCostPerLead(startDate, endDate);
+    res.json({ success: true, kpi: 'Cost Per Lead', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/marketing/kpi/mql-to-sql-conversion', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = marketingKpiService.calculateMQLToSQLConversion(startDate, endDate);
+    res.json({ success: true, kpi: 'MQL to SQL Conversion', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/marketing/kpi/cac', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = marketingKpiService.calculateCAC(startDate, endDate);
+    res.json({ success: true, kpi: 'Customer Acquisition Cost', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/marketing/kpi/mqls-generated', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = marketingKpiService.calculateMQLsGenerated(startDate, endDate);
+    res.json({ success: true, kpi: 'MQLs Generated', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/marketing/kpi/campaign-effectiveness', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = marketingKpiService.calculateCampaignEffectiveness(startDate, endDate);
+    res.json({ success: true, kpi: 'Campaign Effectiveness', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/marketing/kpi/lead-to-customer-rate', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = marketingKpiService.calculateLeadToCustomerRate(startDate, endDate);
+    res.json({ success: true, kpi: 'Lead to Customer Rate', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/marketing/kpi/avg-deal-size', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = marketingKpiService.calculateAvgDealSize(startDate, endDate);
+    res.json({ success: true, kpi: 'Average Deal Size', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/marketing/kpi/channel-roi', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = marketingKpiService.calculateChannelROI(startDate, endDate);
+    res.json({ success: true, kpi: 'Best Channel ROI', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/marketing/kpi/content-engagement', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = marketingKpiService.calculateContentEngagement(startDate, endDate);
+    res.json({ success: true, kpi: 'Content Engagement Rate', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Marketing Pain Points Endpoint
+app.get('/api/marketing/pain-points', (req: Request, res: Response) => {
+  const startDate = '2024-10-01';
+  const endDate = '2024-12-31';
+  const kpis = marketingKpiService.getAllKPIs(startDate, endDate);
+
+  const pain_points = [
+    {
+      id: 1,
+      title: 'Marketing ROI Below Target',
+      description: 'Marketing return on investment is lower than industry benchmarks, indicating inefficient marketing spend or attribution gaps.',
+      severity: kpis.marketingROI.value < 300 ? 'high' : kpis.marketingROI.value < 500 ? 'medium' : 'low',
+      category: 'Marketing ROI (ROMI)',
+      impact: `Current ROI is ${kpis.marketingROI.value.toFixed(1)}% vs target of ${kpis.marketingROI.benchmark}%. This suggests either overspending on marketing activities or underattribution of revenue to marketing efforts.`,
+      recommendation: 'Implement multi-touch attribution modeling to better track revenue impact. Analyze underperforming campaigns and reallocate budget to high-ROI channels. Review marketing-to-sales handoff process.',
+      estimatedCost: '$500K/year in inefficient marketing spend'
+    },
+    {
+      id: 2,
+      title: 'Cost Per Lead Exceeds Budget',
+      description: 'The cost to generate each marketing lead is higher than planned, reducing marketing efficiency and profitability.',
+      severity: kpis.costPerLead.value > 300 ? 'high' : kpis.costPerLead.value > 200 ? 'medium' : 'low',
+      category: 'Cost Per Lead (CPL)',
+      impact: `Current CPL is $${kpis.costPerLead.value.toFixed(2)} vs target of $${kpis.costPerLead.benchmark}. High CPL erodes profit margins and limits scalability.`,
+      recommendation: 'Optimize ad targeting and messaging. Focus on organic channels (SEO, content). Implement lead quality scoring to reduce low-value leads. Test new channels with lower CPL.',
+      estimatedCost: '$300K/year in excess acquisition costs'
+    },
+    {
+      id: 3,
+      title: 'Low MQL to SQL Conversion Rate',
+      description: 'Too few Marketing Qualified Leads are converting to Sales Qualified Leads, indicating misalignment between marketing and sales criteria.',
+      severity: kpis.mqlToSqlConversion.value < 25 ? 'high' : kpis.mqlToSqlConversion.value < 40 ? 'medium' : 'low',
+      category: 'MQL to SQL Conversion Rate',
+      impact: `Only ${kpis.mqlToSqlConversion.value.toFixed(1)}% of MQLs become SQLs (target: ${kpis.mqlToSqlConversion.benchmark}%). This wastes sales time and marketing budget on unqualified leads.`,
+      recommendation: 'Align marketing and sales on lead qualification criteria. Implement lead scoring refinements. Enhance lead nurture programs before hand-off to sales. Provide sales with better lead intelligence.',
+      estimatedCost: '$400K/year in wasted sales time on poor-fit leads'
+    },
+    {
+      id: 4,
+      title: 'High Customer Acquisition Cost (CAC)',
+      description: 'Combined marketing and sales costs to acquire new customers exceed target, threatening unit economics.',
+      severity: kpis.customerAcquisitionCost.value > 20000 ? 'high' : kpis.customerAcquisitionCost.value > 15000 ? 'medium' : 'low',
+      category: 'Customer Acquisition Cost (CAC)',
+      impact: `CAC is $${kpis.customerAcquisitionCost.value.toLocaleString()} vs target of $${kpis.customerAcquisitionCost.benchmark.toLocaleString()}. High CAC reduces profitability and limits growth potential.`,
+      recommendation: 'Reduce marketing spend waste through better targeting. Shorten sales cycles with better-qualified leads. Improve conversion rates at each funnel stage. Leverage lower-cost channels.',
+      estimatedCost: '$600K/year in excess acquisition costs'
+    },
+    {
+      id: 5,
+      title: 'Insufficient MQL Generation',
+      description: 'Marketing is not generating enough qualified leads to meet pipeline and revenue targets.',
+      severity: kpis.mqlsGenerated.value < 50 ? 'high' : kpis.mqlsGenerated.value < 100 ? 'medium' : 'low',
+      category: 'Marketing Qualified Leads (MQLs)',
+      impact: `Generated only ${kpis.mqlsGenerated.value} MQLs vs target of ${kpis.mqlsGenerated.benchmark}. Insufficient lead volume threatens revenue goals.`,
+      recommendation: 'Increase marketing budget allocation to proven lead-gen channels. Launch new demand generation campaigns. Improve website conversion rates. Expand content marketing efforts.',
+      estimatedCost: '$800K/year in missed revenue opportunity'
+    },
+    {
+      id: 6,
+      title: 'Poor Campaign Performance',
+      description: 'Too many marketing campaigns are failing to meet their goals, indicating poor planning or execution.',
+      severity: kpis.campaignEffectiveness.value < 50 ? 'high' : kpis.campaignEffectiveness.value < 70 ? 'medium' : 'low',
+      category: 'Campaign Effectiveness Rate',
+      impact: `Only ${kpis.campaignEffectiveness.value.toFixed(1)}% of campaigns meet goals (target: ${kpis.campaignEffectiveness.benchmark}%). This wastes budget and team resources.`,
+      recommendation: 'Improve campaign planning with better audience research. Test messaging before full launch. Kill underperforming campaigns quickly. Replicate successful campaign elements.',
+      estimatedCost: '$350K/year in failed campaign spend'
+    },
+    {
+      id: 7,
+      title: 'Low Lead-to-Customer Conversion',
+      description: 'The percentage of leads that ultimately become customers is below target, indicating funnel leakage.',
+      severity: kpis.leadToCustomerRate.value < 5 ? 'high' : kpis.leadToCustomerRate.value < 10 ? 'medium' : 'low',
+      category: 'Lead-to-Customer Conversion Rate',
+      impact: `Only ${kpis.leadToCustomerRate.value.toFixed(1)}% of leads convert to customers (target: ${kpis.leadToCustomerRate.benchmark}%). Significant value loss in funnel.`,
+      recommendation: 'Map customer journey to identify drop-off points. Improve lead nurturing with targeted content. Enhance sales enablement. Better qualify leads before SDR handoff.',
+      estimatedCost: '$700K/year in lost revenue from funnel leakage'
+    },
+    {
+      id: 8,
+      title: 'Small Average Deal Size',
+      description: 'Marketing-sourced deals are smaller than target, reducing revenue efficiency and LTV:CAC ratio.',
+      severity: kpis.avgDealSize.value < 30000 ? 'high' : kpis.avgDealSize.value < 50000 ? 'medium' : 'low',
+      category: 'Avg Deal Size (Marketing-Sourced)',
+      impact: `Average deal size is $${kpis.avgDealSize.value.toLocaleString()} vs target of $${kpis.avgDealSize.benchmark.toLocaleString()}. Lower deal sizes reduce revenue per customer.`,
+      recommendation: 'Target larger enterprise accounts with ABM strategies. Promote higher-tier products/packages. Improve sales training on value selling. Create enterprise-focused content.',
+      estimatedCost: '$450K/year in unrealized revenue potential'
+    },
+    {
+      id: 9,
+      title: 'Underperforming Marketing Channels',
+      description: 'The best marketing channel ROI is below expectations, suggesting optimization opportunities across all channels.',
+      severity: kpis.channelROI.value < 200 ? 'high' : kpis.channelROI.value < 400 ? 'medium' : 'low',
+      category: 'Best Channel ROI',
+      impact: `Best channel ROI is ${kpis.channelROI.value.toFixed(1)}% (target: ${kpis.channelROI.benchmark}%). Even top channels need optimization.`,
+      recommendation: 'Conduct channel performance audit. Shift budget from low-ROI to high-ROI channels. Test new channels with growth potential. Optimize landing pages and conversion funnels.',
+      estimatedCost: '$550K/year in suboptimal channel performance'
+    },
+    {
+      id: 10,
+      title: 'Low Content Engagement',
+      description: 'Content marketing efforts are not generating sufficient engagement, limiting lead generation and brand building.',
+      severity: kpis.contentEngagement.value < 10 ? 'high' : kpis.contentEngagement.value < 15 ? 'medium' : 'low',
+      category: 'Content Engagement Rate',
+      impact: `Content engagement is only ${kpis.contentEngagement.value.toFixed(1)}% (target: ${kpis.contentEngagement.benchmark}%). Low engagement reduces content marketing ROI.`,
+      recommendation: 'Improve content quality and relevance through audience research. Optimize headlines and formats. Promote content more effectively. Create more interactive content (videos, tools).',
+      estimatedCost: '$250K/year in underperforming content investment'
+    }
+  ];
+
+  const painPoints = pain_points.map(pp => ({
+    id: pp.id.toString(),
+    title: pp.title,
+    severity: pp.severity as 'high' | 'medium' | 'low',
+    category: pp.category,
+    description: pp.description,
+    impact: pp.impact,
+    recommendation: pp.recommendation,
+    estimatedCost: pp.estimatedCost
   }));
 
   res.json({

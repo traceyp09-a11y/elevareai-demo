@@ -23,4 +23,4 @@ EXPOSE 3001
 RUN mkdir -p /app/database
 
 # Initialize and seed the database (All Modules), then start the server
-CMD ["sh", "-c", "npm run init-db && npm run seed-data && npm run seed-hse && npm run seed-ops && npm run seed-qc && npm run seed-supplychain && npm run init:finance && npm run init:administration && npm run init:sales && npm run init:customer-success && npm run dev"]
+CMD ["sh", "-c", "npm run init-db && npm run seed-data && npm run seed-hse && npm run seed-ops && npm run seed-qc && npm run seed-supplychain && npm run init:finance && npm run init:administration && npm run init:sales && npm run init:customer-success && npm run init:marketing && npm run dev"]
