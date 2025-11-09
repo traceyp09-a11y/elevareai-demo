@@ -8,19 +8,12 @@ import {
 
 interface KPI {
   name: string;
-  value: number;
+  value: number | string;
   unit: string;
-  status: 'good' | 'warning' | 'critical';
-  target: number;
-  targetOperator: '>=' | '<=';
-  calculation: {
-    description: string;
-    formula: string;
-    dataPoints: {
-      label: string;
-      value: number | string;
-    }[];
-  };
+  benchmark: number | string;
+  status: 'Excellent' | 'Good' | 'Warning' | 'Critical';
+  formula: string;
+  dataPoints: any;
 }
 
 interface KPIResponse {
@@ -96,7 +89,8 @@ const DashboardCustomerSuccess: React.FC = () => {
   };
 
   const getStatusColor = (status: string) => {
-    switch (status) {
+    switch (status.toLowerCase()) {
+      case 'excellent':
       case 'good':
         return 'border-green-500 bg-green-500/10';
       case 'warning':
@@ -109,7 +103,8 @@ const DashboardCustomerSuccess: React.FC = () => {
   };
 
   const getStatusTextColor = (status: string) => {
-    switch (status) {
+    switch (status.toLowerCase()) {
+      case 'excellent':
       case 'good':
         return 'text-green-400';
       case 'warning':
@@ -153,7 +148,7 @@ const DashboardCustomerSuccess: React.FC = () => {
 
         <div className="flex items-center justify-between text-xs text-gray-400 mb-3">
           <span>
-            Target: {kpi.targetOperator} {kpi.target}{kpi.unit}
+            Benchmark: {kpi.benchmark}{kpi.unit}
           </span>
         </div>
 
@@ -174,27 +169,24 @@ const DashboardCustomerSuccess: React.FC = () => {
           )}
         </button>
 
-        {isExpanded && kpi.calculation && (
+        {isExpanded && kpi.formula && (
           <div className="mt-4 pt-4 border-t border-gray-700 space-y-3">
-            <div>
-              <h4 className="text-teal-400 text-xs font-semibold mb-1">Description</h4>
-              <p className="text-gray-300 text-xs">{kpi.calculation.description}</p>
-            </div>
-
             <div>
               <h4 className="text-teal-400 text-xs font-semibold mb-1">Formula</h4>
               <code className="text-gray-300 text-xs bg-gray-900 px-2 py-1 rounded block">
-                {kpi.calculation.formula}
+                {kpi.formula}
               </code>
             </div>
 
             <div>
               <h4 className="text-teal-400 text-xs font-semibold mb-2">Data Points</h4>
               <div className="space-y-1">
-                {kpi.calculation.dataPoints.map((point, index) => (
+                {Object.entries(kpi.dataPoints).map(([key, value], index) => (
                   <div key={index} className="flex justify-between text-xs">
-                    <span className="text-gray-400">{point.label}:</span>
-                    <span className="text-gray-200 font-mono">{point.value}</span>
+                    <span className="text-gray-400">{key}:</span>
+                    <span className="text-gray-200 font-mono">
+                      {typeof value === 'object' ? JSON.stringify(value) : String(value)}
+                    </span>
                   </div>
                 ))}
               </div>
