@@ -7,6 +7,7 @@ import { OpsKPICalculationService } from './services/kpiCalculationsOps';
 import { QCKPICalculationService } from './services/kpiCalculationsQC';
 import { SupplyChainKPICalculationService } from './services/kpiCalculationsSupplyChain';
 import { FinanceKPICalculationService } from './services/kpiCalculationsFinance';
+import { AdminKPICalculationService } from './services/kpiCalculationsAdministration';
 import { PredictiveAnalyticsService } from './services/predictiveAnalytics';
 
 const app = express();
@@ -24,6 +25,7 @@ const opsKpiService = new OpsKPICalculationService(dbPath);
 const qcKpiService = new QCKPICalculationService(dbPath);
 const scKpiService = new SupplyChainKPICalculationService(dbPath);
 const financeKpiService = new FinanceKPICalculationService(dbPath);
+const adminKpiService = new AdminKPICalculationService(dbPath);
 const predictiveService = new PredictiveAnalyticsService(dbPath);
 
 // Health check
@@ -1876,6 +1878,370 @@ app.get('/api/finance/pain-points', (req: Request, res: Response) => {
       ],
       responsible_department: 'CFO / Operations',
       timeline: '150 days'
+    }
+  ];
+
+  res.json({
+    success: true,
+    period: {
+      startDate,
+      endDate,
+      label: 'Q4 2024'
+    },
+    pain_points
+  });
+});
+
+// ========== ADMINISTRATION / IT MODULE API ENDPOINTS ==========
+
+// Get all Administration KPIs for current period
+app.get('/api/administration/kpis/current', (req: Request, res: Response) => {
+  try {
+    const startDate = '2024-10-01';
+    const endDate = '2024-12-31';
+
+    const kpis = adminKpiService.getAllKPIs(startDate, endDate);
+
+    res.json({
+      success: true,
+      period: { startDate, endDate, label: 'Q4 2024' },
+      kpis: kpis
+    });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Get all Administration KPIs for custom period
+app.get('/api/administration/kpis/period', (req: Request, res: Response) => {
+  try {
+    const { startDate, endDate } = req.query;
+
+    if (!startDate || !endDate) {
+      return res.status(400).json({
+        success: false,
+        error: 'startDate and endDate query parameters are required'
+      });
+    }
+
+    const kpis = adminKpiService.getAllKPIs(startDate as string, endDate as string);
+
+    res.json({
+      success: true,
+      period: { startDate, endDate },
+      kpis: kpis
+    });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Individual Administration KPI endpoints
+
+app.get('/api/administration/kpi/system-uptime', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = adminKpiService.calculateSystemUptime(startDate, endDate);
+    res.json({ success: true, kpi: 'IT System Uptime', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/administration/kpi/helpdesk-response-time', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = adminKpiService.calculateHelpdeskResponseTime(startDate, endDate);
+    res.json({ success: true, kpi: 'Help Desk Response Time', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/administration/kpi/it-cost-per-employee', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = adminKpiService.calculateITCostPerEmployee(startDate, endDate);
+    res.json({ success: true, kpi: 'IT Cost per Employee', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/administration/kpi/security-incident-rate', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = adminKpiService.calculateSecurityIncidentRate(startDate, endDate);
+    res.json({ success: true, kpi: 'Security Incident Rate', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/administration/kpi/license-utilization', (req: Request, res: Response) => {
+  try {
+    const result = adminKpiService.calculateLicenseUtilization();
+    res.json({ success: true, kpi: 'Software License Utilization', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/administration/kpi/backup-success-rate', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = adminKpiService.calculateBackupSuccessRate(startDate, endDate);
+    res.json({ success: true, kpi: 'Backup Success Rate', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/administration/kpi/project-on-time-delivery', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = adminKpiService.calculateProjectOnTimeDelivery(startDate, endDate);
+    res.json({ success: true, kpi: 'IT Project On-Time Delivery', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/administration/kpi/employee-satisfaction', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = adminKpiService.calculateEmployeeSatisfaction(startDate, endDate);
+    res.json({ success: true, kpi: 'Employee IT Satisfaction', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/administration/kpi/ticket-resolution-time', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = adminKpiService.calculateTicketResolutionTime(startDate, endDate);
+    res.json({ success: true, kpi: 'Ticket Resolution Time', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/administration/kpi/infrastructure-utilization', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = adminKpiService.calculateInfrastructureUtilization(startDate, endDate);
+    res.json({ success: true, kpi: 'Infrastructure Capacity Utilization', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Administration Pain Points Endpoint
+app.get('/api/administration/pain-points', (req: Request, res: Response) => {
+  const startDate = '2024-10-01';
+  const endDate = '2024-12-31';
+
+  const kpis = adminKpiService.getAllKPIs(startDate, endDate);
+
+  const pain_points = [
+    {
+      id: 1,
+      title: 'Critical System Downtime Exceeding Tolerance',
+      description: 'IT system uptime is below the 99.5% SLA target, resulting in productivity losses and user frustration.',
+      severity: kpis.systemUptime.value < 99.0 ? 'Critical' : 'High',
+      affected_metric: 'IT System Uptime',
+      current_value: kpis.systemUptime.value.toFixed(2) + '%',
+      target_value: kpis.systemUptime.benchmark.toFixed(2) + '%',
+      estimated_cost: '$180K/year in lost productivity',
+      recommended_actions: [
+        'Implement redundant systems and failover mechanisms for critical infrastructure',
+        'Establish 24/7 monitoring with automated alerting for system health',
+        'Conduct root cause analysis on all downtime incidents and address systemic issues',
+        'Invest in infrastructure upgrades to improve reliability and performance'
+      ],
+      responsible_department: 'CIO / Infrastructure',
+      timeline: '90 days'
+    },
+    {
+      id: 2,
+      title: 'Help Desk Response Time Below Service Standards',
+      description: 'Average help desk first response time exceeds target, leading to employee dissatisfaction and reduced productivity.',
+      severity: kpis.helpdeskResponseTime.value > 30 ? 'Critical' : 'High',
+      affected_metric: 'Help Desk Response Time',
+      current_value: kpis.helpdeskResponseTime.value.toFixed(1) + ' minutes',
+      target_value: kpis.helpdeskResponseTime.benchmark.toFixed(1) + ' minutes',
+      estimated_cost: '$120K/year in delayed issue resolution',
+      recommended_actions: [
+        'Increase help desk staffing during peak hours based on ticket volume analysis',
+        'Implement AI-powered chatbot for common issues and tier-0 support',
+        'Deploy self-service knowledge base to deflect routine tickets',
+        'Establish clear SLA tiers and prioritization rules for ticket routing'
+      ],
+      responsible_department: 'CIO / IT Support',
+      timeline: '60 days'
+    },
+    {
+      id: 3,
+      title: 'IT Cost per Employee Above Industry Benchmark',
+      description: 'IT spending per employee is significantly higher than industry average, indicating potential inefficiencies.',
+      severity: kpis.itCostPerEmployee.value > 8000 ? 'High' : 'Medium',
+      affected_metric: 'IT Cost per Employee',
+      current_value: '$' + kpis.itCostPerEmployee.value.toLocaleString(),
+      target_value: '$' + kpis.itCostPerEmployee.benchmark.toLocaleString(),
+      estimated_cost: '$450K/year in excess IT spending',
+      recommended_actions: [
+        'Conduct IT spend analysis to identify cost optimization opportunities',
+        'Renegotiate vendor contracts and consolidate software licenses',
+        'Migrate on-premise infrastructure to cloud for better cost efficiency',
+        'Implement IT financial management (ITFM) tools for better visibility'
+      ],
+      responsible_department: 'CIO / CFO',
+      timeline: '120 days'
+    },
+    {
+      id: 4,
+      title: 'Rising Cybersecurity Incident Rate',
+      description: 'Security incidents are increasing, exposing the organization to data breach risks and compliance violations.',
+      severity: kpis.securityIncidentRate.value > 15 ? 'Critical' : 'High',
+      affected_metric: 'Cybersecurity Incident Rate',
+      current_value: kpis.securityIncidentRate.value.toFixed(1) + ' incidents/month',
+      target_value: kpis.securityIncidentRate.benchmark.toFixed(1) + ' incidents/month',
+      estimated_cost: '$500K potential breach cost + reputation damage',
+      recommended_actions: [
+        'Deploy advanced threat detection and prevention systems (EDR, SIEM)',
+        'Conduct mandatory cybersecurity awareness training for all employees',
+        'Implement multi-factor authentication (MFA) across all systems',
+        'Perform regular vulnerability assessments and penetration testing'
+      ],
+      responsible_department: 'CIO / CISO',
+      timeline: '90 days'
+    },
+    {
+      id: 5,
+      title: 'Poor Software License Utilization',
+      description: 'Many software licenses are underutilized or unused, representing wasted IT budget.',
+      severity: kpis.licenseUtilization.value < 70 ? 'High' : 'Medium',
+      affected_metric: 'Software License Utilization',
+      current_value: kpis.licenseUtilization.value.toFixed(1) + '%',
+      target_value: kpis.licenseUtilization.benchmark.toFixed(1) + '%',
+      estimated_cost: '$85K/year in unused license costs',
+      recommended_actions: [
+        'Implement software asset management (SAM) tool to track usage',
+        'Reclaim and reallocate unused licenses or negotiate subscription reductions',
+        'Establish license request approval workflow to prevent over-purchasing',
+        'Conduct quarterly license utilization reviews with department heads'
+      ],
+      responsible_department: 'CIO / Procurement',
+      timeline: '60 days'
+    },
+    {
+      id: 6,
+      title: 'Data Backup Failures Increasing Risk',
+      description: 'Backup success rate is below target, putting critical business data at risk of loss.',
+      severity: kpis.backupSuccessRate.value < 95 ? 'Critical' : 'High',
+      affected_metric: 'Data Backup Success Rate',
+      current_value: kpis.backupSuccessRate.value.toFixed(1) + '%',
+      target_value: kpis.backupSuccessRate.benchmark.toFixed(1) + '%',
+      estimated_cost: 'Catastrophic data loss potential',
+      recommended_actions: [
+        'Upgrade backup infrastructure and software to current versions',
+        'Implement automated backup monitoring with alerts for failed backups',
+        'Conduct regular backup restoration tests to verify recoverability',
+        'Establish 3-2-1 backup strategy (3 copies, 2 media types, 1 offsite)'
+      ],
+      responsible_department: 'CIO / Infrastructure',
+      timeline: '30 days'
+    },
+    {
+      id: 7,
+      title: 'IT Projects Consistently Delivered Late',
+      description: 'IT project on-time delivery rate is well below target, causing business disruption and cost overruns.',
+      severity: kpis.projectOnTimeDelivery.value < 50 ? 'Critical' : 'High',
+      affected_metric: 'IT Project On-Time Delivery',
+      current_value: kpis.projectOnTimeDelivery.value.toFixed(1) + '%',
+      target_value: kpis.projectOnTimeDelivery.benchmark.toFixed(1) + '%',
+      estimated_cost: '$200K/year in project delays and overruns',
+      recommended_actions: [
+        'Implement Agile/Scrum methodology for better project management',
+        'Establish project governance office (PMO) with standardized processes',
+        'Improve project scoping and resource allocation accuracy',
+        'Conduct post-mortem reviews on delayed projects to identify root causes'
+      ],
+      responsible_department: 'CIO / PMO',
+      timeline: '120 days'
+    },
+    {
+      id: 8,
+      title: 'Low Employee IT Satisfaction Scores',
+      description: 'Employee satisfaction with IT services is below expectations, affecting morale and productivity.',
+      severity: kpis.employeeSatisfaction.value < 3.5 ? 'High' : 'Medium',
+      affected_metric: 'Employee IT Satisfaction',
+      current_value: kpis.employeeSatisfaction.value.toFixed(1) + '/5.0',
+      target_value: kpis.employeeSatisfaction.benchmark.toFixed(1) + '/5.0',
+      estimated_cost: '$150K/year in reduced productivity',
+      recommended_actions: [
+        'Conduct employee focus groups to identify specific IT pain points',
+        'Improve IT communication and transparency around outages and changes',
+        'Upgrade end-user devices and applications to modern standards',
+        'Implement regular IT satisfaction surveys with action plans'
+      ],
+      responsible_department: 'CIO / IT Support',
+      timeline: '90 days'
+    },
+    {
+      id: 9,
+      title: 'Excessive Help Desk Ticket Resolution Time',
+      description: 'Average ticket resolution time is too high, causing frustration and extended downtime for users.',
+      severity: kpis.ticketResolutionTime.value > 24 ? 'High' : 'Medium',
+      affected_metric: 'Average Ticket Resolution Time',
+      current_value: kpis.ticketResolutionTime.value.toFixed(1) + ' hours',
+      target_value: kpis.ticketResolutionTime.benchmark.toFixed(1) + ' hours',
+      estimated_cost: '$95K/year in extended downtime',
+      recommended_actions: [
+        'Analyze ticket patterns to identify recurring issues and fix root causes',
+        'Provide advanced training to help desk staff on complex issues',
+        'Implement escalation procedures to route difficult tickets faster',
+        'Deploy remote support tools to speed up troubleshooting'
+      ],
+      responsible_department: 'CIO / IT Support',
+      timeline: '90 days'
+    },
+    {
+      id: 10,
+      title: 'Infrastructure Capacity Approaching Limits',
+      description: 'Infrastructure utilization is high and approaching capacity limits, risking performance degradation.',
+      severity: kpis.infrastructureUtilization.value > 85 ? 'Critical' : kpis.infrastructureUtilization.value > 75 ? 'High' : 'Medium',
+      affected_metric: 'Infrastructure Capacity Utilization',
+      current_value: kpis.infrastructureUtilization.value.toFixed(1) + '%',
+      target_value: kpis.infrastructureUtilization.benchmark.toFixed(1) + '%',
+      estimated_cost: '$250K for emergency capacity expansion',
+      recommended_actions: [
+        'Conduct infrastructure capacity planning for next 12-24 months',
+        'Implement auto-scaling for cloud resources to handle peak loads',
+        'Optimize resource usage through virtualization and consolidation',
+        'Budget for infrastructure expansion before hitting critical thresholds'
+      ],
+      responsible_department: 'CIO / Infrastructure',
+      timeline: '60 days'
     }
   ];
 
