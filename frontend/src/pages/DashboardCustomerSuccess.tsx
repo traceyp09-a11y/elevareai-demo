@@ -66,8 +66,8 @@ const DashboardCustomerSuccess: React.FC = () => {
       try {
         setLoading(true);
         const [kpisResponse, painPointsResponse] = await Promise.all([
-          axios.get('http://localhost:3001/api/customer-success/kpis/current'),
-          axios.get('http://localhost:3001/api/customer-success/pain-points')
+          axios.get('/api/customer-success/kpis/current'),
+          axios.get('/api/customer-success/pain-points')
         ]);
 
         setKpiData(kpisResponse.data);

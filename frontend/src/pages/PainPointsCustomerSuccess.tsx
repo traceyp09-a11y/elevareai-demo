@@ -36,7 +36,7 @@ const PainPointsCustomerSuccess: React.FC = () => {
       try {
         setLoading(true);
         const response = await axios.get<PainPointsResponse>(
-          'http://localhost:3001/api/customer-success/pain-points'
+          '/api/customer-success/pain-points'
         );
 
         if (response.data.success) {
