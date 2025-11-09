@@ -14,6 +14,7 @@ import PainPointsQC from './pages/PainPointsQC';
 import DashboardSupplyChain from './pages/DashboardSupplyChain';
 import PainPointsSupplyChain from './pages/PainPointsSupplyChain';
 import DashboardFinance from './pages/DashboardFinance';
+import PainPointsFinance from './pages/PainPointsFinance';
 import ElevareLogo from './components/ElevareLogo';
 import './App.css';
 
@@ -346,6 +347,7 @@ function AppContent() {
           <Route path="/finance" element={<DashboardFinance />} />
           <Route path="/finance/kpi/:kpiName" element={<KPIDetail />} />
           <Route path="/finance/reports" element={<CustomReports />} />
+          <Route path="/finance/pain-points" element={<PainPointsFinance />} />
 
           {/* Executive Routes - Placeholder for now */}
           <Route path="/executive" element={
