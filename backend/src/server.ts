@@ -6,6 +6,7 @@ import { HSEKPICalculationService } from './services/kpiCalculationsHSE';
 import { OpsKPICalculationService } from './services/kpiCalculationsOps';
 import { QCKPICalculationService } from './services/kpiCalculationsQC';
 import { SupplyChainKPICalculationService } from './services/kpiCalculationsSupplyChain';
+import { FinanceKPICalculationService } from './services/kpiCalculationsFinance';
 import { PredictiveAnalyticsService } from './services/predictiveAnalytics';
 
 const app = express();
@@ -22,6 +23,7 @@ const hseKpiService = new HSEKPICalculationService(dbPath);
 const opsKpiService = new OpsKPICalculationService(dbPath);
 const qcKpiService = new QCKPICalculationService(dbPath);
 const scKpiService = new SupplyChainKPICalculationService(dbPath);
+const financeKpiService = new FinanceKPICalculationService(dbPath);
 const predictiveService = new PredictiveAnalyticsService(dbPath);
 
 // Health check
@@ -1517,6 +1519,371 @@ app.get('/api/supplychain/pain-points', (req: Request, res: Response) => {
     period: {
       startDate: '2024-10-01',
       endDate: '2024-12-31',
+      label: 'Q4 2024'
+    },
+    pain_points
+  });
+});
+
+// ========== Finance Module API Endpoints ==========
+
+// Get all Finance KPIs for Q4 2024
+app.get('/api/finance/kpis/current', (req: Request, res: Response) => {
+  try {
+    const startDate = '2024-10-01';
+    const endDate = '2024-12-31';
+
+    const kpis = financeKpiService.getAllKPIs(startDate, endDate);
+
+    res.json({
+      success: true,
+      period: { startDate, endDate, label: 'Q4 2024' },
+      kpis: kpis
+    });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Get all Finance KPIs for custom period
+app.get('/api/finance/kpis/period', (req: Request, res: Response) => {
+  try {
+    const { startDate, endDate } = req.query;
+
+    if (!startDate || !endDate) {
+      return res.status(400).json({
+        success: false,
+        error: 'startDate and endDate query parameters are required'
+      });
+    }
+
+    const kpis = financeKpiService.getAllKPIs(startDate as string, endDate as string);
+
+    res.json({
+      success: true,
+      period: { startDate, endDate },
+      kpis: kpis
+    });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Individual Finance KPI endpoints
+
+app.get('/api/finance/kpi/gross-profit-margin', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = financeKpiService.calculateGrossProfitMargin(startDate, endDate);
+    res.json({ success: true, ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/finance/kpi/net-profit-margin', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = financeKpiService.calculateNetProfitMargin(startDate, endDate);
+    res.json({ success: true, ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/finance/kpi/operating-cash-flow-ratio', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = financeKpiService.calculateOperatingCashFlowRatio(startDate, endDate);
+    res.json({ success: true, ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/finance/kpi/current-ratio', (req: Request, res: Response) => {
+  try {
+    const snapshotDate = req.query.snapshotDate as string || '2024-12-31';
+
+    const result = financeKpiService.calculateCurrentRatio(snapshotDate);
+    res.json({ success: true, ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/finance/kpi/quick-ratio', (req: Request, res: Response) => {
+  try {
+    const snapshotDate = req.query.snapshotDate as string || '2024-12-31';
+
+    const result = financeKpiService.calculateQuickRatio(snapshotDate);
+    res.json({ success: true, ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/finance/kpi/return-on-assets', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+    const snapshotDate = req.query.snapshotDate as string || '2024-12-31';
+
+    const result = financeKpiService.calculateReturnOnAssets(startDate, endDate, snapshotDate);
+    res.json({ success: true, ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/finance/kpi/return-on-equity', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+    const snapshotDate = req.query.snapshotDate as string || '2024-12-31';
+
+    const result = financeKpiService.calculateReturnOnEquity(startDate, endDate, snapshotDate);
+    res.json({ success: true, ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/finance/kpi/debt-to-equity-ratio', (req: Request, res: Response) => {
+  try {
+    const snapshotDate = req.query.snapshotDate as string || '2024-12-31';
+
+    const result = financeKpiService.calculateDebtToEquityRatio(snapshotDate);
+    res.json({ success: true, ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/finance/kpi/working-capital-ratio', (req: Request, res: Response) => {
+  try {
+    const snapshotDate = req.query.snapshotDate as string || '2024-12-31';
+
+    const result = financeKpiService.calculateWorkingCapitalRatio(snapshotDate);
+    res.json({ success: true, ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/finance/kpi/ebitda-margin', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = financeKpiService.calculateEBITDAMargin(startDate, endDate);
+    res.json({ success: true, ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Finance Pain Points Endpoint
+app.get('/api/finance/pain-points', (req: Request, res: Response) => {
+  const startDate = '2024-10-01';
+  const endDate = '2024-12-31';
+
+  const kpis = financeKpiService.getAllKPIs(startDate, endDate);
+
+  const pain_points = [
+    {
+      id: 1,
+      title: 'Gross Profit Margin Below Target',
+      description: 'Gross profit margin is tracking below the industry benchmark, indicating higher cost of goods sold relative to revenue.',
+      severity: 'High',
+      affected_metric: 'Gross Profit Margin',
+      current_value: kpis.grossProfitMargin.value + '%',
+      target_value: kpis.grossProfitMargin.benchmark + '%',
+      estimated_cost: '$1.2M/year in lost margin',
+      recommended_actions: [
+        'Analyze product mix and prioritize higher-margin offerings',
+        'Negotiate better pricing with suppliers to reduce COGS',
+        'Review manufacturing efficiency and reduce production waste',
+        'Consider price increases for products with inelastic demand'
+      ],
+      responsible_department: 'CFO / Operations',
+      timeline: '90 days'
+    },
+    {
+      id: 2,
+      title: 'Net Profit Margin Compression',
+      description: 'Net profit margin is below target, suggesting operating expenses and/or taxes are consuming too much of gross profit.',
+      severity: 'Critical',
+      affected_metric: 'Net Profit Margin',
+      current_value: kpis.netProfitMargin.value + '%',
+      target_value: kpis.netProfitMargin.benchmark + '%',
+      estimated_cost: '$850K/year in reduced profitability',
+      recommended_actions: [
+        'Conduct zero-based budgeting review of all operating expenses',
+        'Identify and eliminate non-value-added activities and costs',
+        'Implement cost controls and approval workflows for discretionary spending',
+        'Evaluate tax optimization strategies with tax advisors'
+      ],
+      responsible_department: 'CFO / Finance',
+      timeline: '120 days'
+    },
+    {
+      id: 3,
+      title: 'Operating Cash Flow Coverage Concerns',
+      description: 'Operating cash flow ratio indicates potential difficulty covering current liabilities with cash generated from operations.',
+      severity: kpis.operatingCashFlowRatio.value < 1.0 ? 'Critical' : 'High',
+      affected_metric: 'Operating Cash Flow Ratio',
+      current_value: kpis.operatingCashFlowRatio.value.toString(),
+      target_value: kpis.operatingCashFlowRatio.benchmark.toString(),
+      estimated_cost: '$500K in potential credit facility fees',
+      recommended_actions: [
+        'Accelerate accounts receivable collections through early payment discounts',
+        'Optimize inventory levels to free up working capital',
+        'Review and extend accounts payable terms where possible',
+        'Consider factoring or AR financing to improve short-term liquidity'
+      ],
+      responsible_department: 'CFO / Treasury',
+      timeline: '60 days'
+    },
+    {
+      id: 4,
+      title: 'Liquidity Ratio Below Benchmark',
+      description: 'Current ratio indicates insufficient current assets to comfortably cover current liabilities.',
+      severity: kpis.currentRatio.value < 1.5 ? 'Critical' : 'High',
+      affected_metric: 'Current Ratio',
+      current_value: kpis.currentRatio.value.toString(),
+      target_value: kpis.currentRatio.benchmark.toString(),
+      estimated_cost: '$300K in higher borrowing costs',
+      recommended_actions: [
+        'Build cash reserves through improved working capital management',
+        'Reduce short-term debt obligations through refinancing',
+        'Convert excess inventory to cash through sales promotions',
+        'Secure a revolving credit facility for liquidity cushion'
+      ],
+      responsible_department: 'CFO / Treasury',
+      timeline: '90 days'
+    },
+    {
+      id: 5,
+      title: 'Quick Ratio Indicates Cash Dependency on Inventory',
+      description: 'Quick ratio shows the company may struggle to meet short-term obligations without liquidating inventory.',
+      severity: kpis.quickRatio.value < 1.0 ? 'Critical' : 'Medium',
+      affected_metric: 'Quick Ratio',
+      current_value: kpis.quickRatio.value.toString(),
+      target_value: kpis.quickRatio.benchmark.toString(),
+      estimated_cost: '$200K in potential fire-sale losses',
+      recommended_actions: [
+        'Increase focus on cash and near-cash equivalents',
+        'Implement just-in-time inventory to reduce inventory levels',
+        'Accelerate AR collections to build liquid assets',
+        'Establish standby credit facilities for emergency liquidity'
+      ],
+      responsible_department: 'CFO / Operations',
+      timeline: '120 days'
+    },
+    {
+      id: 6,
+      title: 'Return on Assets Below Industry Average',
+      description: 'ROA indicates assets are not being utilized efficiently to generate profits.',
+      severity: 'Medium',
+      affected_metric: 'Return on Assets (ROA)',
+      current_value: kpis.returnOnAssets.value + '%',
+      target_value: kpis.returnOnAssets.benchmark + '%',
+      estimated_cost: '$600K in unrealized profit potential',
+      recommended_actions: [
+        'Divest non-productive or underutilized assets',
+        'Improve asset utilization rates through better planning',
+        'Invest in higher-returning projects and discontinue low-ROI initiatives',
+        'Consider sale-leaseback arrangements for fixed assets'
+      ],
+      responsible_department: 'CFO / Strategy',
+      timeline: '180 days'
+    },
+    {
+      id: 7,
+      title: 'Return on Equity Below Shareholder Expectations',
+      description: 'ROE is below target, indicating insufficient returns being generated for shareholders.',
+      severity: kpis.returnOnEquity.value < 10 ? 'Critical' : 'High',
+      affected_metric: 'Return on Equity (ROE)',
+      current_value: kpis.returnOnEquity.value + '%',
+      target_value: kpis.returnOnEquity.benchmark + '%',
+      estimated_cost: 'Impact on valuation and investor confidence',
+      recommended_actions: [
+        'Improve profitability through revenue growth and cost optimization',
+        'Optimize capital structure to reduce cost of capital',
+        'Focus on high-ROE business segments and product lines',
+        'Implement share buyback program if appropriate'
+      ],
+      responsible_department: 'CEO / CFO',
+      timeline: '180 days'
+    },
+    {
+      id: 8,
+      title: 'Leverage Ratio Indicates High Financial Risk',
+      description: 'Debt-to-equity ratio suggests the company is highly leveraged, increasing financial risk.',
+      severity: kpis.debtToEquityRatio.value > 2.0 ? 'Critical' : kpis.debtToEquityRatio.value > 1.5 ? 'High' : 'Medium',
+      affected_metric: 'Debt-to-Equity Ratio',
+      current_value: kpis.debtToEquityRatio.value.toString(),
+      target_value: kpis.debtToEquityRatio.benchmark.toString(),
+      estimated_cost: '$400K in excess interest expense',
+      recommended_actions: [
+        'Develop debt reduction plan through cash flow allocation',
+        'Consider equity raise to improve capital structure',
+        'Refinance high-interest debt at lower rates',
+        'Improve profitability to organically build equity base'
+      ],
+      responsible_department: 'CFO / Treasury',
+      timeline: '240 days'
+    },
+    {
+      id: 9,
+      title: 'Working Capital Ratio Below Optimal Level',
+      description: 'Working capital as a percentage of total assets is below target, limiting operational flexibility.',
+      severity: 'Medium',
+      affected_metric: 'Working Capital Ratio',
+      current_value: kpis.workingCapitalRatio.value + '%',
+      target_value: kpis.workingCapitalRatio.benchmark + '%',
+      estimated_cost: '$350K in lost business opportunities',
+      recommended_actions: [
+        'Improve cash conversion cycle (DSO, DIO, DPO)',
+        'Implement working capital optimization program',
+        'Negotiate better payment terms with customers and suppliers',
+        'Monitor and manage working capital KPIs weekly'
+      ],
+      responsible_department: 'CFO / Operations',
+      timeline: '120 days'
+    },
+    {
+      id: 10,
+      title: 'EBITDA Margin Below Industry Benchmark',
+      description: 'EBITDA margin indicates operating profitability before non-cash items is below best-in-class performance.',
+      severity: 'High',
+      affected_metric: 'EBITDA Margin',
+      current_value: kpis.ebitdaMargin.value + '%',
+      target_value: kpis.ebitdaMargin.benchmark + '%',
+      estimated_cost: '$950K/year in operational inefficiency',
+      recommended_actions: [
+        'Benchmark operating costs against industry leaders',
+        'Implement lean management and continuous improvement programs',
+        'Automate manual processes to reduce labor costs',
+        'Focus on revenue growth in higher-margin segments'
+      ],
+      responsible_department: 'CFO / Operations',
+      timeline: '150 days'
+    }
+  ];
+
+  res.json({
+    success: true,
+    period: {
+      startDate,
+      endDate,
       label: 'Q4 2024'
     },
     pain_points
