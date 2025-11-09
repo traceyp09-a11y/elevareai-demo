@@ -17,6 +17,8 @@ import DashboardFinance from './pages/DashboardFinance';
 import PainPointsFinance from './pages/PainPointsFinance';
 import DashboardAdministration from './pages/DashboardAdministration';
 import PainPointsAdministration from './pages/PainPointsAdministration';
+import DashboardSales from './pages/DashboardSales';
+import PainPointsSales from './pages/PainPointsSales';
 import ElevareLogo from './components/ElevareLogo';
 import './App.css';
 
@@ -28,8 +30,9 @@ function AppContent() {
   const isSC = location.pathname.startsWith('/supplychain');
   const isFinance = location.pathname.startsWith('/finance');
   const isAdmin = location.pathname.startsWith('/administration');
+  const isSales = location.pathname.startsWith('/sales');
   const isExecutive = location.pathname.startsWith('/executive');
-  const currentDept = isHSE ? 'hse' : isOps ? 'ops' : isQC ? 'qc' : isSC ? 'supplychain' : isFinance ? 'finance' : isAdmin ? 'administration' : isExecutive ? 'executive' : 'hr';
+  const currentDept = isHSE ? 'hse' : isOps ? 'ops' : isQC ? 'qc' : isSC ? 'supplychain' : isFinance ? 'finance' : isAdmin ? 'administration' : isSales ? 'sales' : isExecutive ? 'executive' : 'hr';
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black">
@@ -110,6 +113,16 @@ function AppContent() {
               💻 IT & Admin Analytics
             </Link>
             <Link
+              to="/sales"
+              className={`px-4 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                currentDept === 'sales'
+                  ? 'bg-amber-500 text-white shadow-lg shadow-amber-500/50'
+                  : 'bg-gray-800/50 text-gray-400 hover:bg-gray-700/50 hover:text-gray-300'
+              }`}
+            >
+              💰 Sales & Revenue Analytics
+            </Link>
+            <Link
               to="/executive"
               className={`px-4 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                 currentDept === 'executive'
@@ -129,7 +142,7 @@ function AppContent() {
               </Link>
               <div className="h-6 w-px bg-gray-700"></div>
               <span className="text-sm font-semibold text-cyan-400">
-                {currentDept === 'hr' ? 'HR Analytics' : currentDept === 'hse' ? 'HSE Analytics' : currentDept === 'ops' ? 'Operations Analytics' : currentDept === 'qc' ? 'Quality Control Analytics' : currentDept === 'supplychain' ? 'Supply Chain Analytics' : currentDept === 'finance' ? 'Finance Analytics' : currentDept === 'administration' ? 'IT & Administration Analytics' : 'Executive View'}
+                {currentDept === 'hr' ? 'HR Analytics' : currentDept === 'hse' ? 'HSE Analytics' : currentDept === 'ops' ? 'Operations Analytics' : currentDept === 'qc' ? 'Quality Control Analytics' : currentDept === 'supplychain' ? 'Supply Chain Analytics' : currentDept === 'finance' ? 'Finance Analytics' : currentDept === 'administration' ? 'IT & Administration Analytics' : currentDept === 'sales' ? 'Sales & Revenue Analytics' : 'Executive View'}
               </span>
             </div>
 
@@ -317,6 +330,31 @@ function AppContent() {
                   </Link>
                 </>
               )}
+              {currentDept === 'sales' && (
+                <>
+                  <Link
+                    to="/sales"
+                    className="text-gray-300 hover:text-amber-400 px-4 py-2 text-sm font-medium transition-all duration-200 relative group"
+                  >
+                    <span className="relative z-10">Dashboard</span>
+                    <div className="absolute inset-0 bg-amber-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                  </Link>
+                  <Link
+                    to="/sales/reports"
+                    className="text-gray-300 hover:text-amber-400 px-4 py-2 text-sm font-medium transition-all duration-200 relative group"
+                  >
+                    <span className="relative z-10">Sales Reports</span>
+                    <div className="absolute inset-0 bg-amber-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                  </Link>
+                  <Link
+                    to="/sales/pain-points"
+                    className="text-gray-300 hover:text-amber-400 px-4 py-2 text-sm font-medium transition-all duration-200 relative group"
+                  >
+                    <span className="relative z-10">Pain Points</span>
+                    <div className="absolute inset-0 bg-amber-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                  </Link>
+                </>
+              )}
               {currentDept === 'executive' && (
                 <>
                   <Link
@@ -393,6 +431,12 @@ function AppContent() {
           <Route path="/administration/reports" element={<CustomReports />} />
           <Route path="/administration/pain-points" element={<PainPointsAdministration />} />
 
+          {/* Sales & Revenue Analytics Routes */}
+          <Route path="/sales" element={<DashboardSales />} />
+          <Route path="/sales/kpi/:kpiName" element={<KPIDetail />} />
+          <Route path="/sales/reports" element={<CustomReports />} />
+          <Route path="/sales/pain-points" element={<PainPointsSales />} />
+
           {/* Executive Routes - Placeholder for now */}
           <Route path="/executive" element={
             <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white p-8">
@@ -413,7 +457,7 @@ function AppContent() {
       <footer className="bg-gray-900/80 backdrop-blur-sm border-t border-cyan-500/30 mt-12">
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <p className="text-center text-sm text-gray-400">
-            © 2024 ElevareIQ Platform | HR • HSE • Operations • Quality Control • Supply Chain • Finance • IT & Administration Analytics for C-Suite Executives |
+            © 2024 ElevareIQ Platform | HR • HSE • Operations • Quality Control • Supply Chain • Finance • IT & Administration • Sales & Revenue Analytics for C-Suite Executives |
             <span className="ml-2 text-cyan-400">All Calculations Transparent & Auditable</span>
           </p>
         </div>

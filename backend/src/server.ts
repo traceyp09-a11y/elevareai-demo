@@ -8,6 +8,7 @@ import { QCKPICalculationService } from './services/kpiCalculationsQC';
 import { SupplyChainKPICalculationService } from './services/kpiCalculationsSupplyChain';
 import { FinanceKPICalculationService } from './services/kpiCalculationsFinance';
 import { AdminKPICalculationService } from './services/kpiCalculationsAdministration';
+import { SalesKPICalculationService } from './services/kpiCalculationsSales';
 import { PredictiveAnalyticsService } from './services/predictiveAnalytics';
 
 const app = express();
@@ -26,6 +27,7 @@ const qcKpiService = new QCKPICalculationService(dbPath);
 const scKpiService = new SupplyChainKPICalculationService(dbPath);
 const financeKpiService = new FinanceKPICalculationService(dbPath);
 const adminKpiService = new AdminKPICalculationService(dbPath);
+const salesKpiService = new SalesKPICalculationService(dbPath);
 const predictiveService = new PredictiveAnalyticsService(dbPath);
 
 // Health check
@@ -2242,6 +2244,373 @@ app.get('/api/administration/pain-points', (req: Request, res: Response) => {
       ],
       responsible_department: 'CIO / Infrastructure',
       timeline: '60 days'
+    }
+  ];
+
+  res.json({
+    success: true,
+    period: {
+      startDate,
+      endDate,
+      label: 'Q4 2024'
+    },
+    pain_points
+  });
+});
+
+// ========== SALES & REVENUE MODULE API ENDPOINTS ==========
+
+// Get all Sales KPIs for current period
+app.get('/api/sales/kpis/current', (req: Request, res: Response) => {
+  try {
+    const startDate = '2024-10-01';
+    const endDate = '2024-12-31';
+
+    const kpis = salesKpiService.getAllKPIs(startDate, endDate);
+
+    res.json({
+      success: true,
+      period: { startDate, endDate, label: 'Q4 2024' },
+      kpis: kpis
+    });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Get all Sales KPIs for custom period
+app.get('/api/sales/kpis/period', (req: Request, res: Response) => {
+  try {
+    const { startDate, endDate } = req.query;
+
+    if (!startDate || !endDate) {
+      return res.status(400).json({
+        success: false,
+        error: 'startDate and endDate query parameters are required'
+      });
+    }
+
+    const kpis = salesKpiService.getAllKPIs(startDate as string, endDate as string);
+
+    res.json({
+      success: true,
+      period: { startDate, endDate },
+      kpis: kpis
+    });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Individual Sales KPI endpoints
+
+app.get('/api/sales/kpi/win-rate', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = salesKpiService.calculateWinRate(startDate, endDate);
+    res.json({ success: true, kpi: 'Win Rate', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/sales/kpi/sales-cycle-length', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = salesKpiService.calculateAvgSalesCycleLength(startDate, endDate);
+    res.json({ success: true, kpi: 'Average Sales Cycle Length', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/sales/kpi/pipeline-velocity', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = salesKpiService.calculatePipelineVelocity(startDate, endDate);
+    res.json({ success: true, kpi: 'Pipeline Velocity', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/sales/kpi/quota-attainment', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = salesKpiService.calculateQuotaAttainment(startDate, endDate);
+    res.json({ success: true, kpi: 'Quota Attainment', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/sales/kpi/avg-deal-size', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = salesKpiService.calculateAvgDealSize(startDate, endDate);
+    res.json({ success: true, kpi: 'Average Deal Size', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/sales/kpi/cac', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = salesKpiService.calculateCAC(startDate, endDate);
+    res.json({ success: true, kpi: 'Customer Acquisition Cost', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/sales/kpi/revenue-per-rep', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = salesKpiService.calculateRevenuePerRep(startDate, endDate);
+    res.json({ success: true, kpi: 'Revenue per Sales Rep', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/sales/kpi/forecast-accuracy', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = salesKpiService.calculateForecastAccuracy(startDate, endDate);
+    res.json({ success: true, kpi: 'Forecast Accuracy', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/sales/kpi/lead-conversion-rate', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = salesKpiService.calculateLeadConversionRate(startDate, endDate);
+    res.json({ success: true, kpi: 'Lead Conversion Rate', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/sales/kpi/mrr-growth', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+
+    const result = salesKpiService.calculateMRRGrowthRate(startDate, endDate);
+    res.json({ success: true, kpi: 'MRR Growth Rate', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Sales Pain Points Endpoint
+app.get('/api/sales/pain-points', (req: Request, res: Response) => {
+  const startDate = '2024-10-01';
+  const endDate = '2024-12-31';
+
+  const kpis = salesKpiService.getAllKPIs(startDate, endDate);
+
+  const pain_points = [
+    {
+      id: 1,
+      title: 'Win Rate Below Industry Benchmark',
+      description: 'Sales win rate is tracking significantly below the 25% industry benchmark, indicating issues with lead quality, sales process, or competitive positioning.',
+      severity: kpis.winRate.value < 20 ? 'Critical' : 'High',
+      affected_metric: 'Win Rate',
+      current_value: kpis.winRate.value + '%',
+      target_value: kpis.winRate.benchmark + '%',
+      estimated_cost: '$2.5M/year in lost revenue opportunities',
+      recommended_actions: [
+        'Implement lead qualification framework (BANT/MEDDIC) to improve pipeline quality',
+        'Conduct win/loss analysis to identify competitive gaps and positioning weaknesses',
+        'Provide advanced sales training on objection handling and value selling',
+        'Review and optimize pricing strategy to improve competitive positioning'
+      ],
+      responsible_department: 'VP Sales / Sales Enablement',
+      timeline: '90 days'
+    },
+    {
+      id: 2,
+      title: 'Extended Sales Cycle Slowing Revenue Growth',
+      description: 'Average sales cycle length exceeds target, delaying revenue recognition and reducing sales team productivity.',
+      severity: kpis.avgSalesCycleLength.value > 60 ? 'Critical' : kpis.avgSalesCycleLength.value > 45 ? 'High' : 'Medium',
+      affected_metric: 'Average Sales Cycle Length',
+      current_value: kpis.avgSalesCycleLength.value + ' days',
+      target_value: kpis.avgSalesCycleLength.benchmark + ' days',
+      estimated_cost: '$1.8M/year in delayed revenue and reduced capacity',
+      recommended_actions: [
+        'Implement sales process automation to eliminate manual bottlenecks',
+        'Create standardized proposal templates and ROI calculators for faster deal closure',
+        'Establish executive sponsorship program to accelerate enterprise deal approvals',
+        'Analyze deal stages to identify and remove unnecessary friction points'
+      ],
+      responsible_department: 'VP Sales / Sales Operations',
+      timeline: '120 days'
+    },
+    {
+      id: 3,
+      title: 'Low Pipeline Velocity Constraining Growth',
+      description: 'Pipeline velocity ($/day) is below target, indicating insufficient pipeline generation and/or slow deal progression.',
+      severity: kpis.pipelineVelocity.value < 30000 ? 'Critical' : 'High',
+      affected_metric: 'Pipeline Velocity',
+      current_value: '$' + kpis.pipelineVelocity.value.toLocaleString() + '/day',
+      target_value: '$' + kpis.pipelineVelocity.benchmark.toLocaleString() + '/day',
+      estimated_cost: '$3.2M/year in unrealized revenue potential',
+      recommended_actions: [
+        'Increase top-of-funnel activity through enhanced marketing and SDR collaboration',
+        'Implement pipeline acceleration plays for stalled opportunities',
+        'Focus on higher-value deal segments to improve average deal size',
+        'Create fast-track sales process for qualified, high-intent prospects'
+      ],
+      responsible_department: 'CRO / VP Sales / VP Marketing',
+      timeline: '90 days'
+    },
+    {
+      id: 4,
+      title: 'Team Missing Quota Targets Consistently',
+      description: 'Average quota attainment is below 100%, indicating misalignment between targets and market reality or underperformance.',
+      severity: kpis.quotaAttainment.value < 80 ? 'Critical' : kpis.quotaAttainment.value < 100 ? 'High' : 'Medium',
+      affected_metric: 'Quota Attainment',
+      current_value: kpis.quotaAttainment.value + '%',
+      target_value: kpis.quotaAttainment.benchmark + '%',
+      estimated_cost: '$2.1M/year in missed revenue targets',
+      recommended_actions: [
+        'Review quota setting methodology to ensure targets are realistic and achievable',
+        'Provide targeted coaching and performance improvement plans for underperforming reps',
+        'Analyze top performers to identify and replicate best practices across the team',
+        'Implement sales contests and incentives to drive Q4 performance surge'
+      ],
+      responsible_department: 'VP Sales / Sales Management',
+      timeline: '60 days'
+    },
+    {
+      id: 5,
+      title: 'Average Deal Size Below Target Market Potential',
+      description: 'Average deal size is lower than expected, suggesting focus on wrong market segments or insufficient upselling.',
+      severity: kpis.avgDealSize.value < 30000 ? 'Critical' : 'High',
+      affected_metric: 'Average Deal Size',
+      current_value: '$' + kpis.avgDealSize.value.toLocaleString(),
+      target_value: '$' + kpis.avgDealSize.benchmark.toLocaleString(),
+      estimated_cost: '$1.5M/year in unrealized deal potential',
+      recommended_actions: [
+        'Shift focus to mid-market and enterprise segments with higher deal values',
+        'Create multi-product bundles and solutions packages to increase deal size',
+        'Train sales team on value-based selling and business case development',
+        'Implement land-and-expand strategy with clear expansion playbooks'
+      ],
+      responsible_department: 'VP Sales / Product Marketing',
+      timeline: '120 days'
+    },
+    {
+      id: 6,
+      title: 'Customer Acquisition Cost Exceeding Healthy Ratios',
+      description: 'CAC is significantly above target, indicating inefficient go-to-market spend or low conversion rates.',
+      severity: kpis.customerAcquisitionCost.value > 20000 ? 'Critical' : 'High',
+      affected_metric: 'Customer Acquisition Cost (CAC)',
+      current_value: '$' + kpis.customerAcquisitionCost.value.toLocaleString(),
+      target_value: '$' + kpis.customerAcquisitionCost.benchmark.toLocaleString(),
+      estimated_cost: '$900K/year in excess acquisition costs',
+      recommended_actions: [
+        'Optimize marketing spend allocation toward highest-converting channels',
+        'Improve lead quality through better targeting and qualification criteria',
+        'Implement product-led growth motions to reduce sales-assisted acquisition costs',
+        'Increase reliance on referrals and partner channels with lower CAC'
+      ],
+      responsible_department: 'CRO / VP Sales / VP Marketing',
+      timeline: '90 days'
+    },
+    {
+      id: 7,
+      title: 'Revenue per Rep Below Productivity Targets',
+      description: 'Revenue per sales rep is below benchmark, indicating underperformance or inadequate support/enablement.',
+      severity: kpis.revenuePerRep.value < 350000 ? 'Critical' : 'High',
+      affected_metric: 'Revenue per Sales Rep',
+      current_value: '$' + kpis.revenuePerRep.value.toLocaleString(),
+      target_value: '$' + kpis.revenuePerRep.benchmark.toLocaleString(),
+      estimated_cost: '$1.2M/year in lost productivity',
+      recommended_actions: [
+        'Implement sales enablement platform with playbooks, content, and training resources',
+        'Hire SDR team to handle prospecting and qualification, freeing AEs for closing',
+        'Provide better sales tools (CRM, sales intelligence, proposal automation)',
+        'Conduct quarterly business reviews with each rep to remove blockers and optimize territory'
+      ],
+      responsible_department: 'VP Sales / Sales Enablement',
+      timeline: '120 days'
+    },
+    {
+      id: 8,
+      title: 'Poor Forecast Accuracy Creating Planning Challenges',
+      description: 'Forecast accuracy variance is too high, making it difficult to plan resources and set realistic expectations.',
+      severity: kpis.forecastAccuracy.value < 80 || kpis.forecastAccuracy.value > 120 ? 'Critical' : 'High',
+      affected_metric: 'Forecast Accuracy',
+      current_value: kpis.forecastAccuracy.value + '%',
+      target_value: kpis.forecastAccuracy.benchmark + '%',
+      estimated_cost: 'Resource planning challenges and credibility loss',
+      recommended_actions: [
+        'Implement structured forecast methodology with clear stage definitions and exit criteria',
+        'Require forecast commits to be based on multi-threaded customer validation',
+        'Conduct weekly forecast reviews with deal inspection and accountability',
+        'Use CRM data quality rules to ensure forecast submissions are based on complete information'
+      ],
+      responsible_department: 'VP Sales / Sales Operations',
+      timeline: '60 days'
+    },
+    {
+      id: 9,
+      title: 'Lead Conversion Rate Indicates Qualification Problems',
+      description: 'Lead-to-opportunity conversion rate is below target, suggesting poor lead quality or inadequate follow-up.',
+      severity: kpis.leadConversionRate.value < 10 ? 'Critical' : 'High',
+      affected_metric: 'Lead Conversion Rate',
+      current_value: kpis.leadConversionRate.value + '%',
+      target_value: kpis.leadConversionRate.benchmark + '%',
+      estimated_cost: '$750K/year in wasted lead acquisition spend',
+      recommended_actions: [
+        'Implement lead scoring model to prioritize highest-quality leads',
+        'Establish SLA between marketing and sales for lead follow-up speed',
+        'Provide SDR team with better qualification scripts and discovery questions',
+        'Create feedback loop from sales to marketing on lead quality by source/campaign'
+      ],
+      responsible_department: 'VP Sales / VP Marketing',
+      timeline: '90 days'
+    },
+    {
+      id: 10,
+      title: 'MRR Growth Rate Below SaaS Benchmarks',
+      description: 'Monthly Recurring Revenue growth is below target for a high-growth SaaS business, risking investor confidence.',
+      severity: kpis.mrrGrowthRate.value < 5 ? 'Critical' : 'High',
+      affected_metric: 'MRR Growth Rate',
+      current_value: kpis.mrrGrowthRate.value + '%',
+      target_value: kpis.mrrGrowthRate.benchmark + '%',
+      estimated_cost: 'Valuation impact and missed growth targets',
+      recommended_actions: [
+        'Focus on expansion revenue from existing customers (upsell/cross-sell)',
+        'Launch product-led growth initiatives to accelerate new customer acquisition',
+        'Implement customer success programs to reduce churn and increase net retention',
+        'Develop strategic partnerships to access new customer segments and geographies'
+      ],
+      responsible_department: 'CRO / VP Sales / VP Customer Success',
+      timeline: '180 days'
     }
   ];
 
