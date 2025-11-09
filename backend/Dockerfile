@@ -22,5 +22,5 @@ EXPOSE 3001
 # Create database directory
 RUN mkdir -p /app/database
 
-# Initialize and seed the database (HR + HSE + Operations + QC + Supply Chain), then start the server
-CMD ["sh", "-c", "npm run init-db && npm run seed-data && npm run seed-hse && npm run seed-ops && npm run seed-qc && npm run seed-supplychain && npm run dev"]
+# Initialize and seed the database (All Modules), then start the server
+CMD ["sh", "-c", "npm run init-db && npm run seed-data && npm run seed-hse && npm run seed-ops && npm run seed-qc && npm run seed-supplychain && npm run init:finance && npm run init:administration && npm run init:sales && npm run init:customer-success && npm run dev"]
