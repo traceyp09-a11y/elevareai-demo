@@ -2954,10 +2954,22 @@ app.get('/api/customer-success/pain-points', (req: Request, res: Response) => {
     }
   ];
 
+  // Transform to frontend format
+  const painPoints = pain_points.map(pp => ({
+    id: pp.id.toString(),
+    title: pp.title,
+    severity: pp.severity.toLowerCase() as 'high' | 'medium' | 'low',
+    category: pp.affected_metric,
+    description: pp.description,
+    impact: `Current: ${pp.current_value} | Target: ${pp.target_value}. ${pp.description}`,
+    recommendation: pp.recommended_actions.join('. ') + '.',
+    estimatedCost: pp.estimated_cost
+  }));
+
   res.json({
     success: true,
-    period: { startDate, endDate, label: 'Q4 2024' },
-    pain_points
+    count: painPoints.length,
+    painPoints
   });
 });
 
