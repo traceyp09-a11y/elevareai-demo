@@ -1,6 +1,7 @@
 import Database from 'better-sqlite3';
 
 interface KPIResult {
+  name: string;
   value: number;
   unit: string;
   benchmark: number;

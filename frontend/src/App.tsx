@@ -19,6 +19,8 @@ import DashboardAdministration from './pages/DashboardAdministration';
 import PainPointsAdministration from './pages/PainPointsAdministration';
 import DashboardSales from './pages/DashboardSales';
 import PainPointsSales from './pages/PainPointsSales';
+import DashboardCustomerSuccess from './pages/DashboardCustomerSuccess';
+import PainPointsCustomerSuccess from './pages/PainPointsCustomerSuccess';
 import ElevareLogo from './components/ElevareLogo';
 import './App.css';
 
@@ -31,8 +33,9 @@ function AppContent() {
   const isFinance = location.pathname.startsWith('/finance');
   const isAdmin = location.pathname.startsWith('/administration');
   const isSales = location.pathname.startsWith('/sales');
+  const isCustomerSuccess = location.pathname.startsWith('/customer-success');
   const isExecutive = location.pathname.startsWith('/executive');
-  const currentDept = isHSE ? 'hse' : isOps ? 'ops' : isQC ? 'qc' : isSC ? 'supplychain' : isFinance ? 'finance' : isAdmin ? 'administration' : isSales ? 'sales' : isExecutive ? 'executive' : 'hr';
+  const currentDept = isHSE ? 'hse' : isOps ? 'ops' : isQC ? 'qc' : isSC ? 'supplychain' : isFinance ? 'finance' : isAdmin ? 'administration' : isSales ? 'sales' : isCustomerSuccess ? 'customer-success' : isExecutive ? 'executive' : 'hr';
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black">
@@ -123,6 +126,16 @@ function AppContent() {
               💰 Sales & Revenue Analytics
             </Link>
             <Link
+              to="/customer-success"
+              className={`px-4 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                currentDept === 'customer-success'
+                  ? 'bg-teal-500 text-white shadow-lg shadow-teal-500/50'
+                  : 'bg-gray-800/50 text-gray-400 hover:bg-gray-700/50 hover:text-gray-300'
+              }`}
+            >
+              ❤️ Customer Success
+            </Link>
+            <Link
               to="/executive"
               className={`px-4 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                 currentDept === 'executive'
@@ -142,7 +155,7 @@ function AppContent() {
               </Link>
               <div className="h-6 w-px bg-gray-700"></div>
               <span className="text-sm font-semibold text-cyan-400">
-                {currentDept === 'hr' ? 'HR Analytics' : currentDept === 'hse' ? 'HSE Analytics' : currentDept === 'ops' ? 'Operations Analytics' : currentDept === 'qc' ? 'Quality Control Analytics' : currentDept === 'supplychain' ? 'Supply Chain Analytics' : currentDept === 'finance' ? 'Finance Analytics' : currentDept === 'administration' ? 'IT & Administration Analytics' : currentDept === 'sales' ? 'Sales & Revenue Analytics' : 'Executive View'}
+                {currentDept === 'hr' ? 'HR Analytics' : currentDept === 'hse' ? 'HSE Analytics' : currentDept === 'ops' ? 'Operations Analytics' : currentDept === 'qc' ? 'Quality Control Analytics' : currentDept === 'supplychain' ? 'Supply Chain Analytics' : currentDept === 'finance' ? 'Finance Analytics' : currentDept === 'administration' ? 'IT & Administration Analytics' : currentDept === 'sales' ? 'Sales & Revenue Analytics' : currentDept === 'customer-success' ? 'Customer Success & Experience Analytics' : 'Executive View'}
               </span>
             </div>
 
@@ -355,6 +368,31 @@ function AppContent() {
                   </Link>
                 </>
               )}
+              {currentDept === 'customer-success' && (
+                <>
+                  <Link
+                    to="/customer-success"
+                    className="text-gray-300 hover:text-teal-400 px-4 py-2 text-sm font-medium transition-all duration-200 relative group"
+                  >
+                    <span className="relative z-10">Dashboard</span>
+                    <div className="absolute inset-0 bg-teal-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                  </Link>
+                  <Link
+                    to="/customer-success/reports"
+                    className="text-gray-300 hover:text-teal-400 px-4 py-2 text-sm font-medium transition-all duration-200 relative group"
+                  >
+                    <span className="relative z-10">CS Reports</span>
+                    <div className="absolute inset-0 bg-teal-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                  </Link>
+                  <Link
+                    to="/customer-success/pain-points"
+                    className="text-gray-300 hover:text-teal-400 px-4 py-2 text-sm font-medium transition-all duration-200 relative group"
+                  >
+                    <span className="relative z-10">Pain Points</span>
+                    <div className="absolute inset-0 bg-teal-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                  </Link>
+                </>
+              )}
               {currentDept === 'executive' && (
                 <>
                   <Link
@@ -437,6 +475,12 @@ function AppContent() {
           <Route path="/sales/reports" element={<CustomReports />} />
           <Route path="/sales/pain-points" element={<PainPointsSales />} />
 
+          {/* Customer Success & Experience Analytics Routes */}
+          <Route path="/customer-success" element={<DashboardCustomerSuccess />} />
+          <Route path="/customer-success/kpi/:kpiName" element={<KPIDetail />} />
+          <Route path="/customer-success/reports" element={<CustomReports />} />
+          <Route path="/customer-success/pain-points" element={<PainPointsCustomerSuccess />} />
+
           {/* Executive Routes - Placeholder for now */}
           <Route path="/executive" element={
             <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white p-8">
@@ -457,7 +501,7 @@ function AppContent() {
       <footer className="bg-gray-900/80 backdrop-blur-sm border-t border-cyan-500/30 mt-12">
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <p className="text-center text-sm text-gray-400">
-            © 2024 ElevareIQ Platform | HR • HSE • Operations • Quality Control • Supply Chain • Finance • IT & Administration • Sales & Revenue Analytics for C-Suite Executives |
+            © 2024 ElevareIQ Platform | HR • HSE • Operations • Quality Control • Supply Chain • Finance • IT & Administration • Sales & Revenue • Customer Success Analytics for C-Suite Executives |
             <span className="ml-2 text-cyan-400">All Calculations Transparent & Auditable</span>
           </p>
         </div>

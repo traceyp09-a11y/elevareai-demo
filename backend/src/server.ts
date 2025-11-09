@@ -9,6 +9,7 @@ import { SupplyChainKPICalculationService } from './services/kpiCalculationsSupp
 import { FinanceKPICalculationService } from './services/kpiCalculationsFinance';
 import { AdminKPICalculationService } from './services/kpiCalculationsAdministration';
 import { SalesKPICalculationService } from './services/kpiCalculationsSales';
+import { CustomerSuccessKPICalculationService } from './services/kpiCalculationsCustomerSuccess';
 import { PredictiveAnalyticsService } from './services/predictiveAnalytics';
 
 const app = express();
@@ -28,6 +29,7 @@ const scKpiService = new SupplyChainKPICalculationService(dbPath);
 const financeKpiService = new FinanceKPICalculationService(dbPath);
 const adminKpiService = new AdminKPICalculationService(dbPath);
 const salesKpiService = new SalesKPICalculationService(dbPath);
+const csKpiService = new CustomerSuccessKPICalculationService(dbPath);
 const predictiveService = new PredictiveAnalyticsService(dbPath);
 
 // Health check
@@ -2047,10 +2049,9 @@ app.get('/api/administration/kpi/ticket-resolution-time', (req: Request, res: Re
 
 app.get('/api/administration/kpi/infrastructure-utilization', (req: Request, res: Response) => {
   try {
-    const startDate = req.query.startDate as string || '2024-10-01';
     const endDate = req.query.endDate as string || '2024-12-31';
 
-    const result = adminKpiService.calculateInfrastructureUtilization(startDate, endDate);
+    const result = adminKpiService.calculateInfrastructureUtilization(endDate);
     res.json({ success: true, kpi: 'Infrastructure Capacity Utilization', ...result });
   } catch (error: any) {
     res.status(500).json({ success: false, error: error.message });
@@ -2621,6 +2622,341 @@ app.get('/api/sales/pain-points', (req: Request, res: Response) => {
       endDate,
       label: 'Q4 2024'
     },
+    pain_points
+  });
+});
+
+// ========== CUSTOMER SUCCESS & EXPERIENCE MODULE API ENDPOINTS ==========
+
+// Get all Customer Success KPIs for current period
+app.get('/api/customer-success/kpis/current', (req: Request, res: Response) => {
+  try {
+    const startDate = '2024-10-01';
+    const endDate = '2024-12-31';
+    const kpis = csKpiService.getAllKPIs(startDate, endDate);
+    res.json({ success: true, period: { startDate, endDate, label: 'Q4 2024' }, kpis });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Get all Customer Success KPIs for custom period
+app.get('/api/customer-success/kpis/period', (req: Request, res: Response) => {
+  try {
+    const { startDate, endDate } = req.query;
+    if (!startDate || !endDate) {
+      return res.status(400).json({ success: false, error: 'startDate and endDate required' });
+    }
+    const kpis = csKpiService.getAllKPIs(startDate as string, endDate as string);
+    res.json({ success: true, period: { startDate, endDate }, kpis });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Individual Customer Success KPI endpoints
+app.get('/api/customer-success/kpi/nps', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+    const result = csKpiService.calculateNPS(startDate, endDate);
+    res.json({ success: true, kpi: 'Net Promoter Score', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/customer-success/kpi/csat', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+    const result = csKpiService.calculateCSAT(startDate, endDate);
+    res.json({ success: true, kpi: 'CSAT', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/customer-success/kpi/ces', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+    const result = csKpiService.calculateCES(startDate, endDate);
+    res.json({ success: true, kpi: 'CES', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/customer-success/kpi/churn-rate', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+    const result = csKpiService.calculateChurnRate(startDate, endDate);
+    res.json({ success: true, kpi: 'Churn Rate', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/customer-success/kpi/ltv', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+    const result = csKpiService.calculateCustomerLTV(startDate, endDate);
+    res.json({ success: true, kpi: 'Customer LTV', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/customer-success/kpi/nrr', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+    const result = csKpiService.calculateNetRevenueRetention(startDate, endDate);
+    res.json({ success: true, kpi: 'Net Revenue Retention', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/customer-success/kpi/health-score', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+    const result = csKpiService.calculateAvgHealthScore(startDate, endDate);
+    res.json({ success: true, kpi: 'Health Score', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/customer-success/kpi/time-to-value', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+    const result = csKpiService.calculateTimeToFirstValue(startDate, endDate);
+    res.json({ success: true, kpi: 'Time to First Value', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/customer-success/kpi/adoption-rate', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+    const result = csKpiService.calculateProductAdoptionRate(startDate, endDate);
+    res.json({ success: true, kpi: 'Product Adoption Rate', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/customer-success/kpi/ticket-resolution', (req: Request, res: Response) => {
+  try {
+    const startDate = req.query.startDate as string || '2024-10-01';
+    const endDate = req.query.endDate as string || '2024-12-31';
+    const result = csKpiService.calculateAvgTicketResolution(startDate, endDate);
+    res.json({ success: true, kpi: 'Ticket Resolution Time', ...result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Customer Success Pain Points Endpoint
+app.get('/api/customer-success/pain-points', (req: Request, res: Response) => {
+  const startDate = '2024-10-01';
+  const endDate = '2024-12-31';
+  const kpis = csKpiService.getAllKPIs(startDate, endDate);
+
+  const pain_points = [
+    {
+      id: 1,
+      title: 'NPS Score Below Industry Benchmark',
+      description: 'Net Promoter Score indicates customer loyalty and advocacy are below target, risking organic growth through referrals.',
+      severity: kpis.nps.value < 30 ? 'Critical' : 'High',
+      affected_metric: 'Net Promoter Score (NPS)',
+      current_value: kpis.nps.value.toString(),
+      target_value: kpis.nps.benchmark.toString(),
+      estimated_cost: '$1.5M/year in lost referral revenue',
+      recommended_actions: [
+        'Conduct detractor outreach program to understand and address pain points',
+        'Implement closed-loop feedback system to act on survey results',
+        'Create promoter advocacy program (case studies, referrals, reviews)',
+        'Address top 3 themes from NPS feedback with product/service improvements'
+      ],
+      responsible_department: 'VP Customer Success / Product',
+      timeline: '90 days'
+    },
+    {
+      id: 2,
+      title: 'Customer Satisfaction Below Expectations',
+      description: 'CSAT scores indicate customers are not fully satisfied with product experience or support quality.',
+      severity: kpis.csat.value < 3.5 ? 'Critical' : 'High',
+      affected_metric: 'Customer Satisfaction (CSAT)',
+      current_value: kpis.csat.value.toFixed(1) + '/5.0',
+      target_value: kpis.csat.benchmark.toFixed(1) + '/5.0',
+      estimated_cost: '$800K/year in at-risk renewals',
+      recommended_actions: [
+        'Analyze low-CSAT interactions to identify service gaps',
+        'Improve support team training on product knowledge and soft skills',
+        'Implement proactive customer check-ins before renewal periods',
+        'Create customer education program (webinars, documentation, certification)'
+      ],
+      responsible_department: 'VP Customer Success / Support',
+      timeline: '60 days'
+    },
+    {
+      id: 3,
+      title: 'High Customer Effort Scores Indicating Friction',
+      description: 'CES data shows customers find it difficult to get value from product, leading to poor adoption and churn risk.',
+      severity: kpis.ces.value < 5.0 ? 'Critical' : 'High',
+      affected_metric: 'Customer Effort Score (CES)',
+      current_value: kpis.ces.value.toFixed(1) + '/7.0',
+      target_value: kpis.ces.benchmark.toFixed(1) + '/7.0',
+      estimated_cost: '$650K/year in churn from poor UX',
+      recommended_actions: [
+        'Conduct UX research to identify friction points in customer journey',
+        'Simplify onboarding and product setup processes',
+        'Improve in-app guidance and contextual help',
+        'Create self-service knowledge base and video tutorials'
+      ],
+      responsible_department: 'Product / Customer Success',
+      timeline: '120 days'
+    },
+    {
+      id: 4,
+      title: 'Churn Rate Exceeding Healthy SaaS Benchmarks',
+      description: 'Customer churn rate is above acceptable levels, directly impacting revenue growth and company valuation.',
+      severity: kpis.churnRate.value > 8 ? 'Critical' : 'High',
+      affected_metric: 'Churn Rate',
+      current_value: kpis.churnRate.value.toFixed(1) + '%',
+      target_value: kpis.churnRate.benchmark.toFixed(1) + '%',
+      estimated_cost: '$2.3M/year in lost ARR',
+      recommended_actions: [
+        'Implement early warning system for at-risk customers (health score monitoring)',
+        'Create win-back program for churned customers with exit interview insights',
+        'Establish executive business reviews (EBRs) for strategic accounts',
+        'Develop customer success playbooks for common churn scenarios'
+      ],
+      responsible_department: 'VP Customer Success / CRO',
+      timeline: '90 days'
+    },
+    {
+      id: 5,
+      title: 'Customer Lifetime Value Below Target',
+      description: 'LTV is lower than expected due to high churn and/or insufficient expansion revenue, limiting growth efficiency.',
+      severity: kpis.customerLTV.value < 70000 ? 'Critical' : 'High',
+      affected_metric: 'Customer Lifetime Value (LTV)',
+      current_value: '$' + kpis.customerLTV.value.toLocaleString(),
+      target_value: '$' + kpis.customerLTV.benchmark.toLocaleString(),
+      estimated_cost: 'CAC payback period too long, unprofitable unit economics',
+      recommended_actions: [
+        'Reduce churn through improved customer success engagement',
+        'Increase expansion revenue through upsell/cross-sell programs',
+        'Improve product stickiness with advanced features and integrations',
+        'Optimize pricing to capture more value from high-usage customers'
+      ],
+      responsible_department: 'CRO / VP Customer Success',
+      timeline: '180 days'
+    },
+    {
+      id: 6,
+      title: 'Net Revenue Retention Below Growth Standards',
+      description: 'NRR below 110% indicates expansion revenue is not offsetting churn, limiting growth potential.',
+      severity: kpis.netRevenueRetention.value < 100 ? 'Critical' : 'High',
+      affected_metric: 'Net Revenue Retention (NRR)',
+      current_value: kpis.netRevenueRetention.value.toFixed(1) + '%',
+      target_value: kpis.netRevenueRetention.benchmark.toFixed(1) + '%',
+      estimated_cost: '$1.8M/year in unrealized expansion revenue',
+      recommended_actions: [
+        'Launch systematic expansion motion (identify, qualify, close upsells)',
+        'Create usage-based pricing tiers to capture growth organically',
+        'Develop customer success-to-sales handoff process for expansion deals',
+        'Build customer segmentation model to prioritize expansion opportunities'
+      ],
+      responsible_department: 'CRO / VP Customer Success / VP Sales',
+      timeline: '120 days'
+    },
+    {
+      id: 7,
+      title: 'Low Customer Health Scores Indicating Risk',
+      description: 'Average health score suggests many customers are at risk of churn or not achieving desired outcomes.',
+      severity: kpis.avgHealthScore.value < 60 ? 'Critical' : 'High',
+      affected_metric: 'Average Customer Health Score',
+      current_value: kpis.avgHealthScore.value.toFixed(1) + '/100',
+      target_value: kpis.avgHealthScore.benchmark.toFixed(1) + '/100',
+      estimated_cost: '$1.2M/year in preventable churn',
+      recommended_actions: [
+        'Refine health scoring model to include usage, engagement, support, and sentiment',
+        'Implement automated playbooks triggered by health score changes',
+        'Assign dedicated CSMs to red/yellow health score accounts',
+        'Create quarterly business review (QBR) cadence for all customers'
+      ],
+      responsible_department: 'VP Customer Success',
+      timeline: '60 days'
+    },
+    {
+      id: 8,
+      title: 'Extended Time to First Value Delaying Adoption',
+      description: 'New customers are taking too long to achieve first value, increasing early-stage churn risk.',
+      severity: kpis.timeToFirstValue.value > 21 ? 'Critical' : 'High',
+      affected_metric: 'Time to First Value',
+      current_value: kpis.timeToFirstValue.value.toFixed(1) + ' days',
+      target_value: kpis.timeToFirstValue.benchmark.toFixed(1) + ' days',
+      estimated_cost: '$450K/year in early churn',
+      recommended_actions: [
+        'Redesign onboarding program with clear milestones and success criteria',
+        'Create fast-start templates and pre-built configurations',
+        'Implement white-glove onboarding for high-value customers',
+        'Measure and optimize each onboarding stage for bottlenecks'
+      ],
+      responsible_department: 'VP Customer Success / Product',
+      timeline: '90 days'
+    },
+    {
+      id: 9,
+      title: 'Poor Product Adoption Limiting Value Realization',
+      description: 'Customers are not adopting key features, reducing perceived value and increasing churn risk.',
+      severity: kpis.productAdoptionRate.value < 50 ? 'Critical' : 'High',
+      affected_metric: 'Product Adoption Rate',
+      current_value: kpis.productAdoptionRate.value.toFixed(1) + '%',
+      target_value: kpis.productAdoptionRate.benchmark.toFixed(1) + '%',
+      estimated_cost: '$950K/year in churn from low value perception',
+      recommended_actions: [
+        'Create feature adoption campaigns with use case demonstrations',
+        'Implement in-app messaging to promote underutilized features',
+        'Develop role-based onboarding journeys highlighting relevant features',
+        'Track feature adoption by customer segment and create targeted enablement'
+      ],
+      responsible_department: 'Product / Customer Success',
+      timeline: '120 days'
+    },
+    {
+      id: 10,
+      title: 'Slow Support Ticket Resolution Damaging Experience',
+      description: 'Support resolution times exceed customer expectations, leading to dissatisfaction and churn risk.',
+      severity: kpis.avgTicketResolution.value > 48 ? 'Critical' : 'High',
+      affected_metric: 'Avg Support Ticket Resolution Time',
+      current_value: kpis.avgTicketResolution.value.toFixed(1) + ' hours',
+      target_value: kpis.avgTicketResolution.benchmark.toFixed(1) + ' hours',
+      estimated_cost: '$550K/year in support-driven churn',
+      recommended_actions: [
+        'Analyze ticket patterns to identify and fix root cause issues in product',
+        'Implement tiered support SLAs based on customer segment and severity',
+        'Expand self-service options (knowledge base, community, AI chatbot)',
+        'Provide advanced technical training to support team'
+      ],
+      responsible_department: 'VP Customer Support / Product',
+      timeline: '60 days'
+    }
+  ];
+
+  res.json({
+    success: true,
+    period: { startDate, endDate, label: 'Q4 2024' },
     pain_points
   });
 });
