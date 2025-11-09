@@ -119,6 +119,8 @@ while (currentDate <= endDate) {
     const numLines = randomInt(1, 5);
     let orderTotal = 0;
 
+    // Calculate order total and prepare line items
+    const lineItems = [];
     for (let line = 1; line <= numLines; line++) {
       const product = randomChoice(products);
       const qtyOrdered = randomInt(10, 500);
@@ -127,11 +129,19 @@ while (currentDate <= endDate) {
       const lineTotal = qtyOrdered * unitPrice;
       orderTotal += lineTotal;
 
-      insertOrderLine.run(orderId, line, product, product, qtyOrdered, qtyDelivered, unitPrice, lineTotal);
+      lineItems.push({
+        lineNumber: line,
+        product: product,
+        qtyOrdered: qtyOrdered,
+        qtyDelivered: qtyDelivered,
+        unitPrice: unitPrice,
+        lineTotal: lineTotal
+      });
     }
 
     const location = randomChoice(['Newark, NJ', 'Los Angeles, CA', 'Chicago, IL', 'Dallas, TX', 'Atlanta, GA']);
 
+    // Insert order FIRST
     insertOrder.run(
       orderId,
       'Sales Order',
@@ -147,6 +157,11 @@ while (currentDate <= endDate) {
       inFull,
       accurate
     );
+
+    // Then insert order lines (child records)
+    lineItems.forEach(item => {
+      insertOrderLine.run(orderId, item.lineNumber, item.product, item.product, item.qtyOrdered, item.qtyDelivered, item.unitPrice, item.lineTotal);
+    });
   }
 
   currentDate = addDays(currentDate, 1);
