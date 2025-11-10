@@ -3488,7 +3488,7 @@ app.get('/api/executive/dashboard', (req: Request, res: Response) => {
 
     // Get KPIs from all modules
     const hrKpis = kpiService.getAllKPIs(startDate, endDate);
-    const hseKpis = hseKpiService.getAllKPIs(startDate, endDate);
+    const hseKpis = hseKpiService.getAllHSEKPIs(startDate, endDate);
     const opsKpis = opsKpiService.getAllKPIs(startDate, endDate);
     const qcKpis = qcKpiService.getAllKPIs(startDate, endDate);
     const scKpis = scKpiService.getAllKPIs(startDate, endDate);
