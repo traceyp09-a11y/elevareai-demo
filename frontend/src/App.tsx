@@ -25,6 +25,7 @@ import DashboardMarketing from './pages/DashboardMarketing';
 import PainPointsMarketing from './pages/PainPointsMarketing';
 import DashboardExecutive from './pages/DashboardExecutive';
 import ElevareLogo from './components/ElevareLogo';
+import ErrorBoundary from './components/ErrorBoundary';
 import './App.css';
 
 function AppContent() {
@@ -527,7 +528,11 @@ function AppContent() {
           <Route path="/marketing/pain-points" element={<PainPointsMarketing />} />
 
           {/* Executive Routes */}
-          <Route path="/executive" element={<DashboardExecutive />} />
+          <Route path="/executive" element={
+            <ErrorBoundary fallbackMessage="Unable to load Executive Dashboard. The page may be updating. Please refresh in a moment.">
+              <DashboardExecutive />
+            </ErrorBoundary>
+          } />
         </Routes>
       </main>
 

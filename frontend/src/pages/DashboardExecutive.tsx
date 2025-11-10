@@ -137,7 +137,7 @@ const DashboardExecutive: React.FC = () => {
     );
   }
 
-  const { executiveSummary, departments, topExecutiveKPIs } = data;
+  const { executiveSummary, departments = [], topExecutiveKPIs = [] } = data;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900 p-8">
@@ -148,22 +148,22 @@ const DashboardExecutive: React.FC = () => {
             💼 Executive Dashboard
           </h1>
           <p className="text-gray-400 text-lg">
-            Comprehensive view of all business operations • {executiveSummary.period.label}
+            Comprehensive view of all business operations • {executiveSummary?.period?.label || 'Current Period'}
           </p>
           <p className="text-gray-500 text-sm mt-1">
-            Period: {executiveSummary.period.startDate} to {executiveSummary.period.endDate}
+            Period: {executiveSummary?.period?.startDate || 'N/A'} to {executiveSummary?.period?.endDate || 'N/A'}
           </p>
         </div>
 
         {/* Executive Summary Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {/* Overall Health */}
-          <div className={`${getHealthColor(executiveSummary.overallHealth)} border-2 rounded-lg p-6`}>
+          <div className={`${getHealthColor(executiveSummary?.overallHealth || 0)} border-2 rounded-lg p-6`}>
             <div className="flex items-center justify-between mb-4">
               <Activity className="text-current" size={32} />
               <div className="text-right">
-                <p className="text-4xl font-bold text-white">{executiveSummary.overallHealth}</p>
-                <p className="text-xs text-current font-semibold">{executiveSummary.overallHealthStatus}</p>
+                <p className="text-4xl font-bold text-white">{executiveSummary?.overallHealth || 0}</p>
+                <p className="text-xs text-current font-semibold">{executiveSummary?.overallHealthStatus || 'N/A'}</p>
               </div>
             </div>
             <p className="text-gray-300 text-sm font-semibold">Overall Company Health</p>
@@ -174,7 +174,7 @@ const DashboardExecutive: React.FC = () => {
           <div className="bg-blue-500/10 border-2 border-blue-500 rounded-lg p-6">
             <div className="flex items-center justify-between mb-4">
               <Building2 className="text-blue-400" size={32} />
-              <p className="text-4xl font-bold text-white">{executiveSummary.departmentsMonitored}</p>
+              <p className="text-4xl font-bold text-white">{executiveSummary?.departmentsMonitored || 0}</p>
             </div>
             <p className="text-gray-300 text-sm font-semibold">Departments Monitored</p>
             <p className="text-gray-500 text-xs mt-1">Full business coverage</p>
@@ -184,23 +184,23 @@ const DashboardExecutive: React.FC = () => {
           <div className="bg-purple-500/10 border-2 border-purple-500 rounded-lg p-6">
             <div className="flex items-center justify-between mb-4">
               <BarChart3 className="text-purple-400" size={32} />
-              <p className="text-4xl font-bold text-white">{executiveSummary.totalKPIs}+</p>
+              <p className="text-4xl font-bold text-white">{executiveSummary?.totalKPIs || 0}+</p>
             </div>
             <p className="text-gray-300 text-sm font-semibold">Total KPIs Tracked</p>
             <p className="text-gray-500 text-xs mt-1">Real-time monitoring</p>
           </div>
 
           {/* Critical Alerts */}
-          <div className={`${executiveSummary.criticalAlerts > 0 ? 'bg-red-500/10 border-red-500' : 'bg-green-500/10 border-green-500'} border-2 rounded-lg p-6`}>
+          <div className={`${(executiveSummary?.criticalAlerts || 0) > 0 ? 'bg-red-500/10 border-red-500' : 'bg-green-500/10 border-green-500'} border-2 rounded-lg p-6`}>
             <div className="flex items-center justify-between mb-4">
-              {executiveSummary.criticalAlerts > 0 ? (
+              {(executiveSummary?.criticalAlerts || 0) > 0 ? (
                 <AlertTriangle className="text-red-400" size={32} />
               ) : (
                 <CheckCircle className="text-green-400" size={32} />
               )}
               <div className="text-right">
-                <p className="text-4xl font-bold text-white">{executiveSummary.criticalAlerts}</p>
-                <p className="text-xs text-yellow-400 font-semibold">+{executiveSummary.warningAlerts} warnings</p>
+                <p className="text-4xl font-bold text-white">{executiveSummary?.criticalAlerts || 0}</p>
+                <p className="text-xs text-yellow-400 font-semibold">+{executiveSummary?.warningAlerts || 0} warnings</p>
               </div>
             </div>
             <p className="text-gray-300 text-sm font-semibold">Critical Alerts</p>
@@ -217,17 +217,19 @@ const DashboardExecutive: React.FC = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {topExecutiveKPIs.map((category, idx) => (
               <div key={idx} className="bg-gray-800/50 border border-gray-700 rounded-lg p-6">
-                <h3 className="text-lg font-bold text-purple-400 mb-4">{category.category}</h3>
+                <h3 className="text-lg font-bold text-purple-400 mb-4">{category?.category || 'Category'}</h3>
                 <div className="space-y-4">
-                  {category.kpis.map((kpi, kpiIdx) => (
+                  {(category?.kpis || []).map((kpi, kpiIdx) => (
                     <div key={kpiIdx} className="flex items-center justify-between p-3 bg-gray-900/50 rounded-lg">
                       <div className="flex-1">
-                        <p className="text-gray-300 text-sm font-semibold">{kpi.name}</p>
+                        <p className="text-gray-300 text-sm font-semibold">{kpi?.name || 'N/A'}</p>
                         <div className="flex items-center gap-2 mt-1">
-                          <p className={`text-xl font-bold ${getStatusColor(kpi.status)}`}>{kpi.value}</p>
-                          <span className={`text-xs px-2 py-1 rounded ${kpi.change.startsWith('+') ? 'bg-green-500/20 text-green-400' : kpi.change.startsWith('-') ? 'bg-red-500/20 text-red-400' : 'bg-gray-500/20 text-gray-400'}`}>
-                            {kpi.change}
-                          </span>
+                          <p className={`text-xl font-bold ${getStatusColor(kpi?.status)}`}>{kpi?.value || 'N/A'}</p>
+                          {kpi?.change && (
+                            <span className={`text-xs px-2 py-1 rounded ${kpi.change.startsWith('+') ? 'bg-green-500/20 text-green-400' : kpi.change.startsWith('-') ? 'bg-red-500/20 text-red-400' : 'bg-gray-500/20 text-gray-400'}`}>
+                              {kpi.change}
+                            </span>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -247,23 +249,23 @@ const DashboardExecutive: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
             {departments.map((dept) => (
               <Link
-                key={dept.id}
-                to={dept.url}
-                className={`block bg-gradient-to-br ${getThemeColor(dept.theme)} p-6 rounded-lg shadow-lg hover:shadow-xl transition-all hover:scale-105 border-2 border-transparent hover:border-white/20`}
+                key={dept?.id || Math.random()}
+                to={dept?.url || '#'}
+                className={`block bg-gradient-to-br ${getThemeColor(dept?.theme)} p-6 rounded-lg shadow-lg hover:shadow-xl transition-all hover:scale-105 border-2 border-transparent hover:border-white/20`}
               >
                 <div className="flex items-center justify-between mb-4">
-                  <span className="text-3xl">{dept.icon}</span>
+                  <span className="text-3xl">{dept?.icon || '📊'}</span>
                   <div className="text-right">
-                    <p className="text-3xl font-bold text-white">{dept.healthScore}</p>
+                    <p className="text-3xl font-bold text-white">{dept?.healthScore || 0}</p>
                     <p className="text-xs text-white/80">Health Score</p>
                   </div>
                 </div>
-                <h3 className="text-white font-bold text-lg mb-3">{dept.name}</h3>
+                <h3 className="text-white font-bold text-lg mb-3">{dept?.name || 'Department'}</h3>
                 <div className="space-y-2">
-                  {dept.keyMetrics.map((metric, idx) => (
+                  {(dept?.keyMetrics || []).map((metric, idx) => (
                     <div key={idx} className="bg-black/20 rounded p-2">
-                      <p className="text-white/70 text-xs">{metric.name}</p>
-                      <p className="text-white font-bold text-sm">{metric.value}</p>
+                      <p className="text-white/70 text-xs">{metric?.name || 'N/A'}</p>
+                      <p className="text-white font-bold text-sm">{metric?.value || 'N/A'}</p>
                     </div>
                   ))}
                 </div>
