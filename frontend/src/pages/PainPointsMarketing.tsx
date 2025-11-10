@@ -95,27 +95,25 @@ const PainPointsMarketing: React.FC = () => {
   };
 
   const getCategoryIcon = (category: string) => {
-    if (category.includes('ROI') || category.includes('ROMI')) {
+    if (category.includes('ROI')) {
       return <TrendingUp size={20} className="text-orange-400" />;
-    } else if (category.includes('CPL') || category.includes('Cost')) {
-      return <DollarSign size={20} className="text-green-400" />;
-    } else if (category.includes('Conversion') || category.includes('MQL')) {
-      return <Target size={20} className="text-blue-400" />;
-    } else if (category.includes('CAC') || category.includes('Customer')) {
-      return <Users size={20} className="text-purple-400" />;
-    } else if (category.includes('Campaign')) {
-      return <Award size={20} className="text-indigo-400" />;
-    } else if (category.includes('Lead')) {
-      return <MousePointerClick size={20} className="text-teal-400" />;
-    } else if (category.includes('Deal')) {
-      return <FileText size={20} className="text-lime-400" />;
-    } else if (category.includes('Channel')) {
-      return <Radio size={20} className="text-orange-400" />;
-    } else if (category.includes('Content') || category.includes('Engagement')) {
-      return <Zap size={20} className="text-pink-400" />;
-    } else {
-      return <BarChart3 size={20} className="text-yellow-400" />;
     }
+    if (category.includes('Cost') || category.includes('CAC')) {
+      return <DollarSign size={20} className="text-green-400" />;
+    }
+    if (category.includes('MQL') || category.includes('Lead')) {
+      return <Target size={20} className="text-blue-400" />;
+    }
+    if (category.includes('Campaign')) {
+      return <Radio size={20} className="text-purple-400" />;
+    }
+    if (category.includes('Channel')) {
+      return <BarChart3 size={20} className="text-cyan-400" />;
+    }
+    if (category.includes('Content')) {
+      return <FileText size={20} className="text-yellow-400" />;
+    }
+    return <Zap size={20} className="text-orange-400" />;
   };
 
   const categories = Array.from(new Set(painPoints.map(pp => pp.category)));
@@ -149,171 +147,157 @@ const PainPointsMarketing: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-8">
-      {/* Header */}
-      <div className="mb-8">
-        <a
-          href="/marketing"
-          className="inline-flex items-center gap-2 text-orange-400 hover:text-orange-300 mb-4 transition-colors"
-        >
-          <ArrowLeft size={20} />
-          Back to Dashboard
-        </a>
-
-        <div className="flex items-center gap-3 mb-4">
-          <div className="p-3 rounded-lg bg-gradient-to-br from-orange-400 to-red-500">
-            <AlertCircle size={32} className="text-white" />
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black p-8">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="mb-8">
+          <div className="flex items-center gap-4 mb-4">
+            <a
+              href="/marketing"
+              className="flex items-center gap-2 text-orange-400 hover:text-orange-300 transition-colors"
+            >
+              <ArrowLeft size={20} />
+              <span>Back to Dashboard</span>
+            </a>
           </div>
-          <div>
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-orange-400 to-red-500 bg-clip-text text-transparent">
-              Marketing Performance Challenges
-            </h1>
-            <p className="text-gray-400 text-sm mt-1">
-              {filteredPainPoints.length} marketing issues identified
-            </p>
-          </div>
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-orange-400 via-red-500 to-pink-600 bg-clip-text text-transparent mb-2">
+            Marketing Performance Challenges
+          </h1>
+          <p className="text-gray-400 text-lg">
+            Identified marketing issues prioritized by severity and business impact
+          </p>
         </div>
 
         {/* Summary Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-          <div className="bg-red-900/20 border-2 border-red-500/50 rounded-lg p-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+          <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-red-400 text-sm font-medium">High Severity</p>
-                <p className="text-2xl font-bold text-white mt-1">{severityCounts.high}</p>
+                <p className="text-red-400 text-sm font-semibold">High Severity</p>
+                <p className="text-3xl font-bold text-white">{severityCounts.high}</p>
               </div>
-              <AlertCircle className="text-red-400" size={32} />
+              <AlertCircle className="text-red-500" size={32} />
             </div>
           </div>
-
-          <div className="bg-yellow-900/20 border-2 border-yellow-500/50 rounded-lg p-4">
+          <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-yellow-400 text-sm font-medium">Medium Severity</p>
-                <p className="text-2xl font-bold text-white mt-1">{severityCounts.medium}</p>
+                <p className="text-yellow-400 text-sm font-semibold">Medium Severity</p>
+                <p className="text-3xl font-bold text-white">{severityCounts.medium}</p>
               </div>
-              <AlertCircle className="text-yellow-400" size={32} />
+              <AlertCircle className="text-yellow-500" size={32} />
             </div>
           </div>
-
-          <div className="bg-blue-900/20 border-2 border-blue-500/50 rounded-lg p-4">
+          <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-blue-400 text-sm font-medium">Low Severity</p>
-                <p className="text-2xl font-bold text-white mt-1">{severityCounts.low}</p>
+                <p className="text-blue-400 text-sm font-semibold">Low Severity</p>
+                <p className="text-3xl font-bold text-white">{severityCounts.low}</p>
               </div>
-              <AlertCircle className="text-blue-400" size={32} />
+              <CheckCircle className="text-blue-500" size={32} />
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Filters */}
-      <div className="mb-6 bg-gray-800 rounded-lg p-4 border border-gray-700">
-        <div className="flex items-center gap-2 mb-3">
-          <Filter size={20} className="text-orange-400" />
-          <h3 className="text-lg font-semibold text-orange-400">Filters</h3>
+        {/* Filters */}
+        <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-6 mb-8">
+          <div className="flex items-center gap-4 mb-4">
+            <Filter className="text-orange-400" size={20} />
+            <h2 className="text-xl font-semibold text-white">Filters</h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-400 mb-2">
+                Severity Level
+              </label>
+              <select
+                value={selectedSeverity}
+                onChange={(e) => setSelectedSeverity(e.target.value)}
+                className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-orange-500"
+              >
+                <option value="all">All Severities</option>
+                <option value="high">High</option>
+                <option value="medium">Medium</option>
+                <option value="low">Low</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-400 mb-2">
+                Category
+              </label>
+              <select
+                value={selectedCategory}
+                onChange={(e) => setSelectedCategory(e.target.value)}
+                className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-orange-500"
+              >
+                <option value="all">All Categories</option>
+                {categories.map(cat => (
+                  <option key={cat} value={cat}>{cat}</option>
+                ))}
+              </select>
+            </div>
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-400 mb-2">
-              Severity Level
-            </label>
-            <select
-              value={selectedSeverity}
-              onChange={(e) => setSelectedSeverity(e.target.value)}
-              className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-orange-500"
+        {/* Pain Points Grid */}
+        <div className="grid grid-cols-1 gap-6">
+          {filteredPainPoints.map((painPoint) => (
+            <div
+              key={painPoint.id}
+              className={`${getSeverityColor(painPoint.severity)} border-2 rounded-lg p-6 hover:shadow-lg transition-all`}
             >
-              <option value="all">All Severities</option>
-              <option value="high">High</option>
-              <option value="medium">Medium</option>
-              <option value="low">Low</option>
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-400 mb-2">
-              Category
-            </label>
-            <select
-              value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
-              className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-orange-500"
-            >
-              <option value="all">All Categories</option>
-              {categories.map(cat => (
-                <option key={cat} value={cat}>{cat}</option>
-              ))}
-            </select>
-          </div>
-        </div>
-      </div>
-
-      {/* Pain Points Grid */}
-      <div className="grid grid-cols-1 gap-6">
-        {filteredPainPoints.map((painPoint) => (
-          <div
-            key={painPoint.id}
-            className={`bg-gray-800 rounded-lg border-2 ${getSeverityColor(painPoint.severity)} p-6 hover:shadow-xl transition-all duration-200`}
-          >
-            <div className="flex items-start justify-between mb-4">
-              <div className="flex items-start gap-3">
-                {getCategoryIcon(painPoint.category)}
-                <div>
-                  <h3 className="text-xl font-semibold text-white mb-1">
-                    {painPoint.title}
-                  </h3>
-                  <div className="flex items-center gap-2">
-                    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getSeverityBadgeColor(painPoint.severity)}`}>
-                      {painPoint.severity.toUpperCase()}
-                    </span>
-                    <span className="px-3 py-1 rounded-full text-xs font-semibold bg-gray-700 text-orange-400">
-                      {painPoint.category}
-                    </span>
-                  </div>
+              <div className="flex items-start justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  {getCategoryIcon(painPoint.category)}
+                  <h3 className="text-xl font-bold text-white">{painPoint.title}</h3>
                 </div>
+                <span className={`${getSeverityBadgeColor(painPoint.severity)} px-3 py-1 rounded-full text-xs font-bold uppercase`}>
+                  {painPoint.severity}
+                </span>
               </div>
-            </div>
 
-            <div className="space-y-4">
-              <div>
-                <h4 className="text-sm font-semibold text-gray-400 mb-1">Description</h4>
+              <div className="mb-3">
+                <p className="text-gray-400 text-sm font-semibold mb-1">Category:</p>
+                <p className="text-orange-400 text-sm">{painPoint.category}</p>
+              </div>
+
+              <div className="mb-3">
+                <p className="text-gray-400 text-sm font-semibold mb-1">Description:</p>
                 <p className="text-gray-300">{painPoint.description}</p>
               </div>
 
-              <div>
-                <h4 className="text-sm font-semibold text-gray-400 mb-1">Business Impact</h4>
+              <div className="mb-3">
+                <p className="text-gray-400 text-sm font-semibold mb-1">Business Impact:</p>
                 <p className="text-gray-300">{painPoint.impact}</p>
               </div>
 
-              <div>
-                <h4 className="text-sm font-semibold text-orange-400 mb-1">Recommendation</h4>
-                <p className="text-gray-300">{painPoint.recommendation}</p>
+              <div className="mb-3">
+                <p className="text-gray-400 text-sm font-semibold mb-1">Recommendation:</p>
+                <p className="text-green-400">{painPoint.recommendation}</p>
               </div>
 
-              <div className="pt-4 border-t border-gray-700">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-400">Estimated Cost Impact</span>
-                  <span className="text-lg font-bold text-red-400">{painPoint.estimatedCost}</span>
+              <div className="flex items-center justify-between pt-4 border-t border-gray-700">
+                <div>
+                  <p className="text-gray-400 text-sm">Estimated Cost Impact:</p>
+                  <p className="text-red-400 font-bold">{painPoint.estimatedCost}</p>
                 </div>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
-
-      {filteredPainPoints.length === 0 && (
-        <div className="text-center py-12">
-          <CheckCircle className="mx-auto mb-4 text-green-500" size={48} />
-          <p className="text-gray-400 text-lg">No challenges match the selected filters</p>
+          ))}
         </div>
-      )}
 
-      {/* Footer */}
-      <div className="mt-12 text-center text-gray-500 text-sm">
-        <p>Marketing Performance Challenge Tracker</p>
-        <p className="mt-1">Prioritized by severity and business impact</p>
+        {filteredPainPoints.length === 0 && (
+          <div className="text-center py-12">
+            <CheckCircle className="mx-auto mb-4 text-green-500" size={48} />
+            <p className="text-gray-400 text-lg">No challenges match the selected filters</p>
+          </div>
+        )}
+
+        {/* Footer */}
+        <div className="mt-12 text-center text-gray-500 text-sm">
+          <p>Marketing Performance Challenge Tracker</p>
+          <p className="mt-1">Prioritized by severity and business impact</p>
+        </div>
       </div>
     </div>
   );
