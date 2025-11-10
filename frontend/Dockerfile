@@ -7,14 +7,14 @@ WORKDIR /app
 # Copy package files
 COPY package*.json ./
 
-# Install dependencies
-RUN npm install
+# Install dependencies (clean install)
+RUN npm ci
 
 # Copy the rest of the application
 COPY . .
 
 # Expose the port the app runs on
-EXPOSE 3000
+EXPOSE 5173
 
-# Start the development server
-CMD ["npm", "run", "dev", "--", "--host"]
+# Start the webpack development server
+CMD ["npm", "run", "dev"]
