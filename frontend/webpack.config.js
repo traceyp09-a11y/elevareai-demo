@@ -47,7 +47,7 @@ module.exports = {
     proxy: [
       {
         context: ['/api'],
-        target: process.env.VITE_BACKEND_URL || 'http://backend:3001',
+        target: process.env.WEBPACK_BACKEND_URL || 'http://backend:3001',
         changeOrigin: true
       }
     ],
