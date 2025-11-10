@@ -23,6 +23,7 @@ import DashboardCustomerSuccess from './pages/DashboardCustomerSuccess';
 import PainPointsCustomerSuccess from './pages/PainPointsCustomerSuccess';
 import DashboardMarketing from './pages/DashboardMarketing';
 import PainPointsMarketing from './pages/PainPointsMarketing';
+import DashboardExecutive from './pages/DashboardExecutive';
 import ElevareLogo from './components/ElevareLogo';
 import './App.css';
 
@@ -525,19 +526,8 @@ function AppContent() {
           <Route path="/marketing/reports" element={<CustomReports />} />
           <Route path="/marketing/pain-points" element={<PainPointsMarketing />} />
 
-          {/* Executive Routes - Placeholder for now */}
-          <Route path="/executive" element={
-            <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white p-8">
-              <div className="max-w-7xl mx-auto">
-                <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-400 via-pink-500 to-purple-600 bg-clip-text text-transparent mb-4">
-                  Executive Dashboard - Coming Soon
-                </h1>
-                <p className="text-gray-400 text-lg">
-                  Unified view combining HR and HSE metrics for C-Suite executives.
-                </p>
-              </div>
-            </div>
-          } />
+          {/* Executive Routes */}
+          <Route path="/executive" element={<DashboardExecutive />} />
         </Routes>
       </main>
 

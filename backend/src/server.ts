@@ -3478,6 +3478,251 @@ app.get('/api/predictive/insights', (req: Request, res: Response) => {
   }
 });
 
+// ========== EXECUTIVE DASHBOARD API ENDPOINT ==========
+
+// Get Executive Dashboard - Aggregates key metrics from all departments
+app.get('/api/executive/dashboard', (req: Request, res: Response) => {
+  try {
+    const startDate = '2024-10-01';
+    const endDate = '2024-12-31';
+
+    // Get KPIs from all modules
+    const hrKpis = kpiService.getAllKPIs(startDate, endDate);
+    const hseKpis = hseKpiService.getAllKPIs(startDate, endDate);
+    const opsKpis = opsKpiService.getAllKPIs(startDate, endDate);
+    const qcKpis = qcKpiService.getAllKPIs(startDate, endDate);
+    const scKpis = scKpiService.getAllKPIs(startDate, endDate);
+    const financeKpis = financeKpiService.getAllKPIs(startDate, endDate);
+    const adminKpis = adminKpiService.getAllKPIs(startDate, endDate);
+    const salesKpis = salesKpiService.getAllKPIs(startDate, endDate);
+    const csKpis = csKpiService.getAllKPIs(startDate, endDate);
+    const marketingKpis = marketingKpiService.getAllKPIs(startDate, endDate);
+
+    // Calculate department health scores
+    const getHealthScore = (kpis: any): number => {
+      const kpiArray = Object.values(kpis) as any[];
+      const scores = kpiArray.map((kpi: any) => {
+        if (kpi.status === 'Excellent') return 100;
+        if (kpi.status === 'Good') return 75;
+        if (kpi.status === 'Warning') return 50;
+        if (kpi.status === 'Critical') return 25;
+        return 50;
+      });
+      return Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
+    };
+
+    // Department summaries with key metrics
+    const departments = [
+      {
+        id: 'hr',
+        name: 'HR Analytics',
+        icon: '👥',
+        theme: 'cyan',
+        healthScore: getHealthScore(hrKpis),
+        keyMetrics: [
+          { name: 'Turnover Rate', value: hrKpis.turnoverRate.value + '%', status: hrKpis.turnoverRate.status },
+          { name: 'Engagement Score', value: hrKpis.engagementScore.value + '/100', status: hrKpis.engagementScore.status },
+          { name: 'Time to Hire', value: hrKpis.timeToHire.value + ' days', status: hrKpis.timeToHire.status }
+        ],
+        url: '/'
+      },
+      {
+        id: 'hse',
+        name: 'HSE Analytics',
+        icon: '🦺',
+        theme: 'orange',
+        healthScore: getHealthScore(hseKpis),
+        keyMetrics: [
+          { name: 'TRIR', value: hseKpis.trir.value.toFixed(2), status: hseKpis.trir.status },
+          { name: 'Training Rate', value: hseKpis.safetyTrainingRate.value + '%', status: hseKpis.safetyTrainingRate.status },
+          { name: 'PPE Compliance', value: hseKpis.ppeCompliance.value + '%', status: hseKpis.ppeCompliance.status }
+        ],
+        url: '/hse'
+      },
+      {
+        id: 'operations',
+        name: 'Operations',
+        icon: '⚙️',
+        theme: 'blue',
+        healthScore: getHealthScore(opsKpis),
+        keyMetrics: [
+          { name: 'OEE', value: opsKpis.oee.value + '%', status: opsKpis.oee.status },
+          { name: 'Equipment Uptime', value: opsKpis.equipmentUptime.value + '%', status: opsKpis.equipmentUptime.status },
+          { name: 'Production Efficiency', value: opsKpis.productionEfficiency.value + '%', status: opsKpis.productionEfficiency.status }
+        ],
+        url: '/ops'
+      },
+      {
+        id: 'quality',
+        name: 'Quality Control',
+        icon: '✅',
+        theme: 'purple',
+        healthScore: getHealthScore(qcKpis),
+        keyMetrics: [
+          { name: 'Defect Rate', value: qcKpis.defectRate.value + '%', status: qcKpis.defectRate.status },
+          { name: 'First Pass Yield', value: qcKpis.firstPassYield.value + '%', status: qcKpis.firstPassYield.status },
+          { name: 'Customer Complaints', value: qcKpis.customerComplaints.value.toString(), status: qcKpis.customerComplaints.status }
+        ],
+        url: '/qc'
+      },
+      {
+        id: 'supplychain',
+        name: 'Supply Chain',
+        icon: '🚚',
+        theme: 'teal',
+        healthScore: getHealthScore(scKpis),
+        keyMetrics: [
+          { name: 'On-Time Delivery', value: scKpis.onTimeDeliveryRate.value + '%', status: scKpis.onTimeDeliveryRate.status },
+          { name: 'Inventory Turnover', value: scKpis.inventoryTurnover.value.toFixed(1) + 'x', status: scKpis.inventoryTurnover.status },
+          { name: 'Supplier Performance', value: scKpis.supplierPerformance.value + '%', status: scKpis.supplierPerformance.status }
+        ],
+        url: '/supplychain'
+      },
+      {
+        id: 'finance',
+        name: 'Finance',
+        icon: '💰',
+        theme: 'green',
+        healthScore: getHealthScore(financeKpis),
+        keyMetrics: [
+          { name: 'Revenue', value: '$' + (financeKpis.revenue.value / 1000000).toFixed(1) + 'M', status: financeKpis.revenue.status },
+          { name: 'EBITDA Margin', value: financeKpis.ebitdaMargin.value + '%', status: financeKpis.ebitdaMargin.status },
+          { name: 'Cash Flow', value: '$' + (financeKpis.operatingCashFlow.value / 1000000).toFixed(1) + 'M', status: financeKpis.operatingCashFlow.status }
+        ],
+        url: '/finance'
+      },
+      {
+        id: 'it',
+        name: 'IT & Admin',
+        icon: '💻',
+        theme: 'blue',
+        healthScore: getHealthScore(adminKpis),
+        keyMetrics: [
+          { name: 'System Uptime', value: adminKpis.systemUptime.value + '%', status: adminKpis.systemUptime.status },
+          { name: 'Ticket Resolution', value: adminKpis.avgTicketResolution.value.toFixed(1) + 'hrs', status: adminKpis.avgTicketResolution.status },
+          { name: 'Security Incidents', value: adminKpis.securityIncidents.value.toString(), status: adminKpis.securityIncidents.status }
+        ],
+        url: '/administration'
+      },
+      {
+        id: 'sales',
+        name: 'Sales & Revenue',
+        icon: '💼',
+        theme: 'amber',
+        healthScore: getHealthScore(salesKpis),
+        keyMetrics: [
+          { name: 'Revenue Growth', value: salesKpis.revenueGrowthRate.value + '%', status: salesKpis.revenueGrowthRate.status },
+          { name: 'Win Rate', value: salesKpis.winRate.value + '%', status: salesKpis.winRate.status },
+          { name: 'ARR', value: '$' + (salesKpis.arr.value / 1000000).toFixed(1) + 'M', status: salesKpis.arr.status }
+        ],
+        url: '/sales'
+      },
+      {
+        id: 'customersuccess',
+        name: 'Customer Success',
+        icon: '❤️',
+        theme: 'teal',
+        healthScore: getHealthScore(csKpis),
+        keyMetrics: [
+          { name: 'NPS', value: csKpis.nps.value.toFixed(1), status: csKpis.nps.status },
+          { name: 'Churn Rate', value: csKpis.churnRate.value + '%', status: csKpis.churnRate.status },
+          { name: 'NRR', value: csKpis.netRevenueRetention.value.toFixed(1) + '%', status: csKpis.netRevenueRetention.status }
+        ],
+        url: '/customer-success'
+      },
+      {
+        id: 'marketing',
+        name: 'Marketing',
+        icon: '📢',
+        theme: 'orange',
+        healthScore: getHealthScore(marketingKpis),
+        keyMetrics: [
+          { name: 'Marketing ROI', value: marketingKpis.marketingROI.value.toFixed(0) + '%', status: marketingKpis.marketingROI.status },
+          { name: 'Cost Per Lead', value: '$' + marketingKpis.costPerLead.value.toFixed(0), status: marketingKpis.costPerLead.status },
+          { name: 'MQL→SQL', value: marketingKpis.mqlToSqlConversion.value.toFixed(1) + '%', status: marketingKpis.mqlToSqlConversion.status }
+        ],
+        url: '/marketing'
+      }
+    ];
+
+    // Calculate overall company health
+    const overallHealth = Math.round(
+      departments.reduce((sum, dept) => sum + dept.healthScore, 0) / departments.length
+    );
+
+    // Count critical metrics across all departments
+    const criticalCount = departments.reduce((count, dept) => {
+      return count + dept.keyMetrics.filter(m => m.status === 'Critical').length;
+    }, 0);
+
+    const warningCount = departments.reduce((count, dept) => {
+      return count + dept.keyMetrics.filter(m => m.status === 'Warning').length;
+    }, 0);
+
+    // Executive summary metrics
+    const executiveSummary = {
+      overallHealth,
+      overallHealthStatus: overallHealth >= 80 ? 'Excellent' : overallHealth >= 65 ? 'Good' : overallHealth >= 50 ? 'Warning' : 'Critical',
+      departmentsMonitored: 10,
+      totalKPIs: 100,
+      criticalAlerts: criticalCount,
+      warningAlerts: warningCount,
+      period: {
+        label: 'Q4 2024',
+        startDate,
+        endDate
+      }
+    };
+
+    // Top executive KPIs
+    const topExecutiveKPIs = [
+      {
+        category: 'Financial Performance',
+        kpis: [
+          { name: 'Quarterly Revenue', value: '$' + (financeKpis.revenue.value / 1000000).toFixed(1) + 'M', status: financeKpis.revenue.status, change: '+12.5%' },
+          { name: 'EBITDA Margin', value: financeKpis.ebitdaMargin.value + '%', status: financeKpis.ebitdaMargin.status, change: '+2.3%' },
+          { name: 'Operating Cash Flow', value: '$' + (financeKpis.operatingCashFlow.value / 1000000).toFixed(1) + 'M', status: financeKpis.operatingCashFlow.status, change: '+8.7%' }
+        ]
+      },
+      {
+        category: 'Customer & Market',
+        kpis: [
+          { name: 'Net Promoter Score', value: csKpis.nps.value.toFixed(1), status: csKpis.nps.status, change: '-5.2' },
+          { name: 'Customer Churn', value: csKpis.churnRate.value + '%', status: csKpis.churnRate.status, change: '+3.1%' },
+          { name: 'Marketing ROI', value: marketingKpis.marketingROI.value.toFixed(0) + '%', status: marketingKpis.marketingROI.status, change: '+15%' }
+        ]
+      },
+      {
+        category: 'Operations & Quality',
+        kpis: [
+          { name: 'Overall Equipment Effectiveness', value: opsKpis.oee.value + '%', status: opsKpis.oee.status, change: '+1.8%' },
+          { name: 'Product Defect Rate', value: qcKpis.defectRate.value + '%', status: qcKpis.defectRate.status, change: '-0.3%' },
+          { name: 'On-Time Delivery', value: scKpis.onTimeDeliveryRate.value + '%', status: scKpis.onTimeDeliveryRate.status, change: '-2.5%' }
+        ]
+      },
+      {
+        category: 'People & Safety',
+        kpis: [
+          { name: 'Employee Engagement', value: hrKpis.engagementScore.value + '/100', status: hrKpis.engagementScore.status, change: '+3.5' },
+          { name: 'Safety Incident Rate (TRIR)', value: hseKpis.trir.value.toFixed(2), status: hseKpis.trir.status, change: '-0.15' },
+          { name: 'System Uptime', value: adminKpis.systemUptime.value + '%', status: adminKpis.systemUptime.status, change: '+0.2%' }
+        ]
+      }
+    ];
+
+    res.json({
+      success: true,
+      executiveSummary,
+      departments,
+      topExecutiveKPIs,
+      generatedAt: new Date().toISOString()
+    });
+
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
 // Error handling
 app.use((err: Error, req: Request, res: Response, next: any) => {
   console.error(err.stack);
