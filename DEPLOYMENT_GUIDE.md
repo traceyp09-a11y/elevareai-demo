@@ -18,7 +18,7 @@ ElevareIQ is a comprehensive analytics platform providing real-time KPI tracking
 
 - Docker Desktop installed and running
 - Git installed
-- Ports 3001 (backend) and 5173 (frontend) available
+- Port 3001 (backend) available
 
 ### Deployment Steps
 
@@ -80,36 +80,35 @@ Supply Chain data seeding completed!
 
 ### Web Interface
 
-Open your browser and navigate to:
-- **Frontend**: http://localhost:5173
+Open your browser and navigate to the frontend application.
 
 ### Available Routes
 
 **HR Analytics:**
-- Dashboard: http://localhost:5173/
-- Pain Points: http://localhost:5173/pain-points
-- Reports: http://localhost:5173/reports
+- Dashboard: `/`
+- Pain Points: `/pain-points`
+- Reports: `/reports`
 
 **HSE Analytics:**
-- Dashboard: http://localhost:5173/hse
-- Pain Points: http://localhost:5173/hse/pain-points
-- Predictive Analytics: http://localhost:5173/hse/predictive
-- Mobile Safety App: http://localhost:5173/hse/mobile
+- Dashboard: `/hse`
+- Pain Points: `/hse/pain-points`
+- Predictive Analytics: `/hse/predictive`
+- Mobile Safety App: `/hse/mobile`
 
 **Operations Analytics:**
-- Dashboard: http://localhost:5173/ops
-- Pain Points: http://localhost:5173/ops/pain-points
-- Reports: http://localhost:5173/ops/reports
+- Dashboard: `/ops`
+- Pain Points: `/ops/pain-points`
+- Reports: `/ops/reports`
 
 **Quality Control Analytics:**
-- Dashboard: http://localhost:5173/qc
-- Pain Points: http://localhost:5173/qc/pain-points
-- Reports: http://localhost:5173/qc/reports
+- Dashboard: `/qc`
+- Pain Points: `/qc/pain-points`
+- Reports: `/qc/reports`
 
 **Supply Chain Analytics:**
-- Dashboard: http://localhost:5173/supplychain
-- Pain Points: http://localhost:5173/supplychain/pain-points
-- Reports: http://localhost:5173/supplychain/reports
+- Dashboard: `/supplychain`
+- Pain Points: `/supplychain/pain-points`
+- Reports: `/supplychain/reports`
 
 ### API Endpoints
 

@@ -233,7 +233,7 @@ elevareai-demo/
 ### Prerequisites
 - Docker Desktop installed and running
 - Git installed
-- Ports 3001 (backend) and 5173 (frontend) available
+- Port 3001 (backend) available
 
 ### Installation
 
@@ -250,7 +250,6 @@ docker-compose up -d
 ./verify-deployment.sh
 
 # 4. Access the platform
-# Frontend: http://localhost:5173
 # Backend API: http://localhost:3001
 ```
 
@@ -271,7 +270,7 @@ npm run dev         # Start server on port 3001
 # Frontend (in new terminal)
 cd frontend
 npm install
-npm run dev         # Start on port 5173
+# Note: Build scripts removed - frontend requires build tool configuration
 ```
 
 ## 📱 Platform Usage
@@ -281,26 +280,26 @@ npm run dev         # Start on port 5173
 **Department Switcher**: Top navigation bar allows instant switching between modules
 
 **HR Analytics**
-- Dashboard: `http://localhost:5173/`
-- Pain Points: `http://localhost:5173/pain-points`
+- Dashboard: `/`
+- Pain Points: `/pain-points`
 
 **HSE Analytics**
-- Dashboard: `http://localhost:5173/hse`
-- Predictive Analytics: `http://localhost:5173/hse/predictive`
-- Mobile Safety: `http://localhost:5173/hse/mobile`
-- Pain Points: `http://localhost:5173/hse/pain-points`
+- Dashboard: `/hse`
+- Predictive Analytics: `/hse/predictive`
+- Mobile Safety: `/hse/mobile`
+- Pain Points: `/hse/pain-points`
 
 **Operations Analytics**
-- Dashboard: `http://localhost:5173/ops`
-- Pain Points: `http://localhost:5173/ops/pain-points`
+- Dashboard: `/ops`
+- Pain Points: `/ops/pain-points`
 
 **Quality Control**
-- Dashboard: `http://localhost:5173/qc`
-- Pain Points: `http://localhost:5173/qc/pain-points`
+- Dashboard: `/qc`
+- Pain Points: `/qc/pain-points`
 
 **Supply Chain**
-- Dashboard: `http://localhost:5173/supplychain`
-- Pain Points: `http://localhost:5173/supplychain/pain-points`
+- Dashboard: `/supplychain`
+- Pain Points: `/supplychain/pain-points`
 
 ### Key Features
 
