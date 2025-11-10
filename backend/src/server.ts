@@ -3547,8 +3547,8 @@ app.get('/api/executive/dashboard', (req: Request, res: Response) => {
         healthScore: getHealthScore(opsKpis),
         keyMetrics: [
           { name: 'OEE', value: opsKpis.oee.value + '%', status: opsKpis.oee.status },
-          { name: 'Equipment Uptime', value: opsKpis.equipmentUptime.value + '%', status: opsKpis.equipmentUptime.status },
-          { name: 'Production Efficiency', value: opsKpis.productionEfficiency.value + '%', status: opsKpis.productionEfficiency.status }
+          { name: 'Schedule Adherence', value: opsKpis.scheduleAdherence.value + '%', status: opsKpis.scheduleAdherence.status },
+          { name: 'Capacity Utilization', value: opsKpis.capacityUtilization.value + '%', status: opsKpis.capacityUtilization.status }
         ],
         url: '/ops'
       },
@@ -3559,9 +3559,9 @@ app.get('/api/executive/dashboard', (req: Request, res: Response) => {
         theme: 'purple',
         healthScore: getHealthScore(qcKpis),
         keyMetrics: [
-          { name: 'Defect Rate', value: qcKpis.defectRate.value + '%', status: qcKpis.defectRate.status },
+          { name: 'Defect Rate (PPM)', value: qcKpis.defectRatePPM.value.toString(), status: qcKpis.defectRatePPM.status },
           { name: 'First Pass Yield', value: qcKpis.firstPassYield.value + '%', status: qcKpis.firstPassYield.status },
-          { name: 'Customer Complaints', value: qcKpis.customerComplaints.value.toString(), status: qcKpis.customerComplaints.status }
+          { name: 'Customer Returns', value: qcKpis.customerReturnRate.value + '%', status: qcKpis.customerReturnRate.status }
         ],
         url: '/qc'
       },
@@ -3572,9 +3572,9 @@ app.get('/api/executive/dashboard', (req: Request, res: Response) => {
         theme: 'teal',
         healthScore: getHealthScore(scKpis),
         keyMetrics: [
-          { name: 'On-Time Delivery', value: scKpis.onTimeDeliveryRate.value + '%', status: scKpis.onTimeDeliveryRate.status },
+          { name: 'OTIF', value: scKpis.otif.value + '%', status: scKpis.otif.status },
           { name: 'Inventory Turnover', value: scKpis.inventoryTurnover.value.toFixed(1) + 'x', status: scKpis.inventoryTurnover.status },
-          { name: 'Supplier Performance', value: scKpis.supplierPerformance.value + '%', status: scKpis.supplierPerformance.status }
+          { name: 'Order Accuracy', value: scKpis.orderAccuracy.value + '%', status: scKpis.orderAccuracy.status }
         ],
         url: '/supplychain'
       },
@@ -3585,9 +3585,9 @@ app.get('/api/executive/dashboard', (req: Request, res: Response) => {
         theme: 'green',
         healthScore: getHealthScore(financeKpis),
         keyMetrics: [
-          { name: 'Revenue', value: '$' + (financeKpis.revenue.value / 1000000).toFixed(1) + 'M', status: financeKpis.revenue.status },
+          { name: 'Gross Profit Margin', value: financeKpis.grossProfitMargin.value + '%', status: financeKpis.grossProfitMargin.status },
           { name: 'EBITDA Margin', value: financeKpis.ebitdaMargin.value + '%', status: financeKpis.ebitdaMargin.status },
-          { name: 'Cash Flow', value: '$' + (financeKpis.operatingCashFlow.value / 1000000).toFixed(1) + 'M', status: financeKpis.operatingCashFlow.status }
+          { name: 'Operating Cash Flow Ratio', value: financeKpis.operatingCashFlowRatio.value.toFixed(2), status: financeKpis.operatingCashFlowRatio.status }
         ],
         url: '/finance'
       },
@@ -3599,8 +3599,8 @@ app.get('/api/executive/dashboard', (req: Request, res: Response) => {
         healthScore: getHealthScore(adminKpis),
         keyMetrics: [
           { name: 'System Uptime', value: adminKpis.systemUptime.value + '%', status: adminKpis.systemUptime.status },
-          { name: 'Ticket Resolution', value: adminKpis.avgTicketResolution.value.toFixed(1) + 'hrs', status: adminKpis.avgTicketResolution.status },
-          { name: 'Security Incidents', value: adminKpis.securityIncidents.value.toString(), status: adminKpis.securityIncidents.status }
+          { name: 'Ticket Resolution Time', value: adminKpis.ticketResolutionTime.value.toFixed(1) + 'hrs', status: adminKpis.ticketResolutionTime.status },
+          { name: 'Security Incident Rate', value: adminKpis.securityIncidentRate.value.toFixed(2) + '%', status: adminKpis.securityIncidentRate.status }
         ],
         url: '/administration'
       },
@@ -3611,9 +3611,9 @@ app.get('/api/executive/dashboard', (req: Request, res: Response) => {
         theme: 'amber',
         healthScore: getHealthScore(salesKpis),
         keyMetrics: [
-          { name: 'Revenue Growth', value: salesKpis.revenueGrowthRate.value + '%', status: salesKpis.revenueGrowthRate.status },
+          { name: 'MRR Growth Rate', value: salesKpis.mrrGrowthRate.value + '%', status: salesKpis.mrrGrowthRate.status },
           { name: 'Win Rate', value: salesKpis.winRate.value + '%', status: salesKpis.winRate.status },
-          { name: 'ARR', value: '$' + (salesKpis.arr.value / 1000000).toFixed(1) + 'M', status: salesKpis.arr.status }
+          { name: 'Revenue Per Rep', value: '$' + (salesKpis.revenuePerRep.value / 1000).toFixed(0) + 'K', status: salesKpis.revenuePerRep.status }
         ],
         url: '/sales'
       },
@@ -3679,9 +3679,9 @@ app.get('/api/executive/dashboard', (req: Request, res: Response) => {
       {
         category: 'Financial Performance',
         kpis: [
-          { name: 'Quarterly Revenue', value: '$' + (financeKpis.revenue.value / 1000000).toFixed(1) + 'M', status: financeKpis.revenue.status, change: '+12.5%' },
+          { name: 'Gross Profit Margin', value: financeKpis.grossProfitMargin.value + '%', status: financeKpis.grossProfitMargin.status, change: '+2.5%' },
           { name: 'EBITDA Margin', value: financeKpis.ebitdaMargin.value + '%', status: financeKpis.ebitdaMargin.status, change: '+2.3%' },
-          { name: 'Operating Cash Flow', value: '$' + (financeKpis.operatingCashFlow.value / 1000000).toFixed(1) + 'M', status: financeKpis.operatingCashFlow.status, change: '+8.7%' }
+          { name: 'Net Profit Margin', value: financeKpis.netProfitMargin.value + '%', status: financeKpis.netProfitMargin.status, change: '+1.8%' }
         ]
       },
       {
@@ -3696,8 +3696,8 @@ app.get('/api/executive/dashboard', (req: Request, res: Response) => {
         category: 'Operations & Quality',
         kpis: [
           { name: 'Overall Equipment Effectiveness', value: opsKpis.oee.value + '%', status: opsKpis.oee.status, change: '+1.8%' },
-          { name: 'Product Defect Rate', value: qcKpis.defectRate.value + '%', status: qcKpis.defectRate.status, change: '-0.3%' },
-          { name: 'On-Time Delivery', value: scKpis.onTimeDeliveryRate.value + '%', status: scKpis.onTimeDeliveryRate.status, change: '-2.5%' }
+          { name: 'Product Defect Rate (PPM)', value: qcKpis.defectRatePPM.value.toString(), status: qcKpis.defectRatePPM.status, change: '-50 PPM' },
+          { name: 'On-Time In-Full (OTIF)', value: scKpis.otif.value + '%', status: scKpis.otif.status, change: '-2.5%' }
         ]
       },
       {
