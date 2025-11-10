@@ -3521,7 +3521,7 @@ app.get('/api/executive/dashboard', (req: Request, res: Response) => {
         healthScore: getHealthScore(hrKpis),
         keyMetrics: [
           { name: 'Turnover Rate', value: hrKpis.turnoverRate.value + '%', status: hrKpis.turnoverRate.status },
-          { name: 'Engagement Score', value: hrKpis.engagementScore.value + '/100', status: hrKpis.engagementScore.status },
+          { name: 'Engagement Score', value: hrKpis.engagement.value + '/100', status: hrKpis.engagement.status },
           { name: 'Time to Hire', value: hrKpis.timeToHire.value + ' days', status: hrKpis.timeToHire.status }
         ],
         url: '/'
@@ -3533,9 +3533,9 @@ app.get('/api/executive/dashboard', (req: Request, res: Response) => {
         theme: 'orange',
         healthScore: getHealthScore(hseKpis),
         keyMetrics: [
-          { name: 'TRIR', value: hseKpis.trir.value.toFixed(2), status: hseKpis.trir.status },
-          { name: 'Training Rate', value: hseKpis.safetyTrainingRate.value + '%', status: hseKpis.safetyTrainingRate.status },
-          { name: 'PPE Compliance', value: hseKpis.ppeCompliance.value + '%', status: hseKpis.ppeCompliance.status }
+          { name: 'TRIR', value: hseKpis['TRIR'].value.toFixed(2), status: hseKpis['TRIR'].status },
+          { name: 'Training Rate', value: hseKpis['Safety Training Rate'].value + '%', status: hseKpis['Safety Training Rate'].status },
+          { name: 'PPE Compliance', value: hseKpis['PPE Compliance'].value + '%', status: hseKpis['PPE Compliance'].status }
         ],
         url: '/hse'
       },
@@ -3703,8 +3703,8 @@ app.get('/api/executive/dashboard', (req: Request, res: Response) => {
       {
         category: 'People & Safety',
         kpis: [
-          { name: 'Employee Engagement', value: hrKpis.engagementScore.value + '/100', status: hrKpis.engagementScore.status, change: '+3.5' },
-          { name: 'Safety Incident Rate (TRIR)', value: hseKpis.trir.value.toFixed(2), status: hseKpis.trir.status, change: '-0.15' },
+          { name: 'Employee Engagement', value: hrKpis.engagement.value + '/100', status: hrKpis.engagement.status, change: '+3.5' },
+          { name: 'Safety Incident Rate (TRIR)', value: hseKpis['TRIR'].value.toFixed(2), status: hseKpis['TRIR'].status, change: '-0.15' },
           { name: 'System Uptime', value: adminKpis.systemUptime.value + '%', status: adminKpis.systemUptime.status, change: '+0.2%' }
         ]
       }
