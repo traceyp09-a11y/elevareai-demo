@@ -9,7 +9,7 @@ import {
 interface Metric {
   name: string;
   value: string;
-  status: string;
+  status?: string;
 }
 
 interface Department {
@@ -39,7 +39,7 @@ interface ExecutiveSummary {
 interface ExecutiveKPI {
   name: string;
   value: string;
-  status: string;
+  status?: string;
   change: string;
 }
 
@@ -86,7 +86,8 @@ const DashboardExecutive: React.FC = () => {
     return 'text-red-400 border-red-500 bg-red-500/10';
   };
 
-  const getStatusColor = (status: string) => {
+  const getStatusColor = (status?: string) => {
+    if (!status) return 'text-gray-400';
     switch (status.toLowerCase()) {
       case 'excellent':
       case 'good':
