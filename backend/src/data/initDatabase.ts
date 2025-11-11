@@ -8,6 +8,11 @@ const hseSchemaPath = path.join(__dirname, '../../database/schema-hse.sql');
 const opsSchemaPath = path.join(__dirname, '../../database/schema-ops.sql');
 const qcSchemaPath = path.join(__dirname, '../../database/schema-qc.sql');
 const scSchemaPath = path.join(__dirname, '../../database/schema-supplychain.sql');
+const financeSchemaPath = path.join(__dirname, '../../database/schema-finance.sql');
+const adminSchemaPath = path.join(__dirname, '../../database/schema-administration.sql');
+const salesSchemaPath = path.join(__dirname, '../../database/schema-sales.sql');
+const customerSuccessSchemaPath = path.join(__dirname, '../../database/schema-customer-success.sql');
+const marketingSchemaPath = path.join(__dirname, '../../database/schema-marketing.sql');
 
 // Remove existing database
 if (fs.existsSync(dbPath)) {
@@ -43,6 +48,31 @@ console.log('QC database schema created successfully.');
 const scSchema = fs.readFileSync(scSchemaPath, 'utf8');
 db.exec(scSchema);
 console.log('Supply Chain database schema created successfully.');
+
+// Read and execute Finance schema
+const financeSchema = fs.readFileSync(financeSchemaPath, 'utf8');
+db.exec(financeSchema);
+console.log('Finance database schema created successfully.');
+
+// Read and execute IT & Administration schema
+const adminSchema = fs.readFileSync(adminSchemaPath, 'utf8');
+db.exec(adminSchema);
+console.log('IT & Administration database schema created successfully.');
+
+// Read and execute Sales schema
+const salesSchema = fs.readFileSync(salesSchemaPath, 'utf8');
+db.exec(salesSchema);
+console.log('Sales database schema created successfully.');
+
+// Read and execute Customer Success schema
+const customerSuccessSchema = fs.readFileSync(customerSuccessSchemaPath, 'utf8');
+db.exec(customerSuccessSchema);
+console.log('Customer Success database schema created successfully.');
+
+// Read and execute Marketing schema
+const marketingSchema = fs.readFileSync(marketingSchemaPath, 'utf8');
+db.exec(marketingSchema);
+console.log('Marketing database schema created successfully.');
 
 // Enable foreign keys
 db.pragma('foreign_keys = ON');
