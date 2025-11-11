@@ -297,7 +297,7 @@ export default function DashboardOps() {
         {/* Alerts */}
         {alerts.length > 0 && (
           <div className="mb-6">
-            <AlertBanner alerts={alerts} />
+            <AlertBanner alerts={alerts} onDismiss={(id) => setAlerts(alerts.filter(a => a.id !== id))} />
           </div>
         )}
 

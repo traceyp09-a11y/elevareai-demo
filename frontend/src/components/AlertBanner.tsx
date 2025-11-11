@@ -1,9 +1,11 @@
-interface Alert {
+export interface Alert {
   id: string;
   type: 'critical' | 'warning' | 'info';
-  metric: string;
+  metric?: string;
   message: string;
-  value: string;
+  value?: string;
+  title?: string;
+  kpi?: string;
 }
 
 interface AlertBannerProps {
