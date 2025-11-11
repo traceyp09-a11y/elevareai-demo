@@ -64,7 +64,11 @@ npm run dev
 cd ../frontend
 npm install
 
-# 6. Note: Build scripts removed - frontend requires build tool configuration
+# 6. Start frontend development server
+npm run dev
+# Frontend will run on http://localhost:5173
+
+# 7. Open your browser to http://localhost:5173
 ```
 
 That's it! You should now see the ElevareIQ dashboard with all 10 HR KPIs.

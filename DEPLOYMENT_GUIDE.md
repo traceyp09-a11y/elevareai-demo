@@ -18,7 +18,7 @@ ElevareIQ is a comprehensive analytics platform providing real-time KPI tracking
 
 - Docker Desktop installed and running
 - Git installed
-- Port 3001 (backend) available
+- Ports 3001 (backend) and 5173 (frontend) available
 
 ### Deployment Steps
 
@@ -80,7 +80,8 @@ Supply Chain data seeding completed!
 
 ### Web Interface
 
-Open your browser and navigate to the frontend application.
+Open your browser and navigate to:
+- **Frontend**: http://localhost:5173
 
 ### Available Routes
 

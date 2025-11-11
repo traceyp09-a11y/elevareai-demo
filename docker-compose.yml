@@ -25,6 +25,7 @@ services:
       - ./frontend/index.html:/app/index.html
     environment:
       - NODE_ENV=development
+      - BACKEND_URL=http://backend:3001
     restart: unless-stopped
     depends_on:
       - backend

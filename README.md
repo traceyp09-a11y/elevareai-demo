@@ -165,6 +165,7 @@ Key Metrics:
 
 ### Frontend
 - **Framework**: React 18 with TypeScript
+- **Build Tool**: Webpack 5
 - **Styling**: Tailwind CSS (dark theme with glassmorphism)
 - **Charts**: Recharts for data visualization
 - **Routing**: React Router v6
@@ -233,7 +234,7 @@ elevareai-demo/
 ### Prerequisites
 - Docker Desktop installed and running
 - Git installed
-- Port 3001 (backend) available
+- Ports 3001 (backend) and 5173 (frontend) available
 
 ### Installation
 
@@ -250,6 +251,7 @@ docker-compose up -d
 ./verify-deployment.sh
 
 # 4. Access the platform
+# Frontend: http://localhost:5173
 # Backend API: http://localhost:3001
 ```
 
@@ -270,7 +272,7 @@ npm run dev         # Start server on port 3001
 # Frontend (in new terminal)
 cd frontend
 npm install
-# Note: Build scripts removed - frontend requires build tool configuration
+npm run dev         # Start Webpack dev server on port 5173
 ```
 
 ## 📱 Platform Usage
