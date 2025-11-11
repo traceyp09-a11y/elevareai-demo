@@ -63,7 +63,10 @@ module.exports = (env, argv) => {
       proxy: [
         {
           context: ['/api'],
-          target: process.env.BACKEND_URL || 'http://localhost:3001',
+          // Use localhost for local dev, only use BACKEND_URL if it's localhost or an IP
+          target: (process.env.BACKEND_URL && process.env.BACKEND_URL.includes('localhost'))
+            ? process.env.BACKEND_URL
+            : 'http://localhost:3001',
           changeOrigin: true,
         },
       ],
