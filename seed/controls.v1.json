@@ -1,0 +1,388 @@
+{
+  "controls": [
+    {
+      "control_id": "CTRL-PRIV-01",
+      "area": "privacy",
+      "title": "Data Inventory & Records of Processing",
+      "description": "Maintain inventory of personal data and processing activities including purpose/lawful basis/retention.",
+      "weight": 5,
+      "frequency": "annual",
+      "owner_role": "Privacy Officer",
+      "evidence_examples": ["RoPA export", "system registry"],
+      "mappings": {
+        "gdpr": ["Art.30"],
+        "soc2": ["CC8.1"],
+        "iso42001": ["5.4.2", "8.4.1"],
+        "nist_ai_rmf": ["GOV-1", "MAP-1"]
+      }
+    },
+    {
+      "control_id": "CTRL-PRIV-02",
+      "area": "privacy",
+      "title": "Lawful Basis & Consent Management",
+      "description": "Track lawful basis and capture/manage consent where required with withdrawal mechanisms.",
+      "weight": 5,
+      "frequency": "annual",
+      "owner_role": "Privacy Officer",
+      "evidence_examples": ["consent logs", "privacy policy"],
+      "mappings": {
+        "gdpr": ["Art.6", "Art.7"],
+        "soc2": ["CC7.2"],
+        "iso42001": ["8.3.3"],
+        "nist_ai_rmf": ["MAP-3", "MEAS-1"]
+      }
+    },
+    {
+      "control_id": "CTRL-PRIV-03",
+      "area": "privacy",
+      "title": "Data Subject Rights (DSR) Process",
+      "description": "Documented, tested process for access/erasure/rectification/portability with SLA and verification.",
+      "weight": 4,
+      "frequency": "annual",
+      "owner_role": "Privacy Ops",
+      "evidence_examples": ["DSR runbook", "ticket sample"],
+      "mappings": {
+        "gdpr": ["Art.12-23"],
+        "soc2": ["CC7.2"],
+        "iso42001": ["8.3.4"],
+        "nist_ai_rmf": ["GOV-4", "MAP-5"]
+      }
+    },
+    {
+      "control_id": "CTRL-PRIV-04",
+      "area": "privacy",
+      "title": "Data Minimization & Purpose Limitation",
+      "description": "Collect/process only necessary personal data with documented purposes and retention schedule.",
+      "weight": 4,
+      "frequency": "annual",
+      "owner_role": "Data Owner",
+      "evidence_examples": ["retention schedule", "PIA/DPIA"],
+      "mappings": {
+        "gdpr": ["Art.5(1)(c)", "Art.5(1)(b)"],
+        "soc2": ["CC6.1"],
+        "iso42001": ["8.3.2"],
+        "nist_ai_rmf": ["GOV-2", "MAP-2"]
+      }
+    },
+    {
+      "control_id": "CTRL-PRIV-05",
+      "area": "privacy",
+      "title": "Privacy Impact Assessment (PIA/DPIA)",
+      "description": "Assess privacy risks for AI use cases with mitigations before deployment.",
+      "weight": 5,
+      "frequency": "per_release",
+      "owner_role": "Privacy Officer",
+      "evidence_examples": ["DPIA template", "risk register"],
+      "mappings": {
+        "gdpr": ["Art.35"],
+        "soc2": ["CC3.2"],
+        "iso42001": ["8.2.2"],
+        "nist_ai_rmf": ["MEAS-2", "MAP-4"]
+      }
+    },
+    {
+      "control_id": "CTRL-PRIV-06",
+      "area": "privacy",
+      "title": "Cross-Border Data Transfer Mechanisms",
+      "description": "Document SCCs or other mechanisms for international data transfers, including TIA.",
+      "weight": 3,
+      "frequency": "annual",
+      "owner_role": "Legal",
+      "evidence_examples": ["SCCs", "TIA assessment"],
+      "mappings": {
+        "gdpr": ["Art.44-49"],
+        "soc2": ["CC1.2"],
+        "iso42001": ["5.3.1"],
+        "nist_ai_rmf": ["GOV-3"]
+      }
+    },
+    {
+      "control_id": "CTRL-SEC-01",
+      "area": "security",
+      "title": "Access Control & Least Privilege",
+      "description": "RBAC enforced in app/DB; periodic access review; MFA via Okta.",
+      "weight": 5,
+      "frequency": "quarterly",
+      "owner_role": "Security",
+      "evidence_examples": ["access review report", "RBAC matrix"],
+      "mappings": {
+        "gdpr": ["Art.32"],
+        "soc2": ["CC6.2", "CC6.6"],
+        "iso42001": ["7.2.3"],
+        "nist_ai_rmf": ["MAP-1", "MEAS-1"]
+      }
+    },
+    {
+      "control_id": "CTRL-SEC-02",
+      "area": "security",
+      "title": "Encryption & Key Management",
+      "description": "TLS in transit; KMS at rest; key rotation and CMK ownership documented.",
+      "weight": 5,
+      "frequency": "annual",
+      "owner_role": "Security",
+      "evidence_examples": ["KMS policy", "TLS scan"],
+      "mappings": {
+        "gdpr": ["Art.32"],
+        "soc2": ["CC6.7"],
+        "iso42001": ["7.2.4"],
+        "nist_ai_rmf": ["MEAS-2"]
+      }
+    },
+    {
+      "control_id": "CTRL-SEC-03",
+      "area": "security",
+      "title": "Secure SDLC & Change Management",
+      "description": "Static analysis, dependency scanning, code review; change approvals and rollback.",
+      "weight": 4,
+      "frequency": "per_release",
+      "owner_role": "Engineering",
+      "evidence_examples": ["pipeline logs", "change tickets"],
+      "mappings": {
+        "gdpr": ["Art.25"],
+        "soc2": ["CC8.1", "CC8.2"],
+        "iso42001": ["8.5.1"],
+        "nist_ai_rmf": ["MAP-4"]
+      }
+    },
+    {
+      "control_id": "CTRL-SEC-04",
+      "area": "security",
+      "title": "Logging, Monitoring, & Incident Response",
+      "description": "Centralized logs, alerting, IR runbook, postmortems.",
+      "weight": 4,
+      "frequency": "annual",
+      "owner_role": "Security",
+      "evidence_examples": ["IR plan", "SIEM alerts"],
+      "mappings": {
+        "gdpr": ["Art.33-34"],
+        "soc2": ["CC7.2", "CC7.3"],
+        "iso42001": ["7.3.1"],
+        "nist_ai_rmf": ["MEAS-3"]
+      }
+    },
+    {
+      "control_id": "CTRL-SEC-05",
+      "area": "security",
+      "title": "Data Segmentation & Residency",
+      "description": "Tenant isolation controls and regional pinning enforced and tested.",
+      "weight": 4,
+      "frequency": "annual",
+      "owner_role": "Security",
+      "evidence_examples": ["RLS policy", "region tests"],
+      "mappings": {
+        "gdpr": ["Art.5", "Art.28"],
+        "soc2": ["CC6.1"],
+        "iso42001": ["7.2.2"],
+        "nist_ai_rmf": ["GOV-2"]
+      }
+    },
+    {
+      "control_id": "CTRL-SEC-06",
+      "area": "security",
+      "title": "Vendor & Integration Security",
+      "description": "3rd-party risk assessment for Jira/Snowflake/Okta and other vendors.",
+      "weight": 3,
+      "frequency": "annual",
+      "owner_role": "Security",
+      "evidence_examples": ["SIG questionnaire", "DPAs"],
+      "mappings": {
+        "gdpr": ["Art.28"],
+        "soc2": ["CC3.1"],
+        "iso42001": ["5.5.1"],
+        "nist_ai_rmf": ["GOV-3"]
+      }
+    },
+    {
+      "control_id": "CTRL-MR-01",
+      "area": "model_risk",
+      "title": "Use-Case Registration & Risk Tiering",
+      "description": "Register AI use cases with impact, data sensitivity, and assign risk tier.",
+      "weight": 5,
+      "frequency": "per_release",
+      "owner_role": "AI Governance",
+      "evidence_examples": ["use-case register", "tiering rubric"],
+      "mappings": {
+        "gdpr": ["Art.22"],
+        "soc2": ["CC3.2"],
+        "iso42001": ["6.2.1", "8.2.1"],
+        "nist_ai_rmf": ["MAP-1", "GOV-4"]
+      }
+    },
+    {
+      "control_id": "CTRL-MR-02",
+      "area": "model_risk",
+      "title": "Data & Model Documentation (Model Cards)",
+      "description": "Document datasets, features, training/eval metrics, limitations, and intended use.",
+      "weight": 4,
+      "frequency": "per_release",
+      "owner_role": "Data Science",
+      "evidence_examples": ["model card", "datasheets"],
+      "mappings": {
+        "gdpr": ["Art.5", "Art.13"],
+        "soc2": ["CC2.2"],
+        "iso42001": ["8.3.1", "8.5.2"],
+        "nist_ai_rmf": ["MEAS-1", "MEAS-2"]
+      }
+    },
+    {
+      "control_id": "CTRL-MR-03",
+      "area": "model_risk",
+      "title": "Validation & Testing",
+      "description": "Independent validation of performance, robustness, security; documented test coverage.",
+      "weight": 5,
+      "frequency": "per_release",
+      "owner_role": "Model Risk",
+      "evidence_examples": ["validation report", "test results"],
+      "mappings": {
+        "gdpr": ["Art.25"],
+        "soc2": ["CC7.2"],
+        "iso42001": ["8.5.3"],
+        "nist_ai_rmf": ["MEAS-3", "MAP-4"]
+      }
+    },
+    {
+      "control_id": "CTRL-MR-04",
+      "area": "model_risk",
+      "title": "Drift & Performance Monitoring",
+      "description": "Monitor data/model drift and key metrics with alert thresholds and retrain triggers.",
+      "weight": 4,
+      "frequency": "continuous",
+      "owner_role": "ML Ops",
+      "evidence_examples": ["monitor dashboards", "alerts"],
+      "mappings": {
+        "gdpr": ["Art.5(1)(d)"],
+        "soc2": ["CC7.3"],
+        "iso42001": ["8.6.1"],
+        "nist_ai_rmf": ["MEAS-4"]
+      }
+    },
+    {
+      "control_id": "CTRL-MR-05",
+      "area": "model_risk",
+      "title": "Human-in-the-Loop & Override",
+      "description": "Define when human review is required and provide override/appeal mechanisms.",
+      "weight": 4,
+      "frequency": "annual",
+      "owner_role": "Product/Legal",
+      "evidence_examples": ["SOPs", "UI screenshots"],
+      "mappings": {
+        "gdpr": ["Art.22(3)"],
+        "soc2": ["CC1.2"],
+        "iso42001": ["6.4.2"],
+        "nist_ai_rmf": ["GOV-5", "MAP-2"]
+      }
+    },
+    {
+      "control_id": "CTRL-MR-06",
+      "area": "model_risk",
+      "title": "Data Protection for Model Artifacts",
+      "description": "Protect training data and model artifacts (encryption, access controls, lineage).",
+      "weight": 3,
+      "frequency": "annual",
+      "owner_role": "ML Ops",
+      "evidence_examples": ["registry ACLs", "artifact policy"],
+      "mappings": {
+        "gdpr": ["Art.32"],
+        "soc2": ["CC6.1"],
+        "iso42001": ["7.2.4"],
+        "nist_ai_rmf": ["MEAS-2"]
+      }
+    },
+    {
+      "control_id": "CTRL-ETH-01",
+      "area": "ethics",
+      "title": "Responsible AI Policy & Training",
+      "description": "Published policy with annual training by role.",
+      "weight": 4,
+      "frequency": "annual",
+      "owner_role": "AI Governance",
+      "evidence_examples": ["policy doc", "LMS report"],
+      "mappings": {
+        "gdpr": ["Art.5"],
+        "soc2": ["CC1.1"],
+        "iso42001": ["5.4.1"],
+        "nist_ai_rmf": ["GOV-1"]
+      }
+    },
+    {
+      "control_id": "CTRL-ETH-02",
+      "area": "ethics",
+      "title": "Bias & Fairness Assessment",
+      "description": "Assess potential harms; run fairness metrics by cohort; mitigation plan.",
+      "weight": 5,
+      "frequency": "per_release",
+      "owner_role": "Data Science",
+      "evidence_examples": ["fairness report", "mitigation plan"],
+      "mappings": {
+        "gdpr": ["Art.5", "Art.9"],
+        "soc2": ["CC3.2"],
+        "iso42001": ["6.3.1"],
+        "nist_ai_rmf": ["MEAS-2"]
+      }
+    },
+    {
+      "control_id": "CTRL-ETH-03",
+      "area": "ethics",
+      "title": "Transparency & User Disclosure",
+      "description": "Communicate AI involvement, limitations, and contact for questions.",
+      "weight": 3,
+      "frequency": "per_release",
+      "owner_role": "Product",
+      "evidence_examples": ["UI copy", "help center"],
+      "mappings": {
+        "gdpr": ["Art.13-14"],
+        "soc2": ["CC2.2"],
+        "iso42001": ["5.5.2"],
+        "nist_ai_rmf": ["MAP-2"]
+      }
+    },
+    {
+      "control_id": "CTRL-ETH-04",
+      "area": "ethics",
+      "title": "Content Safety & Abuse Handling",
+      "description": "Processes to detect and handle harmful outputs (toxicity, PII leaks) with escalation.",
+      "weight": 4,
+      "frequency": "annual",
+      "owner_role": "Trust & Safety",
+      "evidence_examples": ["runbooks", "blocklists"],
+      "mappings": {
+        "gdpr": ["Art.32"],
+        "soc2": ["CC7.3"],
+        "iso42001": ["7.3.2"],
+        "nist_ai_rmf": ["MEAS-3"]
+      }
+    },
+    {
+      "control_id": "CTRL-ETH-05",
+      "area": "ethics",
+      "title": "Third-Party Data & IP Compliance",
+      "description": "Verify rights for training/inference datasets and prompts; licensing tracked.",
+      "weight": 4,
+      "frequency": "annual",
+      "owner_role": "Legal",
+      "evidence_examples": ["license docs", "dataset register"],
+      "mappings": {
+        "gdpr": ["Art.5"],
+        "soc2": ["CC6.1"],
+        "iso42001": ["5.5.1"],
+        "nist_ai_rmf": ["GOV-3"]
+      }
+    },
+    {
+      "control_id": "CTRL-ETH-06",
+      "area": "ethics",
+      "title": "Accessibility & Inclusive Design",
+      "description": "Test AI experiences for accessibility and inclusive language; remediate issues.",
+      "weight": 3,
+      "frequency": "annual",
+      "owner_role": "UX",
+      "evidence_examples": ["a11y report", "screen reader tests"],
+      "mappings": {
+        "gdpr": ["Recital 39"],
+        "soc2": ["CC2.3"],
+        "iso42001": ["6.3.2"],
+        "nist_ai_rmf": ["MAP-2"]
+      }
+    }
+  ]
+}

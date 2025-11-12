@@ -1,0 +1,83 @@
+{
+  "pack": "hipaa",
+  "controls": [
+    {
+      "control_id": "HIPAA-01",
+      "area": "security",
+      "title": "Unique User Identification",
+      "description": "Assign a unique name/number for identifying and tracking user identity.",
+      "weight": 5,
+      "frequency": "annual",
+      "owner_role": "Security",
+      "evidence_examples": ["IdP config", "audit extract"],
+      "mappings": {
+        "hipaa": ["164.312(a)(2)(i)"]
+      }
+    },
+    {
+      "control_id": "HIPAA-02",
+      "area": "security",
+      "title": "Emergency Access Procedure",
+      "description": "Establish procedures for obtaining necessary ePHI during an emergency.",
+      "weight": 4,
+      "frequency": "annual",
+      "owner_role": "Security",
+      "evidence_examples": ["DR runbook", "test results"],
+      "mappings": {
+        "hipaa": ["164.312(a)(2)(ii)"]
+      }
+    },
+    {
+      "control_id": "HIPAA-03",
+      "area": "security",
+      "title": "Automatic Logoff",
+      "description": "Terminate electronic sessions after a predetermined time of inactivity.",
+      "weight": 3,
+      "frequency": "annual",
+      "owner_role": "Security",
+      "evidence_examples": ["SSO policy", "config"],
+      "mappings": {
+        "hipaa": ["164.312(a)(2)(iii)"]
+      }
+    },
+    {
+      "control_id": "HIPAA-04",
+      "area": "security",
+      "title": "Audit Controls",
+      "description": "Implement hardware, software, and/or procedural mechanisms to record and examine activity.",
+      "weight": 4,
+      "frequency": "annual",
+      "owner_role": "Security",
+      "evidence_examples": ["SIEM rules", "audit policy"],
+      "mappings": {
+        "hipaa": ["164.312(b)"]
+      }
+    },
+    {
+      "control_id": "HIPAA-05",
+      "area": "security",
+      "title": "Integrity Controls",
+      "description": "Implement policies/procedures to protect ePHI from improper alteration or destruction.",
+      "weight": 4,
+      "frequency": "annual",
+      "owner_role": "Security",
+      "evidence_examples": ["hashing", "WORM"],
+      "mappings": {
+        "hipaa": ["164.312(c)(1)"]
+      }
+    },
+    {
+      "control_id": "HIPAA-06",
+      "area": "privacy",
+      "title": "Notice of Privacy Practices",
+      "description": "Provide notice of privacy practices and obtain acknowledgment where applicable.",
+      "weight": 3,
+      "frequency": "annual",
+      "owner_role": "Privacy",
+      "evidence_examples": ["notice", "acknowledgments"],
+      "mappings": {
+        "hipaa": ["164.520"]
+      }
+    }
+  ]
+}

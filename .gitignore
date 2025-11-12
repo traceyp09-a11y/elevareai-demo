@@ -43,3 +43,19 @@ coverage/
 .cache/
 temp/
 tmp/
+
+# Next.js
+.next/
+out/
+
+# Prisma
+apps/api/prisma/migrations/
+
+# Docker
+docker-compose.override.yml
+
+# OS
+Thumbs.db
+
+# Archive
+archive/

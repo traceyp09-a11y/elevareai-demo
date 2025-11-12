@@ -1,0 +1,266 @@
+{
+  "org": [
+    {
+      "id": "AR-DATA-ORG-01",
+      "dimension": "data",
+      "text": "Is there an enterprise data catalog with ownership defined for critical datasets?",
+      "input_type": "likert5",
+      "weight": 5
+    },
+    {
+      "id": "AR-DATA-ORG-02",
+      "dimension": "data",
+      "text": "What % of source systems have documented SLAs for freshness and quality?",
+      "input_type": "percent",
+      "weight": 4
+    },
+    {
+      "id": "AR-TECH-ORG-01",
+      "dimension": "technical",
+      "text": "Do common MLOps components (feature store, model registry, CI/CD) exist and are they actively used?",
+      "input_type": "likert5",
+      "weight": 5
+    },
+    {
+      "id": "AR-TECH-ORG-02",
+      "dimension": "technical",
+      "text": "Is there a standardized process for AI use-case intake and T-shirt sizing (feasibility, data fit, complexity)?",
+      "input_type": "likert5",
+      "weight": 4
+    },
+    {
+      "id": "AR-ORG-ORG-01",
+      "dimension": "organizational",
+      "text": "Is AI governance defined (roles, RACI, decision rights) and communicated across departments?",
+      "input_type": "likert5",
+      "weight": 5
+    },
+    {
+      "id": "AR-ORG-ORG-02",
+      "dimension": "organizational",
+      "text": "What % of workforce has completed AI literacy training appropriate to role?",
+      "input_type": "percent",
+      "weight": 3
+    }
+  ],
+  "sales": [
+    {
+      "id": "AR-DATA-SALES-01",
+      "dimension": "data",
+      "text": "Are CRM opportunities/activities consistently captured with required fields (stage, amount, close date, next step)?",
+      "input_type": "likert5",
+      "weight": 4
+    },
+    {
+      "id": "AR-DATA-SALES-02",
+      "dimension": "data",
+      "text": "What % of accounts/opportunities pass monthly data quality checks (duplicates, missing contacts)?",
+      "input_type": "percent",
+      "weight": 3
+    },
+    {
+      "id": "AR-TECH-SALES-01",
+      "dimension": "technical",
+      "text": "Is there an API or ELT pipeline from CRM to analytics/feature store within 24h?",
+      "input_type": "boolean",
+      "weight": 5
+    },
+    {
+      "id": "AR-TECH-SALES-02",
+      "dimension": "technical",
+      "text": "Are lead scoring or propensity models deployed and monitored for drift?",
+      "input_type": "likert5",
+      "weight": 4
+    },
+    {
+      "id": "AR-ORG-SALES-01",
+      "dimension": "organizational",
+      "text": "Is there a defined feedback loop from sellers to data/model teams (e.g., win/loss reasons)?",
+      "input_type": "likert5",
+      "weight": 3
+    },
+    {
+      "id": "AR-ORG-SALES-02",
+      "dimension": "organizational",
+      "text": "Are playbooks updated based on model insights (e.g., next best action)?",
+      "input_type": "likert5",
+      "weight": 3
+    }
+  ],
+  "supply_chain": [
+    {
+      "id": "AR-DATA-SC-01",
+      "dimension": "data",
+      "text": "What % of SKUs have complete master data (lead times, MOQ, supplier, safety stock)?",
+      "input_type": "percent",
+      "weight": 5
+    },
+    {
+      "id": "AR-DATA-SC-02",
+      "dimension": "data",
+      "text": "Are demand, supply, and inventory snapshots historized for modeling?",
+      "input_type": "likert5",
+      "weight": 4
+    },
+    {
+      "id": "AR-TECH-SC-01",
+      "dimension": "technical",
+      "text": "Are forecasting/optimization models automated (scheduled retrain, backtesting)?",
+      "input_type": "likert5",
+      "weight": 5
+    },
+    {
+      "id": "AR-TECH-SC-02",
+      "dimension": "technical",
+      "text": "Is there near-real-time event ingestion for logistics (WMS/TMS/IoT)?",
+      "input_type": "likert5",
+      "weight": 4
+    },
+    {
+      "id": "AR-ORG-SC-01",
+      "dimension": "organizational",
+      "text": "Is S&OP incorporating model outputs with clear override rules?",
+      "input_type": "likert5",
+      "weight": 4
+    },
+    {
+      "id": "AR-ORG-SC-02",
+      "dimension": "organizational",
+      "text": "Are supplier risk/continuity plans defined and reviewed quarterly?",
+      "input_type": "likert5",
+      "weight": 3
+    }
+  ],
+  "finance": [
+    {
+      "id": "AR-DATA-FIN-01",
+      "dimension": "data",
+      "text": "Is the chart of accounts harmonized across entities and mapped for analytics?",
+      "input_type": "likert5",
+      "weight": 4
+    },
+    {
+      "id": "AR-DATA-FIN-02",
+      "dimension": "data",
+      "text": "What % of POs/invoices are matched automatically with low exception rates?",
+      "input_type": "percent",
+      "weight": 4
+    },
+    {
+      "id": "AR-TECH-FIN-01",
+      "dimension": "technical",
+      "text": "Are forecasting models (revenue/OPEX/CAPEX) versioned with reproducible pipelines?",
+      "input_type": "likert5",
+      "weight": 4
+    },
+    {
+      "id": "AR-TECH-FIN-02",
+      "dimension": "technical",
+      "text": "Is sensitive financial data tokenized/masked in non-prod?",
+      "input_type": "boolean",
+      "weight": 5
+    },
+    {
+      "id": "AR-ORG-FIN-01",
+      "dimension": "organizational",
+      "text": "Is there an established benefits tracking process linking projects to GL accounts?",
+      "input_type": "likert5",
+      "weight": 5
+    },
+    {
+      "id": "AR-ORG-FIN-02",
+      "dimension": "organizational",
+      "text": "Do finance business partners participate in AI project prioritization?",
+      "input_type": "likert5",
+      "weight": 3
+    }
+  ],
+  "operations": [
+    {
+      "id": "AR-DATA-OPS-01",
+      "dimension": "data",
+      "text": "Is production telemetry (throughput, quality, downtime) captured with timestamps and context?",
+      "input_type": "likert5",
+      "weight": 4
+    },
+    {
+      "id": "AR-DATA-OPS-02",
+      "dimension": "data",
+      "text": "What % of critical assets have complete maintenance histories?",
+      "input_type": "percent",
+      "weight": 4
+    },
+    {
+      "id": "AR-TECH-OPS-01",
+      "dimension": "technical",
+      "text": "Are predictive maintenance or quality models integrated into workflows (CMMS/MES)?",
+      "input_type": "likert5",
+      "weight": 4
+    },
+    {
+      "id": "AR-TECH-OPS-02",
+      "dimension": "technical",
+      "text": "Is edge/IoT data reliably streamed or batched to the warehouse within SLA?",
+      "input_type": "likert5",
+      "weight": 4
+    },
+    {
+      "id": "AR-ORG-OPS-01",
+      "dimension": "organizational",
+      "text": "Are operators trained to interpret AI recommendations and escalate exceptions?",
+      "input_type": "likert5",
+      "weight": 3
+    },
+    {
+      "id": "AR-ORG-OPS-02",
+      "dimension": "organizational",
+      "text": "Are continuous improvement boards incorporating AI insights?",
+      "input_type": "likert5",
+      "weight": 3
+    }
+  ],
+  "admin": [
+    {
+      "id": "AR-DATA-ADM-01",
+      "dimension": "data",
+      "text": "Are HR and policy repositories structured for retrieval (metadata, access controls)?",
+      "input_type": "likert5",
+      "weight": 3
+    },
+    {
+      "id": "AR-DATA-ADM-02",
+      "dimension": "data",
+      "text": "What % of internal policies have machine-readable versions (Markdown/JSON) for governance tooling?",
+      "input_type": "percent",
+      "weight": 3
+    },
+    {
+      "id": "AR-TECH-ADM-01",
+      "dimension": "technical",
+      "text": "Is enterprise search/RAG implemented with document access control enforcement?",
+      "input_type": "likert5",
+      "weight": 5
+    },
+    {
+      "id": "AR-TECH-ADM-02",
+      "dimension": "technical",
+      "text": "Are service request workflows (IT/Facilities) instrumented with SLAs and APIs?",
+      "input_type": "likert5",
+      "weight": 3
+    },
+    {
+      "id": "AR-ORG-ADM-01",
+      "dimension": "organizational",
+      "text": "Is there a formal intake for AI assistant use cases (e.g., policy Q&A, ticket triage) with risk review?",
+      "input_type": "likert5",
+      "weight": 4
+    },
+    {
+      "id": "AR-ORG-ADM-02",
+      "dimension": "organizational",
+      "text": "Are accessibility and inclusion requirements applied to AI-enabled interfaces?",
+      "input_type": "likert5",
+      "weight": 3
+    }
+  ]
+}

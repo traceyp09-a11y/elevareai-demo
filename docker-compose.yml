@@ -1,37 +1,91 @@
-services:
-  backend:
-    build: ./backend
-    container_name: elevareiq-backend
-    ports:
-      - "3001:3001"
-    volumes:
-      - ./backend/src:/app/src
-      - ./backend/database:/app/database
-    environment:
-      - NODE_ENV=development
-      - PORT=3001
-    restart: unless-stopped
-    networks:
-      - elevareiq-network
+version: '3.8'
 
-  frontend:
-    build: ./frontend
-    container_name: elevareiq-frontend
-    ports:
-      - "5173:5173"
-    volumes:
-      - ./frontend/src:/app/src
-      - ./frontend/public:/app/public
-      - ./frontend/index.html:/app/index.html
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: elevare-postgres
+    restart: unless-stopped
     environment:
-      - NODE_ENV=development
-      - VITE_BACKEND_URL=http://backend:3001
+      POSTGRES_USER: elevare
+      POSTGRES_PASSWORD: elevare_dev_password
+      POSTGRES_DB: elevare_ai
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U elevare']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: elevare-redis
+    restart: unless-stopped
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    container_name: elevare-api
     restart: unless-stopped
     depends_on:
-      - backend
-    networks:
-      - elevareiq-network
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      NODE_ENV: development
+      PORT: 3001
+      DATABASE_URL: postgresql://elevare:elevare_dev_password@postgres:5432/elevare_ai?schema=public
+      REDIS_URL: redis://redis:6379
+      CORS_ORIGIN: http://localhost:3000
+      JWT_SECRET: dev-secret-change-in-production
+      OKTA_DOMAIN: ${OKTA_DOMAIN:-}
+      OKTA_CLIENT_ID: ${OKTA_CLIENT_ID:-}
+      OKTA_CLIENT_SECRET: ${OKTA_CLIENT_SECRET:-}
+    ports:
+      - '3001:3001'
+    volumes:
+      - ./apps/api:/app/apps/api
+      - /app/apps/api/node_modules
+      - /app/node_modules
+    command: pnpm --filter @elevare/api dev
 
-networks:
-  elevareiq-network:
-    driver: bridge
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    container_name: elevare-web
+    restart: unless-stopped
+    depends_on:
+      - api
+    environment:
+      NODE_ENV: development
+      NEXT_PUBLIC_API_URL: http://localhost:3001
+      API_BASE_URL: http://api:3001
+      OKTA_DOMAIN: ${OKTA_DOMAIN:-}
+      OKTA_CLIENT_ID: ${OKTA_CLIENT_ID:-}
+      OKTA_CLIENT_SECRET: ${OKTA_CLIENT_SECRET:-}
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./apps/web:/app/apps/web
+      - /app/apps/web/node_modules
+      - /app/apps/web/.next
+      - /app/node_modules
+    command: pnpm --filter @elevare/web dev
+
+volumes:
+  postgres_data:
+  redis_data:

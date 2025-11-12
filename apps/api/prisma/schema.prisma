@@ -1,0 +1,386 @@
+// Elevare AI Platform - Prisma Schema
+// Multi-tenant SaaS with Row-Level Security (RLS)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================================================
+// TENANT & USER MANAGEMENT
+// ============================================================================
+
+model Tenant {
+  id         String   @id @default(uuid()) @map("tenant_id")
+  name       String
+  region     String   // us, eu
+  plan       String   // core, plus, enterprise
+  settings   Json     @default("{}") @map("settings_json")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  users            User[]
+  departments      Department[]
+  assessments      Assessment[]
+  projects         Project[]
+  controls         Control[]
+  complianceScores ComplianceScore[]
+  alerts           Alert[]
+  activities       Activity[]
+  connectors       Connector[]
+
+  @@map("tenants")
+}
+
+model User {
+  id        String   @id @default(uuid()) @map("user_id")
+  tenantId  String   @map("tenant_id")
+  email     String
+  name      String
+  status    String   @default("active") // active, suspended, deleted
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  tenant    Tenant     @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  roles     UserRole[]
+  answers   Answer[]
+  activities Activity[]
+
+  @@unique([tenantId, email])
+  @@index([tenantId])
+  @@map("users")
+}
+
+model UserRole {
+  id     String @id @default(uuid())
+  userId String @map("user_id")
+  role   String // Admin, Manager, Contributor, Viewer
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, role])
+  @@map("user_roles")
+}
+
+model Department {
+  id        String   @id @default(uuid()) @map("dept_id")
+  tenantId  String   @map("tenant_id")
+  name      String
+  type      String   // sales, supply_chain, finance, operations, admin
+  createdAt DateTime @default(now()) @map("created_at")
+
+  // Relations
+  tenant      Tenant       @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  assessments Assessment[]
+  projects    Project[]
+
+  @@index([tenantId])
+  @@map("departments")
+}
+
+// ============================================================================
+// AI READINESS ASSESSMENTS
+// ============================================================================
+
+model Assessment {
+  id               String    @id @default(uuid()) @map("assess_id")
+  tenantId         String    @map("tenant_id")
+  deptId           String?   @map("dept_id")
+  frameworkVersion String    @default("v1.0") @map("framework_version")
+  status           String    @default("draft") // draft, in_progress, completed
+  startedAt        DateTime? @map("started_at")
+  completedAt      DateTime? @map("completed_at")
+  createdAt        DateTime  @default(now()) @map("created_at")
+
+  // Relations
+  tenant     Tenant      @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  department Department? @relation(fields: [deptId], references: [id], onDelete: SetNull)
+  answers    Answer[]
+
+  @@index([tenantId, status])
+  @@map("assessments")
+}
+
+model Question {
+  id               String  @id @map("question_id")
+  frameworkVersion String  @map("framework_version")
+  dimension        String  // data, technical, organizational
+  text             String
+  inputType        String  @map("input_type") // likert5, boolean, percent
+  weight           Int
+  options          Json?   @map("options_json") // {scope: "org"|"sales"|"supply_chain"|...}
+
+  // Relations
+  answers Answer[]
+
+  @@index([frameworkVersion, dimension])
+  @@map("questions")
+}
+
+model Answer {
+  id              String   @id @default(uuid()) @map("answer_id")
+  assessId        String   @map("assess_id")
+  questionId      String   @map("question_id")
+  responderId     String   @map("responder_id")
+  value           Json     @map("value_json")
+  normalizedScore Float?   @map("normalized_score") // 0..1
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  // Relations
+  assessment Assessment @relation(fields: [assessId], references: [id], onDelete: Cascade)
+  question   Question   @relation(fields: [questionId], references: [id])
+  responder  User       @relation(fields: [responderId], references: [id])
+
+  @@unique([assessId, questionId])
+  @@index([assessId])
+  @@map("answers")
+}
+
+// ============================================================================
+// PROJECT PORTFOLIO MANAGEMENT
+// ============================================================================
+
+model Project {
+  id            String    @id @default(uuid()) @map("project_id")
+  tenantId      String    @map("tenant_id")
+  deptId        String    @map("dept_id")
+  name          String
+  stage         String    @default("intake") // intake, evaluation, execution, benefits
+  status        String    @default("active")
+  ownerId       String?   @map("owner_id")
+  jiraKey       String?   @map("jira_key")
+  priorityScore Float?    @map("priority_score")
+  riskScore     Float?    @map("risk_score")
+  valueScore    Float?    @map("value_score")
+  startedAt     DateTime? @map("started_at")
+  targetEnd     DateTime? @map("target_end")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  // Relations
+  tenant     Tenant       @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  department Department   @relation(fields: [deptId], references: [id])
+  milestones Milestone[]
+  budgets    Budget[]
+  risks      Risk[]
+  roiFlows   ROIFlow[]
+  roiSummary ROISummary?
+  evidences  Evidence[]
+
+  @@index([tenantId, stage, status])
+  @@map("projects")
+}
+
+model Milestone {
+  id              String    @id @default(uuid()) @map("milestone_id")
+  projectId       String    @map("project_id")
+  title           String
+  dueDate         DateTime? @map("due_date")
+  status          String    @default("pending")
+  percentComplete Int       @default(0) @map("percent_complete")
+  createdAt       DateTime  @default(now()) @map("created_at")
+
+  // Relations
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+  @@map("milestones")
+}
+
+model Budget {
+  id          String   @id @default(uuid()) @map("budget_id")
+  projectId   String   @map("project_id")
+  periodMonth DateTime @map("period_month")
+  plannedCost Float    @map("planned_cost")
+  actualCost  Float?   @map("actual_cost")
+  currency    String   @default("USD")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  // Relations
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, periodMonth])
+  @@map("budgets")
+}
+
+model Risk {
+  id          String   @id @default(uuid()) @map("risk_id")
+  projectId   String   @map("project_id")
+  probability Float    // 0..1
+  impact      Int      // 1..5
+  severity    String   // critical, high, medium, low
+  mitigation  String
+  ownerId     String?  @map("owner_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+  @@map("risks")
+}
+
+// ============================================================================
+// COMPLIANCE MONITORING
+// ============================================================================
+
+model Control {
+  id             String  @id @map("control_id")
+  tenantId       String? @map("tenant_id") // null = global library
+  area           String  // privacy, security, model_risk, ethics
+  code           String
+  description    String
+  weight         Int
+  requirementRef Json?   @map("requirement_ref") // mappings to GDPR, SOC2, ISO42001, NIST AI RMF
+  meta           Json?   @map("meta_json") // title, frequency, owner_role, evidence_examples, pack
+
+  // Relations
+  tenant    Tenant?    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  evidences Evidence[]
+  alerts    Alert[]
+
+  @@unique([id, tenantId])
+  @@index([tenantId, area])
+  @@map("controls")
+}
+
+model Evidence {
+  id         String    @id @default(uuid()) @map("evidence_id")
+  controlId  String    @map("control_id")
+  projectId  String?   @map("project_id")
+  s3Key      String    @map("s3_key")
+  hash       String
+  status     String    @default("pending") // pending, approved, rejected
+  reviewerId String?   @map("reviewer_id")
+  reviewedAt DateTime? @map("reviewed_at")
+  validUntil DateTime? @map("valid_until")
+  createdAt  DateTime  @default(now()) @map("created_at")
+
+  // Relations
+  control Control  @relation(fields: [controlId], references: [id])
+  project Project? @relation(fields: [projectId], references: [id])
+
+  @@index([controlId])
+  @@map("evidences")
+}
+
+model ComplianceScore {
+  id        String   @id @default(uuid()) @map("score_id")
+  tenantId  String   @map("tenant_id")
+  area      String   // privacy, security, model_risk, ethics
+  score     Float    // 0..100
+  asOf      DateTime @map("as_of") @default(now())
+  createdAt DateTime @default(now()) @map("created_at")
+
+  // Relations
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, area, asOf])
+  @@index([tenantId, area])
+  @@map("compliance_scores")
+}
+
+model Alert {
+  id        String    @id @default(uuid()) @map("alert_id")
+  tenantId  String    @map("tenant_id")
+  severity  String    // critical, high, medium, low
+  area      String
+  controlId String?   @map("control_id")
+  title     String
+  details   String?
+  status    String    @default("open") // open, acknowledged, closed
+  openedAt  DateTime  @default(now()) @map("opened_at")
+  closedAt  DateTime? @map("closed_at")
+
+  // Relations
+  tenant  Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  control Control? @relation(fields: [controlId], references: [id])
+
+  @@index([tenantId, status])
+  @@map("alerts")
+}
+
+// ============================================================================
+// ROI ANALYTICS
+// ============================================================================
+
+model ROIFlow {
+  id          String   @id @default(uuid()) @map("flow_id")
+  projectId   String   @map("project_id")
+  periodMonth DateTime @map("period_month")
+  cost        Float    @default(0)
+  benefit     Float    @default(0)
+  scenario    String   @default("base") // base, conservative, optimistic
+  currency    String   @default("USD")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  // Relations
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, periodMonth, scenario])
+  @@index([projectId])
+  @@map("roi_flows")
+}
+
+model ROISummary {
+  projectId      String    @id @map("project_id")
+  npv            Float?
+  irr            Float?
+  roiPct         Float?    @map("roi_pct")
+  paybackMonths  Int?      @map("payback_months")
+  lastComputedAt DateTime? @map("last_computed_at")
+
+  // Relations
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@map("roi_summaries")
+}
+
+// ============================================================================
+// INTEGRATIONS & ACTIVITY
+// ============================================================================
+
+model Connector {
+  id         String    @id @default(uuid()) @map("connector_id")
+  tenantId   String    @map("tenant_id")
+  type       String    // jira, snowflake, okta_scim
+  auth       Json      @map("auth_json") // encrypted credentials
+  status     String    @default("inactive")
+  lastSyncAt DateTime? @map("last_sync_at")
+  createdAt  DateTime  @default(now()) @map("created_at")
+  updatedAt  DateTime  @updatedAt @map("updated_at")
+
+  // Relations
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, type])
+  @@index([tenantId])
+  @@map("connectors")
+}
+
+model Activity {
+  id        String   @id @default(uuid()) @map("activity_id")
+  tenantId  String   @map("tenant_id")
+  actorId   String   @map("actor_id")
+  verb      String   // created, updated, deleted, completed
+  entity    String   // assessment, project, control, etc.
+  entityId  String   @map("entity_id")
+  message   String
+  meta      Json?    @map("meta_json")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  // Relations
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  actor  User   @relation(fields: [actorId], references: [id])
+
+  @@index([tenantId, createdAt])
+  @@map("activities")
+}

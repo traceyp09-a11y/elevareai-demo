@@ -1,0 +1,83 @@
+{
+  "pack": "sox",
+  "controls": [
+    {
+      "control_id": "SOX-01",
+      "area": "security",
+      "title": "Change Management Approvals",
+      "description": "All production changes approved, tested, and documented with backout plans.",
+      "weight": 5,
+      "frequency": "per_release",
+      "owner_role": "Engineering",
+      "evidence_examples": ["change tickets", "approvals"],
+      "mappings": {
+        "sox": ["404"]
+      }
+    },
+    {
+      "control_id": "SOX-02",
+      "area": "security",
+      "title": "Segregation of Duties (SOD)",
+      "description": "No single individual can develop, approve, and deploy changes to financial systems.",
+      "weight": 5,
+      "frequency": "annual",
+      "owner_role": "Security",
+      "evidence_examples": ["SOD matrix", "access review"],
+      "mappings": {
+        "sox": ["404"]
+      }
+    },
+    {
+      "control_id": "SOX-03",
+      "area": "security",
+      "title": "Production Access Reviews",
+      "description": "Quarterly review of privileged access to financial systems.",
+      "weight": 4,
+      "frequency": "quarterly",
+      "owner_role": "Security",
+      "evidence_examples": ["access review", "tickets"],
+      "mappings": {
+        "sox": ["404"]
+      }
+    },
+    {
+      "control_id": "SOX-04",
+      "area": "security",
+      "title": "Audit Trail Retention",
+      "description": "Retention of change logs and transaction logs for at least 7 years as applicable.",
+      "weight": 3,
+      "frequency": "annual",
+      "owner_role": "Security",
+      "evidence_examples": ["log policy", "storage config"],
+      "mappings": {
+        "sox": ["802"]
+      }
+    },
+    {
+      "control_id": "SOX-05",
+      "area": "security",
+      "title": "Backup & Restore Tests",
+      "description": "Periodic backup integrity verification and restore drills for financial systems.",
+      "weight": 3,
+      "frequency": "annual",
+      "owner_role": "IT Ops",
+      "evidence_examples": ["restore report", "test results"],
+      "mappings": {
+        "sox": ["404"]
+      }
+    },
+    {
+      "control_id": "SOX-06",
+      "area": "privacy",
+      "title": "Financial Data Classification",
+      "description": "Classify financial data and apply appropriate controls.",
+      "weight": 3,
+      "frequency": "annual",
+      "owner_role": "Finance",
+      "evidence_examples": ["classification policy", "tags"],
+      "mappings": {
+        "sox": ["404"]
+      }
+    }
+  ]
+}
