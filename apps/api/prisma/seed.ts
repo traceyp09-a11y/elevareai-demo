@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import { readFile } from 'node:fs/promises';
-import path from 'node:path';
+import * as path from 'node:path';
 
 const prisma = new PrismaClient();
 const GLOBAL_TENANT_ID = '00000000-0000-0000-0000-000000000000'; // system library
