@@ -12,7 +12,7 @@ export class TenantsService {
         name: true,
         region: true,
         plan: true,
-        created_at: true,
+        createdAt: true,
       },
     });
   }
@@ -25,16 +25,15 @@ export class TenantsService {
           select: {
             id: true,
             email: true,
-            first_name: true,
-            last_name: true,
-            role: true,
+            name: true,
+            status: true,
           },
         },
         departments: {
           select: {
             id: true,
             name: true,
-            scope: true,
+            type: true,
           },
         },
       },

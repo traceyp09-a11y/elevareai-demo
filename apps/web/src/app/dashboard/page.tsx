@@ -58,7 +58,8 @@ export default function DashboardPage() {
 
   const questionsByScope = questions.reduce(
     (acc, q) => {
-      acc[q.scope] = (acc[q.scope] || 0) + 1;
+      const scope = q.options?.scope || 'unknown';
+      acc[scope] = (acc[scope] || 0) + 1;
       return acc;
     },
     {} as Record<string, number>

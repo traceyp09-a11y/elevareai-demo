@@ -6,13 +6,22 @@ export class AssessmentsService {
   constructor(private prisma: PrismaService) {}
 
   async getQuestions(scope?: string, dimension?: string) {
-    return this.prisma.question.findMany({
+    const questions = await this.prisma.question.findMany({
       where: {
-        ...(scope && { scope }),
         ...(dimension && { dimension }),
       },
-      orderBy: [{ scope: 'asc' }, { dimension: 'asc' }],
+      orderBy: [{ dimension: 'asc' }],
     });
+
+    // Filter by scope from options JSON if provided
+    if (scope) {
+      return questions.filter((q) => {
+        const options = q.options as { scope?: string } | null;
+        return options?.scope === scope;
+      });
+    }
+
+    return questions;
   }
 
   async findOne(id: string) {
@@ -23,7 +32,7 @@ export class AssessmentsService {
           select: {
             id: true,
             name: true,
-            scope: true,
+            type: true,
           },
         },
         answers: {
@@ -58,7 +67,7 @@ export class AssessmentsService {
     // - Overall readiness score (0-100)
 
     const totalQuestions = assessment.answers.length;
-    const completedAnswers = assessment.answers.filter(a => a.answer_value !== null).length;
+    const completedAnswers = assessment.answers.filter(a => a.value !== null).length;
     const completionRate = totalQuestions > 0 ? (completedAnswers / totalQuestions) * 100 : 0;
 
     return {

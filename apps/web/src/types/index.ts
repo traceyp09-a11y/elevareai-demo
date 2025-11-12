@@ -13,32 +13,33 @@ export interface Tenant {
 export interface User {
   id: string;
   email: string;
-  first_name: string;
-  last_name: string;
-  role: string;
+  name: string;
+  status: string;
 }
 
 // Department types
 export interface Department {
   id: string;
   name: string;
-  scope: string;
+  type: string;
 }
 
 // Assessment types
 export interface Question {
   id: string;
-  scope: string;
+  frameworkVersion: string;
   dimension: string;
   text: string;
-  input_type: string;
+  inputType: string;
   weight: number;
+  options: { scope?: string } | null;
 }
 
 export interface Answer {
   id: string;
-  question_id: string;
-  answer_value: string | null;
+  questionId: string;
+  value: any;
+  normalizedScore: number | null;
   question?: Question;
 }
 
