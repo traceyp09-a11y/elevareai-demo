@@ -22,7 +22,7 @@ async function ensureGlobalTenant() {
 }
 
 async function seedQuestions() {
-  const fp = path.resolve(process.cwd(), '../../../seed/questions.v1.json');
+  const fp = path.resolve(process.cwd(), '../../seed/questions.v1.json');
   const raw = await readFile(fp, 'utf-8');
   const data = JSON.parse(raw) as Record<string, any[]>;
   const scopes = Object.keys(data);
@@ -107,7 +107,7 @@ async function upsertControl(c: ControlJson) {
 }
 
 async function seedControls() {
-  const basePath = path.resolve(process.cwd(), '../../../seed');
+  const basePath = path.resolve(process.cwd(), '../../seed');
   const base = JSON.parse(await readFile(path.join(basePath, 'controls.v1.json'), 'utf-8'));
 
   for (const c of base.controls as ControlJson[]) {
