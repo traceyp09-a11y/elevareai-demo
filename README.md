@@ -3,22 +3,28 @@
 <div align="center">
 
 ![ElevareIQ](https://img.shields.io/badge/ElevareIQ-Analytics%20Platform-0891b2?style=for-the-badge)
-![Modules](https://img.shields.io/badge/Modules-5-06b6d4?style=for-the-badge)
-![KPIs](https://img.shields.io/badge/KPIs-46-3b82f6?style=for-the-badge)
+![Modules](https://img.shields.io/badge/Modules-11-06b6d4?style=for-the-badge)
+![KPIs](https://img.shields.io/badge/KPIs-110+-3b82f6?style=for-the-badge)
 ![Status](https://img.shields.io/badge/Status-Production%20Ready-10b981?style=for-the-badge)
 
 </div>
 
 ## 📊 Overview
 
-ElevareIQ is a comprehensive enterprise analytics platform designed for C-Suite executives in manufacturing, construction, and logistics industries. The platform provides real-time KPI tracking, pain point analysis, and transparent calculation methodologies across five critical business departments.
+ElevareIQ is a comprehensive enterprise analytics platform designed for C-Suite executives in manufacturing, construction, and logistics industries. The platform provides real-time KPI tracking, pain point analysis, and transparent calculation methodologies across eleven critical business departments.
 
 ### 🎯 Target Audience
-- **CEO/CFO**: Strategic oversight across all departments
-- **VP of Operations**: Production efficiency and quality metrics
-- **VP of Supply Chain**: End-to-end supply chain visibility
+- **CEO/CFO**: Executive dashboard with strategic oversight across all departments
 - **VP of HR**: Workforce analytics and talent management
 - **VP of Safety**: HSE compliance and risk management
+- **VP of Operations**: Production efficiency and quality metrics
+- **VP of Quality**: Quality control and compliance metrics
+- **VP of Supply Chain**: End-to-end supply chain visibility
+- **CFO/VP of Finance**: Financial performance and analysis
+- **CIO/VP of IT**: IT operations and administration analytics
+- **VP of Sales**: Revenue pipeline and sales performance
+- **VP of Customer Success**: Customer satisfaction and retention
+- **VP of Marketing**: Marketing ROI and campaign effectiveness
 
 ## 🏢 Demo Company Profile
 
@@ -32,7 +38,7 @@ ElevareIQ is a comprehensive enterprise analytics platform designed for C-Suite 
 ## 🚀 Platform Modules
 
 ### 1. 👥 HR Analytics
-**6 Core KPIs** | **10 Pain Points**
+**10 Core KPIs** | **10 Pain Points**
 
 Key Metrics:
 - Employee Turnover Rate (with cost impact)
@@ -41,6 +47,10 @@ Key Metrics:
 - Employee Productivity
 - Absenteeism Rate
 - Revenue per Employee
+- Training Hours per Employee
+- Employee Satisfaction Score
+- Diversity & Inclusion Metrics
+- Headcount Growth Rate
 
 **Top Pain Points:**
 - Skilled Labor Shortage & Talent Acquisition
@@ -128,7 +138,7 @@ Key Metrics:
 
 ---
 
-### 5. 🚚 Supply Chain Analytics **(NEW)**
+### 5. 🚚 Supply Chain Analytics
 **10 Core KPIs** | **10 Pain Points**
 
 Key Metrics:
@@ -152,6 +162,144 @@ Key Metrics:
 - High Freight Costs Reducing Margins
 - Warehouse Space Inefficiencies
 - Elevated Supply Chain Costs
+
+---
+
+### 6. 💰 Finance Analytics
+**10 Core KPIs** | **10 Pain Points**
+
+Key Metrics:
+- Revenue Growth Rate
+- Gross Profit Margin
+- Operating Profit Margin
+- EBITDA Margin
+- Cash Flow from Operations
+- Current Ratio
+- Quick Ratio
+- Accounts Receivable Turnover
+- Return on Assets (ROA)
+- Return on Equity (ROE)
+
+**Top Pain Points:**
+- Declining Profit Margins
+- Cash Flow Management Issues
+- High Accounts Receivable Days
+- Rising Operating Costs
+- Inefficient Capital Allocation
+
+---
+
+### 7. 💻 IT & Administration Analytics
+**10 Core KPIs** | **10 Pain Points**
+
+Key Metrics:
+- System Uptime Percentage
+- IT Cost per Employee
+- Help Desk Ticket Resolution Time
+- Cybersecurity Incident Rate
+- Software License Utilization
+- IT Project On-Time Delivery
+- Network Performance Score
+- Backup Success Rate
+- User Satisfaction Score
+- IT Budget Variance
+
+**Top Pain Points:**
+- Frequent System Downtime
+- Rising IT Costs
+- Cybersecurity Vulnerabilities
+- Slow Help Desk Response
+- Outdated Technology Infrastructure
+
+---
+
+### 8. 💰 Sales & Revenue Analytics
+**10 Core KPIs** | **10 Pain Points**
+
+Key Metrics:
+- Monthly Recurring Revenue (MRR)
+- Sales Growth Rate
+- Average Deal Size
+- Sales Cycle Length
+- Win Rate
+- Customer Acquisition Cost (CAC)
+- Sales Pipeline Value
+- Quota Attainment
+- Revenue per Sales Rep
+- Lead Conversion Rate
+
+**Top Pain Points:**
+- Long Sales Cycles
+- Low Win Rates
+- High Customer Acquisition Costs
+- Pipeline Visibility Issues
+- Quota Attainment Challenges
+
+---
+
+### 9. ❤️ Customer Success & Experience Analytics
+**10 Core KPIs** | **10 Pain Points**
+
+Key Metrics:
+- Customer Satisfaction Score (CSAT)
+- Net Promoter Score (NPS)
+- Customer Retention Rate
+- Customer Churn Rate
+- Customer Lifetime Value (CLV)
+- Average Response Time
+- First Contact Resolution Rate
+- Customer Effort Score
+- Renewal Rate
+- Support Ticket Volume
+
+**Top Pain Points:**
+- High Customer Churn
+- Low NPS Scores
+- Slow Response Times
+- Poor First Contact Resolution
+- Decreasing Customer Lifetime Value
+
+---
+
+### 10. 📢 Marketing Analytics
+**10 Core KPIs** | **10 Pain Points**
+
+Key Metrics:
+- Marketing ROI
+- Cost per Lead (CPL)
+- Lead to Customer Conversion Rate
+- Website Traffic
+- Marketing Qualified Leads (MQLs)
+- Campaign Click-Through Rate
+- Social Media Engagement Rate
+- Content Performance Score
+- Brand Awareness Index
+- Marketing Attribution Score
+
+**Top Pain Points:**
+- Low Marketing ROI
+- High Cost per Lead
+- Poor Lead Quality
+- Low Conversion Rates
+- Ineffective Campaign Performance
+
+---
+
+### 11. 💼 Executive Dashboard
+**Unified C-Suite View** | **Cross-Functional Insights**
+
+**Special Features:**
+- 📊 **Consolidated KPI View**: Top metrics from all 10 departments
+- 🎯 **Strategic Objectives Tracking**: Company-wide goals and initiatives
+- 🔥 **Critical Issues Dashboard**: Urgent pain points requiring executive attention
+- 📈 **Trend Analysis**: Historical performance across all functions
+- 💡 **Actionable Insights**: AI-powered recommendations for leadership
+
+**Purpose:**
+- Single pane of glass for CEO/CFO
+- Cross-functional performance visibility
+- Strategic decision-making support
+- Board-ready reporting
 
 ---
 
@@ -183,48 +331,71 @@ elevareai-demo/
 ├── backend/
 │   ├── src/
 │   │   ├── services/
-│   │   │   ├── kpiCalculations.ts           # HR KPIs
-│   │   │   ├── kpiCalculationsHSE.ts        # HSE KPIs
-│   │   │   ├── kpiCalculationsOps.ts        # Operations KPIs
-│   │   │   ├── kpiCalculationsQC.ts         # QC KPIs
-│   │   │   ├── kpiCalculationsSupplyChain.ts # Supply Chain KPIs
-│   │   │   └── predictiveAnalytics.ts       # AI/ML models
+│   │   │   ├── kpiCalculations.ts                  # HR KPIs
+│   │   │   ├── kpiCalculationsHSE.ts               # HSE KPIs
+│   │   │   ├── kpiCalculationsOps.ts               # Operations KPIs
+│   │   │   ├── kpiCalculationsQC.ts                # QC KPIs
+│   │   │   ├── kpiCalculationsSupplyChain.ts       # Supply Chain KPIs
+│   │   │   ├── kpiCalculationsFinance.ts           # Finance KPIs
+│   │   │   ├── kpiCalculationsAdministration.ts    # IT & Admin KPIs
+│   │   │   ├── kpiCalculationsSales.ts             # Sales KPIs
+│   │   │   ├── kpiCalculationsCustomerSuccess.ts   # Customer Success KPIs
+│   │   │   ├── kpiCalculationsMarketing.ts         # Marketing KPIs
+│   │   │   └── predictiveAnalytics.ts              # AI/ML models
 │   │   ├── data/
-│   │   │   ├── seedData.ts                  # HR seed data
-│   │   │   ├── seedDataHSE.ts               # HSE seed data
-│   │   │   ├── seedDataOps.ts               # Operations seed data
-│   │   │   ├── seedDataQC.ts                # QC seed data
-│   │   │   ├── seedDataSupplyChain.ts       # Supply Chain seed data
-│   │   │   └── initDatabase.ts              # DB initialization
-│   │   └── server.ts                        # Express server (1500+ lines)
+│   │   │   ├── seedData.ts                         # HR seed data
+│   │   │   ├── seedDataHSE.ts                      # HSE seed data
+│   │   │   ├── seedDataOps.ts                      # Operations seed data
+│   │   │   ├── seedDataQC.ts                       # QC seed data
+│   │   │   ├── seedDataSupplyChain.ts              # Supply Chain seed data
+│   │   │   ├── seedDataFinance.ts                  # Finance seed data
+│   │   │   ├── seedDataAdministration.ts           # IT & Admin seed data
+│   │   │   ├── seedDataSales.ts                    # Sales seed data
+│   │   │   ├── seedDataCustomerSuccess.ts          # Customer Success seed data
+│   │   │   ├── seedDataMarketing.ts                # Marketing seed data
+│   │   │   └── initDatabase.ts                     # DB initialization
+│   │   └── server.ts                               # Express server (3000+ lines)
 │   ├── database/
-│   │   ├── schema.sql                       # HR schema
-│   │   ├── schema-hse.sql                   # HSE schema
-│   │   ├── schema-ops.sql                   # Operations schema
-│   │   ├── schema-qc.sql                    # QC schema
-│   │   └── schema-supplychain.sql           # Supply Chain schema
+│   │   ├── schema.sql                              # HR schema
+│   │   ├── schema-hse.sql                          # HSE schema
+│   │   ├── schema-ops.sql                          # Operations schema
+│   │   ├── schema-qc.sql                           # QC schema
+│   │   ├── schema-supplychain.sql                  # Supply Chain schema
+│   │   ├── schema-finance.sql                      # Finance schema
+│   │   ├── schema-administration.sql               # IT & Admin schema
+│   │   ├── schema-sales.sql                        # Sales schema
+│   │   ├── schema-customer-success.sql             # Customer Success schema
+│   │   └── schema-marketing.sql                    # Marketing schema
 │   ├── Dockerfile
 │   └── package.json
 ├── frontend/
 │   ├── src/
 │   │   ├── pages/
-│   │   │   ├── Dashboard.tsx                # HR Dashboard
-│   │   │   ├── DashboardHSE.tsx             # HSE Dashboard
-│   │   │   ├── DashboardOps.tsx             # Operations Dashboard
-│   │   │   ├── DashboardQC.tsx              # QC Dashboard
-│   │   │   ├── DashboardSupplyChain.tsx     # Supply Chain Dashboard
-│   │   │   ├── PainPoints*.tsx              # Pain Points pages (5)
-│   │   │   ├── PredictiveAnalytics.tsx      # AI predictions
-│   │   │   └── MobileSafetyApp.tsx          # Mobile app
+│   │   │   ├── Dashboard.tsx                       # HR Dashboard
+│   │   │   ├── DashboardHSE.tsx                    # HSE Dashboard
+│   │   │   ├── DashboardOps.tsx                    # Operations Dashboard
+│   │   │   ├── DashboardQC.tsx                     # QC Dashboard
+│   │   │   ├── DashboardSupplyChain.tsx            # Supply Chain Dashboard
+│   │   │   ├── DashboardFinance.tsx                # Finance Dashboard
+│   │   │   ├── DashboardAdministration.tsx         # IT & Admin Dashboard
+│   │   │   ├── DashboardSales.tsx                  # Sales Dashboard
+│   │   │   ├── DashboardCustomerSuccess.tsx        # Customer Success Dashboard
+│   │   │   ├── DashboardMarketing.tsx              # Marketing Dashboard
+│   │   │   ├── DashboardExecutive.tsx              # Executive Dashboard
+│   │   │   ├── PainPoints*.tsx                     # Pain Points pages (11)
+│   │   │   ├── PredictiveAnalytics.tsx             # AI predictions
+│   │   │   └── MobileSafetyApp.tsx                 # Mobile safety app
 │   │   ├── components/
-│   │   │   └── ElevareLogo.tsx              # Brand logo
-│   │   ├── App.tsx                          # Main app with routing
+│   │   │   ├── ElevareLogo.tsx                     # Brand logo
+│   │   │   └── ErrorBoundary.tsx                   # Error handling
+│   │   ├── App.tsx                                 # Main app with routing
 │   │   └── main.tsx
 │   ├── Dockerfile
+│   ├── webpack.config.js
 │   └── package.json
 ├── docker-compose.yml
-├── DEPLOYMENT_GUIDE.md                      # Comprehensive deployment guide
-├── verify-deployment.sh                     # Automated testing script
+├── DEPLOYMENT_GUIDE.md                             # Comprehensive deployment guide
+├── verify-deployment.sh                            # Automated testing script
 └── README.md
 ```
 
@@ -260,13 +431,18 @@ docker-compose up -d
 # Backend
 cd backend
 npm install
-npm run init-db     # Initialize database
-npm run seed-data   # Seed HR data
-npm run seed-hse    # Seed HSE data
-npm run seed-ops    # Seed Operations data
-npm run seed-qc     # Seed QC data
-npm run seed-supplychain  # Seed Supply Chain data
-npm run dev         # Start server on port 3001
+npm run init-db              # Initialize database
+npm run seed-data            # Seed HR data
+npm run seed-hse             # Seed HSE data
+npm run seed-ops             # Seed Operations data
+npm run seed-qc              # Seed QC data
+npm run seed-supplychain     # Seed Supply Chain data
+npm run seed-finance         # Seed Finance data
+npm run seed-administration  # Seed IT & Admin data
+npm run seed-sales           # Seed Sales data
+npm run seed-customer-success # Seed Customer Success data
+npm run seed-marketing       # Seed Marketing data
+npm run dev                  # Start server on port 3001
 
 # Frontend (in new terminal)
 cd frontend
@@ -278,29 +454,63 @@ npm run dev         # Start on port 5173
 
 ### Accessing Modules
 
-**Department Switcher**: Top navigation bar allows instant switching between modules
+**Department Switcher**: Top navigation bar allows instant switching between all 11 modules
 
-**HR Analytics**
+**1. HR Analytics**
 - Dashboard: `http://localhost:5173/`
 - Pain Points: `http://localhost:5173/pain-points`
+- Reports: `http://localhost:5173/reports`
 
-**HSE Analytics**
+**2. HSE Analytics**
 - Dashboard: `http://localhost:5173/hse`
 - Predictive Analytics: `http://localhost:5173/hse/predictive`
 - Mobile Safety: `http://localhost:5173/hse/mobile`
 - Pain Points: `http://localhost:5173/hse/pain-points`
+- Reports: `http://localhost:5173/hse/reports`
 
-**Operations Analytics**
+**3. Operations Analytics**
 - Dashboard: `http://localhost:5173/ops`
 - Pain Points: `http://localhost:5173/ops/pain-points`
+- Reports: `http://localhost:5173/ops/reports`
 
-**Quality Control**
+**4. Quality Control**
 - Dashboard: `http://localhost:5173/qc`
 - Pain Points: `http://localhost:5173/qc/pain-points`
+- Reports: `http://localhost:5173/qc/reports`
 
-**Supply Chain**
+**5. Supply Chain**
 - Dashboard: `http://localhost:5173/supplychain`
 - Pain Points: `http://localhost:5173/supplychain/pain-points`
+- Reports: `http://localhost:5173/supplychain/reports`
+
+**6. Finance**
+- Dashboard: `http://localhost:5173/finance`
+- Pain Points: `http://localhost:5173/finance/pain-points`
+- Reports: `http://localhost:5173/finance/reports`
+
+**7. IT & Administration**
+- Dashboard: `http://localhost:5173/administration`
+- Pain Points: `http://localhost:5173/administration/pain-points`
+- Reports: `http://localhost:5173/administration/reports`
+
+**8. Sales & Revenue**
+- Dashboard: `http://localhost:5173/sales`
+- Pain Points: `http://localhost:5173/sales/pain-points`
+- Reports: `http://localhost:5173/sales/reports`
+
+**9. Customer Success**
+- Dashboard: `http://localhost:5173/customer-success`
+- Pain Points: `http://localhost:5173/customer-success/pain-points`
+- Reports: `http://localhost:5173/customer-success/reports`
+
+**10. Marketing**
+- Dashboard: `http://localhost:5173/marketing`
+- Pain Points: `http://localhost:5173/marketing/pain-points`
+- Reports: `http://localhost:5173/marketing/reports`
+
+**11. Executive Dashboard**
+- Overview: `http://localhost:5173/executive`
+- Strategic View: `http://localhost:5173/executive/strategic`
 
 ### Key Features
 
@@ -323,23 +533,36 @@ npm run dev         # Start on port 5173
 - HR: Cyan
 - HSE: Cyan/Purple (predictive)
 - Operations: Blue
-- QC: Teal/Green
-- Supply Chain: Orange/Amber
+- Quality Control: Teal/Green
+- Supply Chain: Orange
+- Finance: Green
+- IT & Administration: Blue
+- Sales & Revenue: Amber
+- Customer Success: Teal
+- Marketing: Orange
+- Executive: Purple-Pink Gradient
 
 ## 📊 Data & Statistics
 
 ### Total Platform Metrics
-- **46 KPIs** tracked across 5 departments
-- **50 Pain Points** with actionable recommendations
-- **2,000+ database records** generated per module
-- **25+ API endpoints** for data access
+- **110+ KPIs** tracked across 11 departments
+- **110+ Pain Points** with actionable recommendations
+- **20,000+ database records** generated across all modules
+- **100+ API endpoints** for data access
+- **11 comprehensive dashboards** with real-time analytics
 
-### Database Tables
+### Database Tables Per Module
 - **HR**: 6 tables (employees, departments, hires, terminations, etc.)
 - **HSE**: 8 tables (incidents, near-misses, training, audits, etc.)
 - **Operations**: 10 tables (production, downtime, maintenance, etc.)
-- **QC**: 7 tables (inspections, defects, NCRs, CAPAs, etc.)
+- **Quality Control**: 7 tables (inspections, defects, NCRs, CAPAs, etc.)
 - **Supply Chain**: 14 tables (orders, inventory, suppliers, shipments, etc.)
+- **Finance**: 10 tables (revenue, expenses, cash flow, assets, etc.)
+- **IT & Administration**: 8 tables (systems, tickets, projects, licenses, etc.)
+- **Sales**: 10 tables (opportunities, deals, pipeline, quotas, etc.)
+- **Customer Success**: 8 tables (customers, tickets, surveys, renewals, etc.)
+- **Marketing**: 10 tables (campaigns, leads, conversions, attribution, etc.)
+- **Executive**: Aggregated views from all 10 operational departments
 
 ## 🔒 Security Considerations
 
@@ -363,9 +586,11 @@ Run automated verification:
 This script tests:
 - Container health
 - API health check
-- All 46 KPI endpoints
-- Pain points endpoints
+- All 110+ KPI endpoints across 11 departments
+- Pain points endpoints for all modules
 - Mobile safety endpoints
+- Executive dashboard aggregations
+- Predictive analytics endpoints
 
 ## 📈 Performance
 
@@ -408,31 +633,38 @@ Status: Above 85% = Excellent, 75-85% = Good, 60-75% = Warning, <60% = Critical
 
 ## 🛣️ Roadmap
 
-### Phase 1 (Current - Completed ✅)
+### Phase 1 (Completed ✅)
 - [x] HR Analytics Module
-- [x] HSE Analytics Module
-- [x] Predictive Analytics Engine
-- [x] Mobile Safety Reporting
+- [x] HSE Analytics Module with Predictive Analytics
+- [x] Mobile Safety Reporting App
 - [x] Operations Analytics Module
 - [x] Quality Control Analytics Module
 - [x] Supply Chain Analytics Module
+- [x] Finance Analytics Module
+- [x] IT & Administration Analytics Module
+- [x] Sales & Revenue Analytics Module
+- [x] Customer Success & Experience Analytics Module
+- [x] Marketing Analytics Module
+- [x] Executive Dashboard (unified C-Suite view)
 
-### Phase 2 (Planned)
-- [ ] Executive Dashboard (unified view)
-- [ ] Finance Analytics Module
-- [ ] Sales & Marketing Analytics
+### Phase 2 (In Progress)
 - [ ] PDF Report Generation
-- [ ] Excel/CSV Export
+- [ ] Excel/CSV Export functionality
 - [ ] Email Alerts & Notifications
 - [ ] Custom KPI Builder
+- [ ] Advanced Data Filtering & Segmentation
+- [ ] Role-Based Access Control (RBAC)
+- [ ] Multi-language Support
 
-### Phase 3 (Future)
-- [ ] Machine Learning Models
-- [ ] Advanced Forecasting
+### Phase 3 (Planned)
+- [ ] Enhanced Machine Learning Models
+- [ ] Advanced Forecasting & Predictive Models
 - [ ] Multi-tenant Architecture
-- [ ] Mobile Apps (iOS/Android)
-- [ ] API Webhooks
-- [ ] Third-party Integrations (SAP, Oracle, etc.)
+- [ ] Native Mobile Apps (iOS/Android)
+- [ ] API Webhooks & Events
+- [ ] Third-party Integrations (SAP, Oracle, Salesforce, etc.)
+- [ ] Real-time Collaboration Features
+- [ ] Advanced Data Visualization Options
 
 ## 📝 Documentation
 
