@@ -158,9 +158,9 @@ export default function LandingPage() {
       <div className="relative z-10">
         {/* Navigation */}
         <nav className="fixed top-0 left-0 right-0 z-50 bg-black/40 backdrop-blur-xl border-b border-white/10">
-          <div className="max-w-7xl mx-auto px-6 py-4">
+          <div className="max-w-7xl mx-auto px-6 py-6">
             <div className="flex items-center justify-between">
-              <ElevareLogo variant="dark" size="md" />
+              <ElevareLogo variant="dark" size="xl" />
 
               <div className="flex items-center gap-8">
                 <a href="#features" className="text-gray-300 hover:text-cyan-400 transition-colors text-sm font-medium">Features</a>
@@ -423,7 +423,7 @@ export default function LandingPage() {
           <div className="max-w-7xl mx-auto">
             <div className="flex flex-col md:flex-row justify-between items-center gap-6">
               <div className="text-center md:text-left">
-                <ElevareLogo variant="dark" size="md" />
+                <ElevareLogo variant="dark" size="lg" />
                 <p className="text-gray-400 text-sm mt-2">
                   Enterprise Analytics Reimagined
                 </p>
