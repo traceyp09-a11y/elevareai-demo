@@ -189,6 +189,11 @@ async function seedDemoTenant() {
     { type: 'hr', name: 'Human Resources' },
     { type: 'hse', name: 'Health, Safety & Environment' },
     { type: 'marketing', name: 'Marketing' },
+    { type: 'rnd', name: 'Research & Development' },
+    { type: 'procurement', name: 'Procurement' },
+    { type: 'quality', name: 'Quality Assurance' },
+    { type: 'customer_success', name: 'Customer Success' },
+    { type: 'strategy', name: 'Strategy & Business Development' },
   ];
 
   for (const dept of departments) {

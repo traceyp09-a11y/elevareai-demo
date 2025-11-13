@@ -217,6 +217,11 @@ function DepartmentCard({ department }: { department: Department }) {
       hr: '👥',
       hse: '🛡️',
       marketing: '📢',
+      rnd: '🔬',
+      procurement: '🛒',
+      quality: '✅',
+      customer_success: '🎯',
+      strategy: '📈',
     };
     return icons[type] || '🏢';
   };
@@ -231,6 +236,11 @@ function DepartmentCard({ department }: { department: Department }) {
       hr: 'border-pink-200 bg-pink-50',
       hse: 'border-orange-200 bg-orange-50',
       marketing: 'border-indigo-200 bg-indigo-50',
+      rnd: 'border-violet-200 bg-violet-50',
+      procurement: 'border-cyan-200 bg-cyan-50',
+      quality: 'border-emerald-200 bg-emerald-50',
+      customer_success: 'border-rose-200 bg-rose-50',
+      strategy: 'border-teal-200 bg-teal-50',
     };
     return colors[type] || 'border-gray-200 bg-gray-50';
   };
