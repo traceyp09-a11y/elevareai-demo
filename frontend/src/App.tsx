@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
+import LandingPage from './pages/LandingPage';
 import Dashboard from './pages/Dashboard';
 import KPIDetail from './pages/KPIDetail';
 import PainPoints from './pages/PainPoints';
@@ -30,6 +31,7 @@ import './App.css';
 
 function AppContent() {
   const location = useLocation();
+  const isLanding = location.pathname === '/landing';
   const isHSE = location.pathname.startsWith('/hse');
   const isOps = location.pathname.startsWith('/ops');
   const isQC = location.pathname.startsWith('/qc');
@@ -41,6 +43,11 @@ function AppContent() {
   const isMarketing = location.pathname.startsWith('/marketing');
   const isExecutive = location.pathname.startsWith('/executive');
   const currentDept = isHSE ? 'hse' : isOps ? 'ops' : isQC ? 'qc' : isSC ? 'supplychain' : isFinance ? 'finance' : isAdmin ? 'administration' : isSales ? 'sales' : isCustomerSuccess ? 'customer-success' : isMarketing ? 'marketing' : isExecutive ? 'executive' : 'hr';
+
+  // Render landing page without header/footer
+  if (isLanding) {
+    return <LandingPage />;
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black">
@@ -465,6 +472,9 @@ function AppContent() {
       {/* Main Content */}
       <main>
         <Routes>
+          {/* Landing Page */}
+          <Route path="/landing" element={<LandingPage />} />
+
           {/* HR Analytics Routes */}
           <Route path="/" element={<Dashboard />} />
           <Route path="/kpi/:kpiName" element={<KPIDetail />} />
