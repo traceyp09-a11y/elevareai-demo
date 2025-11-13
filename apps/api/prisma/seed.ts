@@ -175,14 +175,28 @@ async function seedDemoTenant() {
   });
   console.log(`✅ Demo user created: ${user.email}`);
 
-  // Create departments
-  const departments = ['sales', 'supply_chain', 'finance', 'operations', 'admin'];
-  for (const type of departments) {
+  // Create departments (delete existing first to avoid duplicates)
+  await prisma.department.deleteMany({
+    where: { tenantId: DEMO_TENANT_ID },
+  });
+
+  const departments = [
+    { type: 'sales', name: 'Sales' },
+    { type: 'supply_chain', name: 'Supply Chain' },
+    { type: 'finance', name: 'Finance' },
+    { type: 'operations', name: 'Operations' },
+    { type: 'admin', name: 'Administration' },
+    { type: 'hr', name: 'Human Resources' },
+    { type: 'hse', name: 'Health, Safety & Environment' },
+    { type: 'marketing', name: 'Marketing' },
+  ];
+
+  for (const dept of departments) {
     await prisma.department.create({
       data: {
         tenantId: DEMO_TENANT_ID,
-        name: type.charAt(0).toUpperCase() + type.slice(1).replace('_', ' '),
-        type,
+        name: dept.name,
+        type: dept.type,
       },
     });
   }

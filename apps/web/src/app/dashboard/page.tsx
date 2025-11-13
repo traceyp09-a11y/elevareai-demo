@@ -2,10 +2,11 @@
 
 import { useEffect, useState } from 'react';
 import { api } from '@/lib/api';
-import { Tenant, Question } from '@/types';
+import { Tenant, Question, Department } from '@/types';
 
 export default function DashboardPage() {
   const [tenants, setTenants] = useState<Tenant[]>([]);
+  const [departments, setDepartments] = useState<Department[]>([]);
   const [questions, setQuestions] = useState<Question[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -20,6 +21,13 @@ export default function DashboardPage() {
         ]);
         setTenants(tenantsData as Tenant[]);
         setQuestions(questionsData as Question[]);
+
+        // Get departments from first tenant
+        if ((tenantsData as Tenant[]).length > 0) {
+          const tenantWithDepts = await api.tenants.get((tenantsData as Tenant[])[0].id);
+          setDepartments((tenantWithDepts as any).departments || []);
+        }
+
         setError(null);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to fetch data');
@@ -85,8 +93,9 @@ export default function DashboardPage() {
 
       <div className="container mx-auto px-4 py-8">
         {/* Stats Overview */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <StatCard title="Tenants" value={tenants.length} color="blue" />
+          <StatCard title="Departments" value={departments.length} color="indigo" />
           <StatCard title="Assessment Questions" value={questions.length} color="green" />
           <StatCard
             title="Question Scopes"
@@ -95,34 +104,21 @@ export default function DashboardPage() {
           />
         </div>
 
-        {/* Tenants Section */}
+        {/* Departments Section */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 mb-8">
           <div className="px-6 py-4 border-b border-gray-200">
-            <h2 className="text-xl font-semibold text-gray-900">Active Tenants</h2>
+            <h2 className="text-xl font-semibold text-gray-900">Departments</h2>
+            <p className="text-sm text-gray-600 mt-1">
+              Manage AI readiness assessments by department
+            </p>
           </div>
           <div className="p-6">
-            {tenants.length === 0 ? (
-              <p className="text-gray-500 text-center py-8">No tenants found</p>
+            {departments.length === 0 ? (
+              <p className="text-gray-500 text-center py-8">No departments found</p>
             ) : (
-              <div className="grid grid-cols-1 gap-4">
-                {tenants.map((tenant) => (
-                  <div
-                    key={tenant.id}
-                    className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
-                  >
-                    <div className="flex items-start justify-between">
-                      <div>
-                        <h3 className="font-semibold text-gray-900">{tenant.name}</h3>
-                        <p className="text-sm text-gray-600 mt-1">ID: {tenant.id}</p>
-                      </div>
-                      <div className="text-right">
-                        <span className="inline-block px-3 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">
-                          {tenant.plan}
-                        </span>
-                        <p className="text-xs text-gray-500 mt-2">{tenant.region}</p>
-                      </div>
-                    </div>
-                  </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {departments.map((department) => (
+                  <DepartmentCard key={department.id} department={department} />
                 ))}
               </div>
             )}
@@ -194,6 +190,69 @@ export default function DashboardPage() {
   );
 }
 
+function DepartmentCard({ department }: { department: Department }) {
+  const getDepartmentIcon = (type: string) => {
+    const icons: Record<string, string> = {
+      sales: '💼',
+      supply_chain: '🚚',
+      finance: '💰',
+      operations: '⚙️',
+      admin: '📋',
+      hr: '👥',
+      hse: '🛡️',
+      marketing: '📢',
+    };
+    return icons[type] || '🏢';
+  };
+
+  const getDepartmentColor = (type: string) => {
+    const colors: Record<string, string> = {
+      sales: 'border-blue-200 bg-blue-50',
+      supply_chain: 'border-green-200 bg-green-50',
+      finance: 'border-yellow-200 bg-yellow-50',
+      operations: 'border-purple-200 bg-purple-50',
+      admin: 'border-gray-200 bg-gray-50',
+      hr: 'border-pink-200 bg-pink-50',
+      hse: 'border-orange-200 bg-orange-50',
+      marketing: 'border-indigo-200 bg-indigo-50',
+    };
+    return colors[type] || 'border-gray-200 bg-gray-50';
+  };
+
+  return (
+    <div
+      className={`border-2 rounded-lg p-5 hover:shadow-lg transition-all ${getDepartmentColor(
+        department.type
+      )}`}
+    >
+      <div className="flex items-start justify-between mb-4">
+        <div className="flex items-center gap-3">
+          <span className="text-3xl">{getDepartmentIcon(department.type)}</span>
+          <div>
+            <h3 className="font-bold text-gray-900 text-lg">{department.name}</h3>
+            <p className="text-xs text-gray-600 capitalize">{department.type.replace('_', ' ')}</p>
+          </div>
+        </div>
+      </div>
+
+      <div className="space-y-2">
+        <button
+          className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-lg transition-colors"
+          onClick={() => alert(`Start Assessment for ${department.name}`)}
+        >
+          Start Assessment
+        </button>
+        <button
+          className="w-full bg-white hover:bg-gray-50 text-gray-700 font-medium py-2 px-4 rounded-lg border border-gray-300 transition-colors"
+          onClick={() => alert(`View ${department.name} Details`)}
+        >
+          View Details
+        </button>
+      </div>
+    </div>
+  );
+}
+
 function StatCard({
   title,
   value,
@@ -201,10 +260,11 @@ function StatCard({
 }: {
   title: string;
   value: number;
-  color: 'blue' | 'green' | 'purple';
+  color: 'blue' | 'indigo' | 'green' | 'purple';
 }) {
   const colorClasses = {
     blue: 'bg-blue-50 text-blue-600',
+    indigo: 'bg-indigo-50 text-indigo-600',
     green: 'bg-green-50 text-green-600',
     purple: 'bg-purple-50 text-purple-600',
   };
