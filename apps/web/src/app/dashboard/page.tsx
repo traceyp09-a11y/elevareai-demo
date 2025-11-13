@@ -22,10 +22,26 @@ export default function DashboardPage() {
         setTenants(tenantsData as Tenant[]);
         setQuestions(questionsData as Question[]);
 
-        // Get departments from first tenant
+        // Get departments from Acme Corporation (demo tenant) or first tenant with departments
         if ((tenantsData as Tenant[]).length > 0) {
-          const tenantWithDepts = await api.tenants.get((tenantsData as Tenant[])[0].id);
-          setDepartments((tenantWithDepts as any).departments || []);
+          const tenants = tenantsData as Tenant[];
+
+          // Try to find Acme Corporation first
+          let targetTenant = tenants.find(t => t.name === 'Acme Corporation');
+
+          // If not found, try each tenant until we find one with departments
+          if (!targetTenant) {
+            for (const tenant of tenants) {
+              const tenantWithDepts = await api.tenants.get(tenant.id);
+              if ((tenantWithDepts as any).departments?.length > 0) {
+                setDepartments((tenantWithDepts as any).departments);
+                break;
+              }
+            }
+          } else {
+            const tenantWithDepts = await api.tenants.get(targetTenant.id);
+            setDepartments((tenantWithDepts as any).departments || []);
+          }
         }
 
         setError(null);
