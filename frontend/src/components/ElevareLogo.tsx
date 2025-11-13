@@ -4,6 +4,9 @@ interface ElevareLogoProps {
 }
 
 export default function ElevareLogo({ size = 'md', variant = 'dark' }: ElevareLogoProps) {
+  // DEBUG: Log to verify new code is loading
+  console.log('ElevareLogo rendering with size:', size);
+
   const sizes = {
     sm: 'w-32 h-10',
     md: 'w-40 h-12',
