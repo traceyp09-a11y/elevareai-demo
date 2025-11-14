@@ -54,71 +54,240 @@ const PLATFORM_COSTS = {
 };
 
 /**
- * Calculate time savings from automated reporting
+ * Calculate time savings from automated reporting - customized per department
  */
-export function calculateReportingTimeSavings(
-  department: string,
-  numberOfReports: number = 30,
-  userCount: number = 50
-): TimeSavings[] {
-  const timeSavings: TimeSavings[] = [
-    {
-      activity: 'Monthly Report Generation',
-      currentTimeHours: 40, // Manual Excel/PowerPoint creation
-      elevareIQTimeHours: 0.5, // One-click export
-      savingsHours: 39.5,
-      savingsPercentage: 98.75,
-      annualSavingsDollars: 39.5 * 12 * LABOR_RATES.analyst,
-      burdedLaborRate: LABOR_RATES.analyst,
-    },
-    {
-      activity: 'Data Collection & Validation',
-      currentTimeHours: 60, // Manual data gathering from multiple systems
-      elevareIQTimeHours: 2, // Automated integration
-      savingsHours: 58,
-      savingsPercentage: 96.67,
-      annualSavingsDollars: 58 * 12 * LABOR_RATES.specialist,
-      burdedLaborRate: LABOR_RATES.specialist,
-    },
-    {
-      activity: 'Executive Dashboard Preparation',
-      currentTimeHours: 20, // Manual chart creation
-      elevareIQTimeHours: 0.25, // Real-time dashboard
-      savingsHours: 19.75,
-      savingsPercentage: 98.75,
-      annualSavingsDollars: 19.75 * 12 * LABOR_RATES.manager,
-      burdedLaborRate: LABOR_RATES.manager,
-    },
-    {
-      activity: 'Board Presentation Creation',
-      currentTimeHours: 16, // Quarterly board decks
-      elevareIQTimeHours: 1, // Export templates
-      savingsHours: 15,
-      savingsPercentage: 93.75,
-      annualSavingsDollars: 15 * 4 * LABOR_RATES.director, // Quarterly
-      burdedLaborRate: LABOR_RATES.director,
-    },
-    {
-      activity: 'Cross-Department Data Reconciliation',
-      currentTimeHours: 24, // Monthly reconciliation meetings
-      elevareIQTimeHours: 2, // Single source of truth
-      savingsHours: 22,
-      savingsPercentage: 91.67,
-      annualSavingsDollars: 22 * 12 * LABOR_RATES.manager,
-      burdedLaborRate: LABOR_RATES.manager,
-    },
-    {
-      activity: 'Ad-Hoc Analysis Requests',
-      currentTimeHours: 8, // Per request, ~10 requests/month
-      elevareIQTimeHours: 0.5,
-      savingsHours: 7.5,
-      savingsPercentage: 93.75,
-      annualSavingsDollars: 7.5 * 10 * 12 * LABOR_RATES.analyst,
-      burdedLaborRate: LABOR_RATES.analyst,
-    },
-  ];
+export function calculateReportingTimeSavings(department: string): TimeSavings[] {
+  const departmentActivities: { [key: string]: TimeSavings[] } = {
+    HR: [
+      {
+        activity: 'New Hire Onboarding Paperwork',
+        currentTimeHours: 8,
+        elevareIQTimeHours: 0.5,
+        savingsHours: 7.5,
+        savingsPercentage: 93.75,
+        annualSavingsDollars: 7.5 * 125 * LABOR_RATES.specialist, // 125 hires/year
+        burdedLaborRate: LABOR_RATES.specialist,
+      },
+      {
+        activity: 'Benefits Enrollment Processing',
+        currentTimeHours: 12,
+        elevareIQTimeHours: 1,
+        savingsHours: 11,
+        savingsPercentage: 91.67,
+        annualSavingsDollars: 11 * 12 * LABOR_RATES.specialist, // Monthly
+        burdedLaborRate: LABOR_RATES.specialist,
+      },
+      {
+        activity: 'Performance Review Compilation',
+        currentTimeHours: 40,
+        elevareIQTimeHours: 2,
+        savingsHours: 38,
+        savingsPercentage: 95.0,
+        annualSavingsDollars: 38 * 2 * LABOR_RATES.manager, // Bi-annual
+        burdedLaborRate: LABOR_RATES.manager,
+      },
+      {
+        activity: 'Turnover & Retention Analysis',
+        currentTimeHours: 16,
+        elevareIQTimeHours: 0.25,
+        savingsHours: 15.75,
+        savingsPercentage: 98.44,
+        annualSavingsDollars: 15.75 * 12 * LABOR_RATES.analyst, // Monthly
+        burdedLaborRate: LABOR_RATES.analyst,
+      },
+      {
+        activity: 'Compliance Reporting (EEO, OSHA, etc.)',
+        currentTimeHours: 24,
+        elevareIQTimeHours: 1,
+        savingsHours: 23,
+        savingsPercentage: 95.83,
+        annualSavingsDollars: 23 * 4 * LABOR_RATES.manager, // Quarterly
+        burdedLaborRate: LABOR_RATES.manager,
+      },
+      {
+        activity: 'Headcount Planning & Budget Reports',
+        currentTimeHours: 20,
+        elevareIQTimeHours: 0.5,
+        savingsHours: 19.5,
+        savingsPercentage: 97.5,
+        annualSavingsDollars: 19.5 * 12 * LABOR_RATES.manager, // Monthly
+        burdedLaborRate: LABOR_RATES.manager,
+      },
+    ],
 
-  return timeSavings;
+    HSE: [
+      {
+        activity: 'Incident Investigation Reports',
+        currentTimeHours: 12,
+        elevareIQTimeHours: 1,
+        savingsHours: 11,
+        savingsPercentage: 91.67,
+        annualSavingsDollars: 11 * 24 * LABOR_RATES.specialist, // ~24 incidents/year
+        burdedLaborRate: LABOR_RATES.specialist,
+      },
+      {
+        activity: 'Safety Audit Documentation',
+        currentTimeHours: 32,
+        elevareIQTimeHours: 2,
+        savingsHours: 30,
+        savingsPercentage: 93.75,
+        annualSavingsDollars: 30 * 4 * LABOR_RATES.manager, // Quarterly audits
+        burdedLaborRate: LABOR_RATES.manager,
+      },
+      {
+        activity: 'PPE Inventory & Compliance Tracking',
+        currentTimeHours: 8,
+        elevareIQTimeHours: 0.25,
+        savingsHours: 7.75,
+        savingsPercentage: 96.88,
+        annualSavingsDollars: 7.75 * 12 * LABOR_RATES.specialist, // Monthly
+        burdedLaborRate: LABOR_RATES.specialist,
+      },
+      {
+        activity: 'Hazard Assessment Forms',
+        currentTimeHours: 6,
+        elevareIQTimeHours: 0.5,
+        savingsHours: 5.5,
+        savingsPercentage: 91.67,
+        annualSavingsDollars: 5.5 * 52 * LABOR_RATES.specialist, // Weekly
+        burdedLaborRate: LABOR_RATES.specialist,
+      },
+      {
+        activity: 'OSHA/Regulatory Reporting',
+        currentTimeHours: 40,
+        elevareIQTimeHours: 2,
+        savingsHours: 38,
+        savingsPercentage: 95.0,
+        annualSavingsDollars: 38 * 4 * LABOR_RATES.manager, // Quarterly
+        burdedLaborRate: LABOR_RATES.manager,
+      },
+      {
+        activity: 'Safety Training Records & Certification Tracking',
+        currentTimeHours: 16,
+        elevareIQTimeHours: 0.5,
+        savingsHours: 15.5,
+        savingsPercentage: 96.88,
+        annualSavingsDollars: 15.5 * 12 * LABOR_RATES.specialist, // Monthly
+        burdedLaborRate: LABOR_RATES.specialist,
+      },
+    ],
+
+    Operations: [
+      {
+        activity: 'Daily Production Scheduling',
+        currentTimeHours: 4,
+        elevareIQTimeHours: 0.25,
+        savingsHours: 3.75,
+        savingsPercentage: 93.75,
+        annualSavingsDollars: 3.75 * 250 * LABOR_RATES.manager, // 250 workdays
+        burdedLaborRate: LABOR_RATES.manager,
+      },
+      {
+        activity: 'Equipment Maintenance Logs',
+        currentTimeHours: 6,
+        elevareIQTimeHours: 0.5,
+        savingsHours: 5.5,
+        savingsPercentage: 91.67,
+        annualSavingsDollars: 5.5 * 52 * LABOR_RATES.specialist, // Weekly
+        burdedLaborRate: LABOR_RATES.specialist,
+      },
+      {
+        activity: 'Inventory Reconciliation',
+        currentTimeHours: 24,
+        elevareIQTimeHours: 1,
+        savingsHours: 23,
+        savingsPercentage: 95.83,
+        annualSavingsDollars: 23 * 12 * LABOR_RATES.analyst, // Monthly
+        burdedLaborRate: LABOR_RATES.analyst,
+      },
+      {
+        activity: 'Shift Handover Reports',
+        currentTimeHours: 2,
+        elevareIQTimeHours: 0.1,
+        savingsHours: 1.9,
+        savingsPercentage: 95.0,
+        annualSavingsDollars: 1.9 * 250 * 3 * LABOR_RATES.operator, // 3 shifts/day, 250 days
+        burdedLaborRate: LABOR_RATES.operator,
+      },
+      {
+        activity: 'OEE & Downtime Analysis',
+        currentTimeHours: 16,
+        elevareIQTimeHours: 0.25,
+        savingsHours: 15.75,
+        savingsPercentage: 98.44,
+        annualSavingsDollars: 15.75 * 12 * LABOR_RATES.manager, // Monthly
+        burdedLaborRate: LABOR_RATES.manager,
+      },
+      {
+        activity: 'Root Cause Analysis Documentation',
+        currentTimeHours: 20,
+        elevareIQTimeHours: 2,
+        savingsHours: 18,
+        savingsPercentage: 90.0,
+        annualSavingsDollars: 18 * 12 * LABOR_RATES.manager, // Monthly
+        burdedLaborRate: LABOR_RATES.manager,
+      },
+    ],
+
+    'Quality Control': [
+      {
+        activity: 'Daily Inspection Reports',
+        currentTimeHours: 3,
+        elevareIQTimeHours: 0.25,
+        savingsHours: 2.75,
+        savingsPercentage: 91.67,
+        annualSavingsDollars: 2.75 * 250 * LABOR_RATES.specialist, // 250 workdays
+        burdedLaborRate: LABOR_RATES.specialist,
+      },
+      {
+        activity: 'Non-Conformance Tracking & Reporting',
+        currentTimeHours: 8,
+        elevareIQTimeHours: 0.5,
+        savingsHours: 7.5,
+        savingsPercentage: 93.75,
+        annualSavingsDollars: 7.5 * 52 * LABOR_RATES.specialist, // Weekly
+        burdedLaborRate: LABOR_RATES.specialist,
+      },
+      {
+        activity: 'Corrective Action (CAPA) Documentation',
+        currentTimeHours: 12,
+        elevareIQTimeHours: 1,
+        savingsHours: 11,
+        savingsPercentage: 91.67,
+        annualSavingsDollars: 11 * 24 * LABOR_RATES.analyst, // ~24 CAPAs/year
+        burdedLaborRate: LABOR_RATES.analyst,
+      },
+      {
+        activity: 'Supplier Quality Audit Reports',
+        currentTimeHours: 24,
+        elevareIQTimeHours: 2,
+        savingsHours: 22,
+        savingsPercentage: 91.67,
+        annualSavingsDollars: 22 * 4 * LABOR_RATES.manager, // Quarterly
+        burdedLaborRate: LABOR_RATES.manager,
+      },
+      {
+        activity: 'Certificate of Analysis (COA) Generation',
+        currentTimeHours: 4,
+        elevareIQTimeHours: 0.1,
+        savingsHours: 3.9,
+        savingsPercentage: 97.5,
+        annualSavingsDollars: 3.9 * 200 * LABOR_RATES.specialist, // 200 batches/year
+        burdedLaborRate: LABOR_RATES.specialist,
+      },
+      {
+        activity: 'Customer Complaint Investigation',
+        currentTimeHours: 16,
+        elevareIQTimeHours: 1.5,
+        savingsHours: 14.5,
+        savingsPercentage: 90.63,
+        annualSavingsDollars: 14.5 * 12 * LABOR_RATES.manager, // Monthly
+        burdedLaborRate: LABOR_RATES.manager,
+      },
+    ],
+  };
+
+  return departmentActivities[department] || [];
 }
 
 /**
