@@ -24,6 +24,7 @@ import PainPointsCustomerSuccess from './pages/PainPointsCustomerSuccess';
 import DashboardMarketing from './pages/DashboardMarketing';
 import PainPointsMarketing from './pages/PainPointsMarketing';
 import DashboardExecutive from './pages/DashboardExecutive';
+import ROIDashboard from './pages/ROIDashboard';
 import ElevareLogo from './components/ElevareLogo';
 import ErrorBoundary from './components/ErrorBoundary';
 import './App.css';
@@ -176,6 +177,15 @@ function AppContent() {
 
             {/* Navigation */}
             <nav className="flex space-x-6">
+              {/* Global ROI Link - Always visible */}
+              <Link
+                to="/roi"
+                className="text-gray-300 hover:text-green-400 px-4 py-2 text-sm font-medium transition-all duration-200 relative group border border-green-500/30 rounded-lg bg-green-900/20"
+              >
+                <span className="relative z-10">💰 ROI & Savings</span>
+                <div className="absolute inset-0 bg-green-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              </Link>
+
               {currentDept === 'hr' && (
                 <>
                   <Link
@@ -533,6 +543,9 @@ function AppContent() {
               <DashboardExecutive />
             </ErrorBoundary>
           } />
+
+          {/* ROI Dashboard (Global) */}
+          <Route path="/roi" element={<ROIDashboard />} />
         </Routes>
       </main>
 
