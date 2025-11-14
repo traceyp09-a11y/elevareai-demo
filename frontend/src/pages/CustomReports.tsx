@@ -15,6 +15,7 @@ import {
   ResponsiveContainer,
   Legend
 } from 'recharts';
+import ElevareLogo from '../components/ElevareLogo';
 
 type ReportType = 'executive' | 'operational' | 'compliance' | 'custom';
 type TimeRange = '1m' | '3m' | '6m' | '1y' | '2y';
@@ -315,6 +316,224 @@ const getReportTemplates = (department: string): ReportTemplate[] => {
   }
 };
 
+// Department-specific data generators based on actual KPIs
+const getDepartmentData = (department: string, templateId: string) => {
+  const monthLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+  switch (department) {
+    case 'HR':
+      if (templateId === 'executive-summary') {
+        return {
+          chartData: monthLabels.map((month, i) => ({
+            month,
+            turnover: 13.5 + (Math.random() - 0.5) * 2,
+            timeToHire: 42 + (Math.random() - 0.5) * 8,
+            costPerHire: 4200 + (Math.random() - 0.5) * 500,
+            absenteeism: 3.8 + (Math.random() - 0.5) * 0.8
+          })),
+          metrics: [
+            { label: 'Employee Turnover', value: '13.5%', target: '< 12%', status: 'warning' },
+            { label: 'Time to Hire', value: '42 days', target: '< 30 days', status: 'critical' },
+            { label: 'Cost per Hire', value: '$4,200', target: '< $3,500', status: 'warning' },
+            { label: 'Absenteeism Rate', value: '3.8%', target: '< 3%', status: 'warning' }
+          ]
+        };
+      }
+      break;
+
+    case 'HSE':
+      if (templateId === 'safety-overview') {
+        return {
+          chartData: monthLabels.map((month, i) => ({
+            month,
+            trir: 4.2 + (Math.random() - 0.5) * 1,
+            ltifr: 2.1 + (Math.random() - 0.5) * 0.5,
+            dartRate: 3.1 + (Math.random() - 0.5) * 0.6,
+            nearMiss: 12 + Math.floor(Math.random() * 6)
+          })),
+          metrics: [
+            { label: 'TRIR', value: '4.2', target: '< 3.0', status: 'critical' },
+            { label: 'LTIFR', value: '2.1', target: '< 1.0', status: 'critical' },
+            { label: 'DART Rate', value: '3.1', target: '< 2.0', status: 'warning' },
+            { label: 'Near Miss Rate', value: '14.2/month', target: '> 20/month', status: 'warning' }
+          ]
+        };
+      }
+      break;
+
+    case 'Operations':
+      if (templateId === 'production-overview') {
+        return {
+          chartData: monthLabels.map((month, i) => ({
+            month,
+            oee: 72 + (Math.random() - 0.5) * 8,
+            production: 42000 + Math.floor(Math.random() * 5000),
+            downtime: 12 + (Math.random() - 0.5) * 4,
+            capacity: 78 + (Math.random() - 0.5) * 6
+          })),
+          metrics: [
+            { label: 'OEE', value: '72%', target: '> 85%', status: 'warning' },
+            { label: 'Production Volume', value: '44,200 units', target: '50,000 units', status: 'warning' },
+            { label: 'Downtime', value: '12.3%', target: '< 5%', status: 'critical' },
+            { label: 'Capacity Utilization', value: '78%', target: '> 90%', status: 'warning' }
+          ]
+        };
+      }
+      break;
+
+    case 'Quality Control':
+      if (templateId === 'quality-overview') {
+        return {
+          chartData: monthLabels.map((month, i) => ({
+            month,
+            defectRate: 3200 + Math.floor(Math.random() * 600),
+            firstPassYield: 91 + (Math.random() - 0.5) * 4,
+            scrapRate: 2.8 + (Math.random() - 0.5) * 0.6,
+            reworkRate: 4.2 + (Math.random() - 0.5) * 0.8
+          })),
+          metrics: [
+            { label: 'Defect Rate', value: '3,450 PPM', target: '< 2,000 PPM', status: 'critical' },
+            { label: 'First Pass Yield', value: '91.2%', target: '> 95%', status: 'warning' },
+            { label: 'Scrap Rate', value: '2.8%', target: '< 2%', status: 'warning' },
+            { label: 'Rework Rate', value: '4.2%', target: '< 3%', status: 'warning' }
+          ]
+        };
+      }
+      break;
+
+    case 'Supply Chain':
+      if (templateId === 'sc-overview') {
+        return {
+          chartData: monthLabels.map((month, i) => ({
+            month,
+            perfectOrder: 87 + (Math.random() - 0.5) * 6,
+            otif: 82 + (Math.random() - 0.5) * 8,
+            inventoryTurn: 4.2 + (Math.random() - 0.5) * 0.8,
+            dso: 52 + Math.floor(Math.random() * 10)
+          })),
+          metrics: [
+            { label: 'Perfect Order Rate', value: '87.5%', target: '> 95%', status: 'warning' },
+            { label: 'OTIF Delivery', value: '82.3%', target: '> 95%', status: 'critical' },
+            { label: 'Inventory Turnover', value: '4.2x', target: '> 6x', status: 'warning' },
+            { label: 'DSO', value: '52 days', target: '< 45 days', status: 'warning' }
+          ]
+        };
+      }
+      break;
+
+    case 'Finance':
+      if (templateId === 'financial-overview') {
+        return {
+          chartData: monthLabels.map((month, i) => ({
+            month,
+            revenue: 10.5 + (Math.random() - 0.5) * 1.5,
+            grossMargin: 28 + (Math.random() - 0.5) * 3,
+            ebitda: 12 + (Math.random() - 0.5) * 2,
+            roe: 14 + (Math.random() - 0.5) * 2
+          })),
+          metrics: [
+            { label: 'Revenue Growth', value: '5.2%', target: '> 10%', status: 'warning' },
+            { label: 'Gross Margin', value: '28.4%', target: '> 35%', status: 'warning' },
+            { label: 'EBITDA Margin', value: '12.1%', target: '> 15%', status: 'warning' },
+            { label: 'ROE', value: '14.2%', target: '> 18%', status: 'warning' }
+          ]
+        };
+      }
+      break;
+
+    case 'IT & Administration':
+      if (templateId === 'it-overview') {
+        return {
+          chartData: monthLabels.map((month, i) => ({
+            month,
+            uptime: 97 + (Math.random() - 0.5) * 2,
+            ticketResolution: 18 + Math.floor(Math.random() * 8),
+            projectDelivery: 72 + (Math.random() - 0.5) * 12,
+            userSat: 3.8 + (Math.random() - 0.5) * 0.4
+          })),
+          metrics: [
+            { label: 'System Uptime', value: '97.8%', target: '> 99.5%', status: 'warning' },
+            { label: 'Ticket Resolution', value: '18 hrs', target: '< 8 hrs', status: 'critical' },
+            { label: 'Project On-Time', value: '72%', target: '> 90%', status: 'warning' },
+            { label: 'User Satisfaction', value: '3.8/5', target: '> 4.5/5', status: 'warning' }
+          ]
+        };
+      }
+      break;
+
+    case 'Sales':
+      if (templateId === 'sales-overview') {
+        return {
+          chartData: monthLabels.map((month, i) => ({
+            month,
+            revenue: 8.5 + (Math.random() - 0.5) * 2,
+            pipeline: 45 + Math.floor(Math.random() * 15),
+            winRate: 28 + (Math.random() - 0.5) * 8,
+            quota: 78 + (Math.random() - 0.5) * 12
+          })),
+          metrics: [
+            { label: 'Monthly Revenue', value: '$8.5M', target: '$12M', status: 'warning' },
+            { label: 'Pipeline Value', value: '$45M', target: '$60M', status: 'warning' },
+            { label: 'Win Rate', value: '28%', target: '> 35%', status: 'warning' },
+            { label: 'Quota Attainment', value: '78%', target: '> 100%', status: 'critical' }
+          ]
+        };
+      }
+      break;
+
+    case 'Customer Success':
+      if (templateId === 'cs-overview') {
+        return {
+          chartData: monthLabels.map((month, i) => ({
+            month,
+            csat: 7.2 + (Math.random() - 0.5) * 1,
+            nps: 32 + Math.floor(Math.random() * 12),
+            retention: 88 + (Math.random() - 0.5) * 4,
+            churn: 3.2 + (Math.random() - 0.5) * 0.8
+          })),
+          metrics: [
+            { label: 'CSAT Score', value: '7.2/10', target: '> 8.5/10', status: 'warning' },
+            { label: 'NPS', value: '32', target: '> 50', status: 'critical' },
+            { label: 'Retention Rate', value: '88%', target: '> 95%', status: 'warning' },
+            { label: 'Churn Rate', value: '3.2%', target: '< 2%', status: 'warning' }
+          ]
+        };
+      }
+      break;
+
+    case 'Marketing':
+      if (templateId === 'marketing-overview') {
+        return {
+          chartData: monthLabels.map((month, i) => ({
+            month,
+            roi: 2.8 + (Math.random() - 0.5) * 0.8,
+            leads: 420 + Math.floor(Math.random() * 120),
+            conversion: 12 + (Math.random() - 0.5) * 4,
+            cpl: 185 + Math.floor(Math.random() * 50)
+          })),
+          metrics: [
+            { label: 'Marketing ROI', value: '2.8x', target: '> 4x', status: 'warning' },
+            { label: 'Leads Generated', value: '420/month', target: '> 600/month', status: 'warning' },
+            { label: 'Conversion Rate', value: '12%', target: '> 18%', status: 'warning' },
+            { label: 'Cost per Lead', value: '$185', target: '< $150', status: 'warning' }
+          ]
+        };
+      }
+      break;
+
+    default:
+      return {
+        chartData: [],
+        metrics: []
+      };
+  }
+
+  return {
+    chartData: [],
+    metrics: []
+  };
+};
+
 export default function CustomReports() {
   const location = useLocation();
   const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
@@ -369,31 +588,212 @@ export default function CustomReports() {
     }, 1500);
   };
 
-  const handleExport = (format: 'pdf' | 'excel' | 'ppt') => {
-    alert(`Exporting report to ${format.toUpperCase()}...`);
+  const handleExport = (format: 'pdf' | 'excel' | 'word') => {
+    const template = REPORT_TEMPLATES.find(t => t.id === selectedTemplate);
+    if (!template) return;
+
+    const reportData = getDepartmentData(department, selectedTemplate || '');
+    const timestamp = new Date().toISOString().split('T')[0];
+    const filename = `${department}_${template.name.replace(/ /g, '_')}_${timestamp}`;
+
+    if (format === 'excel') {
+      // Generate CSV content (simplified Excel)
+      let csvContent = `${department} - ${template.name}\nTitanBuild Manufacturing & Logistics\nQ4 2025 Performance Report\nGenerated: ${new Date().toLocaleString()}\n\n`;
+
+      csvContent += 'Key Metrics\n';
+      csvContent += 'Metric,Current Value,Target,Status\n';
+      reportData.metrics.forEach((metric: any) => {
+        csvContent += `${metric.label},${metric.value},${metric.target},${metric.status}\n`;
+      });
+
+      csvContent += '\n\nMonthly Trend Data\n';
+      const headers = Object.keys(reportData.chartData[0] || {}).join(',');
+      csvContent += headers + '\n';
+      reportData.chartData.forEach((row: any) => {
+        csvContent += Object.values(row).join(',') + '\n';
+      });
+
+      const blob = new Blob([csvContent], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `${filename}.csv`;
+      link.click();
+      window.URL.revokeObjectURL(url);
+    } else if (format === 'word') {
+      // Generate HTML content for Word
+      let htmlContent = `
+        <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word'>
+          <head><meta charset='utf-8'><title>${department} Report</title></head>
+          <body>
+            <div style='font-family: Arial, sans-serif; padding: 40px;'>
+              <div style='text-align: center; margin-bottom: 30px;'>
+                <h1 style='color: #06b6d4; font-size: 28px;'>ElevareIQ</h1>
+                <h2>${department} - ${template.name}</h2>
+                <p>TitanBuild Manufacturing & Logistics</p>
+                <p>Q4 2025 Performance Report</p>
+                <p>Generated: ${new Date().toLocaleString()}</p>
+              </div>
+
+              <div style='margin: 30px 0;'>
+                <h3 style='color: #06b6d4;'>Executive Summary</h3>
+                <table border='1' cellpadding='10' cellspacing='0' style='width: 100%; border-collapse: collapse;'>
+                  <tr style='background-color: #f3f4f6;'>
+                    <th>Metric</th>
+                    <th>Current Value</th>
+                    <th>Target</th>
+                    <th>Status</th>
+                  </tr>`;
+
+      reportData.metrics.forEach((metric: any) => {
+        const statusColor = metric.status === 'critical' ? '#ef4444' : metric.status === 'warning' ? '#f59e0b' : '#10b981';
+        htmlContent += `
+                  <tr>
+                    <td>${metric.label}</td>
+                    <td><strong>${metric.value}</strong></td>
+                    <td>${metric.target}</td>
+                    <td style='color: ${statusColor}; font-weight: bold;'>${metric.status.toUpperCase()}</td>
+                  </tr>`;
+      });
+
+      htmlContent += `
+                </table>
+              </div>
+
+              <div style='margin: 30px 0;'>
+                <h3 style='color: #06b6d4;'>Key Insights</h3>
+                <ul>
+                  <li>Performance trends show ${department.toLowerCase()} metrics require focused attention</li>
+                  <li>Several KPIs are below industry benchmarks</li>
+                  <li>Improvement initiatives recommended for critical areas</li>
+                  <li>Monthly tracking shows seasonal variations in performance</li>
+                </ul>
+              </div>
+
+              <div style='margin-top: 50px; padding-top: 20px; border-top: 1px solid #ccc; text-align: center; font-size: 12px; color: #666;'>
+                <p>© 2025 ElevareIQ Platform | All Rights Reserved</p>
+              </div>
+            </div>
+          </body>
+        </html>`;
+
+      const blob = new Blob([htmlContent], { type: 'application/msword' });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `${filename}.doc`;
+      link.click();
+      window.URL.revokeObjectURL(url);
+    } else if (format === 'pdf') {
+      // Generate HTML for PDF (browser print)
+      const printWindow = window.open('', '_blank');
+      if (printWindow) {
+        printWindow.document.write(`
+          <html>
+            <head>
+              <title>${department} Report - ${template.name}</title>
+              <style>
+                body { font-family: Arial, sans-serif; padding: 40px; }
+                .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #06b6d4; padding-bottom: 20px; }
+                .logo { color: #06b6d4; font-size: 24px; font-weight: bold; margin-bottom: 10px; }
+                h1 { color: #333; font-size: 24px; margin: 10px 0; }
+                h2 { color: #06b6d4; margin-top: 30px; }
+                table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+                th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+                th { background-color: #f3f4f6; font-weight: bold; }
+                .critical { color: #ef4444; font-weight: bold; }
+                .warning { color: #f59e0b; font-weight: bold; }
+                .good { color: #10b981; font-weight: bold; }
+                .footer { margin-top: 50px; padding-top: 20px; border-top: 1px solid #ccc; text-align: center; font-size: 12px; color: #666; }
+                @media print {
+                  body { padding: 20px; }
+                  .no-print { display: none; }
+                }
+              </style>
+            </head>
+            <body>
+              <div class="header">
+                <div class="logo">ElevareIQ</div>
+                <h1>${department} - ${template.name}</h1>
+                <p>TitanBuild Manufacturing & Logistics</p>
+                <p>Q4 2025 Performance Report</p>
+                <p>Generated: ${new Date().toLocaleString()}</p>
+              </div>
+
+              <h2>Executive Summary</h2>
+              <table>
+                <tr>
+                  <th>Metric</th>
+                  <th>Current Value</th>
+                  <th>Target</th>
+                  <th>Status</th>
+                </tr>
+                ${reportData.metrics.map((metric: any) => `
+                  <tr>
+                    <td>${metric.label}</td>
+                    <td><strong>${metric.value}</strong></td>
+                    <td>${metric.target}</td>
+                    <td class="${metric.status}">${metric.status.toUpperCase()}</td>
+                  </tr>
+                `).join('')}
+              </table>
+
+              <h2>Key Insights</h2>
+              <ul>
+                <li>Performance trends show ${department.toLowerCase()} metrics require focused attention</li>
+                <li>Several KPIs are below industry benchmarks</li>
+                <li>Improvement initiatives recommended for critical areas</li>
+                <li>Monthly tracking shows seasonal variations in performance</li>
+              </ul>
+
+              <div class="footer">
+                <p>© 2025 ElevareIQ Platform | All Rights Reserved</p>
+              </div>
+
+              <div class="no-print" style="margin-top: 30px; text-align: center;">
+                <button onclick="window.print();" style="padding: 10px 20px; background: #06b6d4; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">Print to PDF</button>
+                <button onclick="window.close();" style="margin-left: 10px; padding: 10px 20px; background: #6b7280; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">Close</button>
+              </div>
+            </body>
+          </html>
+        `);
+        printWindow.document.close();
+      }
+    }
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-gray-100 py-8">
       <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
 
-        {/* Header */}
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent mb-2">
-              {department} Reports
-            </h1>
-            <p className="text-gray-400 text-lg">Generate comprehensive {department} analytics reports</p>
+        {/* Header with Logo */}
+        <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl p-6">
+          <div className="flex items-center justify-between mb-4">
+            <ElevareLogo size="lg" variant="dark" />
+            <div className="text-right text-sm text-gray-400">
+              <div className="font-semibold text-white">TitanBuild M&L</div>
+              <div>Q4 2025 Performance Report</div>
+            </div>
           </div>
-          <Link
-            to={dashboardPath}
-            className="inline-flex items-center text-cyan-400 hover:text-cyan-300 font-medium transition-colors"
-          >
-            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-            Back to Dashboard
-          </Link>
+          <div className="border-t border-gray-700 pt-4 mt-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <h1 className="text-4xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent mb-2">
+                  {department} Reports
+                </h1>
+                <p className="text-gray-400 text-lg">Generate comprehensive {department} analytics reports with TitanBuild data</p>
+              </div>
+              <Link
+                to={dashboardPath}
+                className="inline-flex items-center text-cyan-400 hover:text-cyan-300 font-medium transition-colors"
+              >
+                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+                Back to Dashboard
+              </Link>
+            </div>
+          </div>
         </div>
 
         {/* Report Templates Grid */}
@@ -467,10 +867,10 @@ export default function CustomReports() {
                           📊 Excel
                         </button>
                         <button
-                          onClick={() => handleExport('ppt')}
+                          onClick={() => handleExport('word')}
                           className="px-4 py-2 bg-gradient-to-r from-orange-600 to-red-600 text-white rounded-lg hover:from-orange-500 hover:to-red-500 font-medium transition-all duration-200 shadow-lg"
                         >
-                          📽️ PowerPoint
+                          📝 Word
                         </button>
                       </div>
                     </div>
@@ -500,35 +900,60 @@ export default function CustomReports() {
                   </div>
                 </div>
 
-                {/* Executive Summary Content */}
-                {selectedTemplate === 'executive-summary' && (
-                  <div className="space-y-6">
-                    {/* Key Metrics Overview */}
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                      {[
-                        { label: 'Employee Turnover', value: '13.5%', change: '-1.2%', positive: true },
-                        { label: 'Employee Engagement', value: '74.2%', change: '+2.5%', positive: true },
-                        { label: 'Revenue per Employee', value: '$103K', change: '+4.8%', positive: true },
-                        { label: 'Training ROI', value: '285%', change: '+12%', positive: true }
-                      ].map((metric, idx) => (
-                        <div key={idx} className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl p-6">
-                          <div className="text-sm text-gray-400 mb-2">{metric.label}</div>
-                          <div className="text-3xl font-bold text-white mb-2">{metric.value}</div>
-                          <div className={`text-sm font-semibold ${metric.positive ? 'text-green-400' : 'text-red-400'}`}>
-                            {metric.change} vs last period
-                          </div>
-                        </div>
-                      ))}
-                    </div>
+                {/* Report Content - All Templates */}
+                {(() => {
+                  const reportData = getDepartmentData(department, selectedTemplate || '');
+                  const template = REPORT_TEMPLATES.find(t => t.id === selectedTemplate);
 
-                    {/* Trend Charts */}
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  if (!reportData.metrics.length || !template) {
+                    return (
+                      <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl p-8 text-center">
+                        <div className="text-6xl mb-4">{template?.icon || '📊'}</div>
+                        <h3 className="text-2xl font-bold text-white mb-4">{template?.name}</h3>
+                        <p className="text-gray-400 mb-6">
+                          Detailed report content for {template?.name.toLowerCase()} with TitanBuild data
+                          would appear here with comprehensive analytics, charts, and insights.
+                        </p>
+                        <div className="inline-flex items-center gap-2 text-cyan-400">
+                          <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
+                          <span>Full report visualization coming soon</span>
+                        </div>
+                      </div>
+                    );
+                  }
+
+                  return (
+                    <div className="space-y-6">
+                      {/* Key Metrics Overview */}
                       <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl p-6">
-                        <h3 className="text-xl font-bold text-cyan-400 mb-4">📉 Turnover Rate Trend</h3>
-                        <ResponsiveContainer width="100%" height={300}>
-                          <AreaChart data={executiveSummaryData}>
+                        <h3 className="text-xl font-bold text-cyan-400 mb-4 flex items-center gap-2">
+                          <span>📊</span> Key Performance Metrics - TitanBuild M&L
+                        </h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                          {reportData.metrics.map((metric: any, idx: number) => (
+                            <div key={idx} className="bg-gray-900/50 border border-gray-700 rounded-xl p-6">
+                              <div className="text-sm text-gray-400 mb-2">{metric.label}</div>
+                              <div className="text-3xl font-bold text-white mb-2">{metric.value}</div>
+                              <div className="text-xs text-gray-500 mb-2">Target: {metric.target}</div>
+                              <div className={`text-sm font-semibold inline-block px-3 py-1 rounded-full ${
+                                metric.status === 'critical' ? 'bg-red-500/20 text-red-400' :
+                                metric.status === 'warning' ? 'bg-yellow-500/20 text-yellow-400' :
+                                'bg-green-500/20 text-green-400'
+                              }`}>
+                                {metric.status.toUpperCase()}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Trend Chart */}
+                      <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl p-6">
+                        <h3 className="text-xl font-bold text-cyan-400 mb-4">📈 12-Month Performance Trend</h3>
+                        <ResponsiveContainer width="100%" height={350}>
+                          <ComposedChart data={reportData.chartData}>
                             <defs>
-                              <linearGradient id="colorTurnover" x1="0" y1="0" x2="0" y2="1">
+                              <linearGradient id="colorGradient" x1="0" y1="0" x2="0" y2="1">
                                 <stop offset="5%" stopColor="#06b6d4" stopOpacity={0.8}/>
                                 <stop offset="95%" stopColor="#06b6d4" stopOpacity={0.1}/>
                               </linearGradient>
@@ -539,86 +964,41 @@ export default function CustomReports() {
                             <RechartsTooltip
                               contentStyle={{ backgroundColor: '#1f2937', border: '1px solid #374151', borderRadius: '8px' }}
                             />
-                            <Area type="monotone" dataKey="turnover" stroke="#06b6d4" fill="url(#colorTurnover)" />
-                          </AreaChart>
+                            <Legend />
+                            {Object.keys(reportData.chartData[0] || {}).filter(key => key !== 'month').slice(0, 3).map((key, idx) => (
+                              idx === 0 ? (
+                                <Area key={key} type="monotone" dataKey={key} stroke="#06b6d4" fill="url(#colorGradient)" />
+                              ) : (
+                                <Line key={key} type="monotone" dataKey={key} stroke={idx === 1 ? '#3b82f6' : '#10b981'} strokeWidth={2} />
+                              )
+                            ))}
+                          </ComposedChart>
                         </ResponsiveContainer>
                       </div>
 
-                      <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl p-6">
-                        <h3 className="text-xl font-bold text-cyan-400 mb-4">💙 Engagement Trend</h3>
-                        <ResponsiveContainer width="100%" height={300}>
-                          <LineChart data={executiveSummaryData}>
-                            <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-                            <XAxis dataKey="month" stroke="#9ca3af" style={{ fontSize: '12px' }} />
-                            <YAxis stroke="#9ca3af" style={{ fontSize: '12px' }} />
-                            <RechartsTooltip
-                              contentStyle={{ backgroundColor: '#1f2937', border: '1px solid #374151', borderRadius: '8px' }}
-                            />
-                            <Line type="monotone" dataKey="engagement" stroke="#3b82f6" strokeWidth={3} dot={{ fill: '#3b82f6', r: 4 }} />
-                          </LineChart>
-                        </ResponsiveContainer>
+                      {/* Key Insights */}
+                      <div className="bg-gradient-to-r from-cyan-900/30 via-blue-900/30 to-purple-900/30 border border-cyan-500/30 rounded-xl p-6 backdrop-blur-sm">
+                        <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                          <span>💡</span> Key Insights & Recommendations
+                        </h3>
+                        <div className="space-y-3">
+                          {[
+                            { icon: '📊', text: `${department} performance metrics show areas requiring focused attention and improvement` },
+                            { icon: '⚠️', text: 'Several KPIs are currently below industry benchmark targets' },
+                            { icon: '🎯', text: 'Immediate action recommended for metrics flagged as CRITICAL status' },
+                            { icon: '📈', text: 'Monthly trend analysis reveals seasonal variations and opportunities for optimization' },
+                            { icon: '✅', text: 'Implementation of recommended initiatives could improve overall department performance by 15-25%' }
+                          ].map((insight, idx) => (
+                            <div key={idx} className="flex items-start gap-3 bg-gray-900/50 p-4 rounded-lg">
+                              <span className="text-2xl">{insight.icon}</span>
+                              <p className="text-gray-200 text-sm">{insight.text}</p>
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     </div>
-
-                    {/* Productivity Chart */}
-                    <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl p-6">
-                      <h3 className="text-xl font-bold text-cyan-400 mb-4">📈 Productivity Index</h3>
-                      <ResponsiveContainer width="100%" height={350}>
-                        <ComposedChart data={executiveSummaryData}>
-                          <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-                          <XAxis dataKey="month" stroke="#9ca3af" />
-                          <YAxis stroke="#9ca3af" />
-                          <RechartsTooltip
-                            contentStyle={{ backgroundColor: '#1f2937', border: '1px solid #374151', borderRadius: '8px' }}
-                          />
-                          <Legend />
-                          <Bar dataKey="productivity" fill="#10b981" name="Productivity Score" />
-                          <Line type="monotone" dataKey="engagement" stroke="#3b82f6" strokeWidth={2} name="Engagement" />
-                        </ComposedChart>
-                      </ResponsiveContainer>
-                    </div>
-
-                    {/* Key Insights */}
-                    <div className="bg-gradient-to-r from-cyan-900/30 via-blue-900/30 to-purple-900/30 border border-cyan-500/30 rounded-xl p-6 backdrop-blur-sm">
-                      <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
-                        <span>💡</span> Key Insights & Recommendations
-                      </h3>
-                      <div className="space-y-3">
-                        {[
-                          { icon: '✅', text: 'Employee engagement has increased by 2.5% over the last quarter, indicating positive workplace culture' },
-                          { icon: '📊', text: 'Productivity levels are at an all-time high, correlating with reduced turnover rates' },
-                          { icon: '⚠️', text: 'Manufacturing department shows 15.3% turnover - recommend focused retention initiatives' },
-                          { icon: '🎯', text: 'Training ROI of 285% demonstrates strong learning and development effectiveness' }
-                        ].map((insight, idx) => (
-                          <div key={idx} className="flex items-start gap-3 bg-gray-900/50 p-4 rounded-lg">
-                            <span className="text-2xl">{insight.icon}</span>
-                            <p className="text-gray-200 text-sm">{insight.text}</p>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* Other Report Templates */}
-                {selectedTemplate !== 'executive-summary' && (
-                  <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl p-8 text-center">
-                    <div className="text-6xl mb-4">
-                      {REPORT_TEMPLATES.find(t => t.id === selectedTemplate)?.icon}
-                    </div>
-                    <h3 className="text-2xl font-bold text-white mb-4">
-                      {REPORT_TEMPLATES.find(t => t.id === selectedTemplate)?.name}
-                    </h3>
-                    <p className="text-gray-400 mb-6">
-                      Detailed report content for {REPORT_TEMPLATES.find(t => t.id === selectedTemplate)?.name.toLowerCase()}
-                      would appear here with comprehensive analytics, charts, and insights.
-                    </p>
-                    <div className="inline-flex items-center gap-2 text-cyan-400">
-                      <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
-                      <span>Full report template coming soon</span>
-                    </div>
-                  </div>
-                )}
+                  );
+                })()}
               </>
             )}
           </div>
