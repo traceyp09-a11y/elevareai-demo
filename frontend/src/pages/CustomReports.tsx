@@ -28,56 +28,292 @@ interface ReportTemplate {
   metrics: string[];
 }
 
-const REPORT_TEMPLATES: ReportTemplate[] = [
-  {
-    id: 'executive-summary',
-    name: 'Executive Summary',
-    description: 'High-level overview of all key HR metrics for C-suite presentations',
-    icon: '📊',
-    type: 'executive',
-    metrics: ['turnover', 'engagement', 'productivity', 'revenue-per-employee']
-  },
-  {
-    id: 'workforce-analytics',
-    name: 'Workforce Analytics',
-    description: 'Detailed workforce composition, turnover, and productivity analysis',
-    icon: '👥',
-    type: 'operational',
-    metrics: ['headcount', 'turnover', 'absenteeism', 'demographics']
-  },
-  {
-    id: 'recruitment-performance',
-    name: 'Recruitment Performance',
-    description: 'Hiring efficiency, time-to-hire, and candidate quality metrics',
-    icon: '🎯',
-    type: 'operational',
-    metrics: ['time-to-hire', 'cost-per-hire', 'offer-acceptance', 'quality-of-hire']
-  },
-  {
-    id: 'safety-compliance',
-    name: 'Safety & Compliance',
-    description: 'OSHA compliance, incident tracking, and safety training effectiveness',
-    icon: '🛡️',
-    type: 'compliance',
-    metrics: ['trir', 'incident-rate', 'safety-training', 'compliance-score']
-  },
-  {
-    id: 'compensation-benefits',
-    name: 'Compensation & Benefits',
-    description: 'Pay equity, benefits utilization, and total rewards analysis',
-    icon: '💰',
-    type: 'operational',
-    metrics: ['compensation-ratio', 'benefits-cost', 'pay-equity', 'retention']
-  },
-  {
-    id: 'learning-development',
-    name: 'Learning & Development',
-    description: 'Training ROI, skill development, and career progression metrics',
-    icon: '🎓',
-    type: 'operational',
-    metrics: ['training-roi', 'completion-rate', 'skill-gap', 'career-progression']
+const getReportTemplates = (department: string): ReportTemplate[] => {
+  switch (department) {
+    case 'HR':
+      return [
+        {
+          id: 'executive-summary',
+          name: 'Executive Summary',
+          description: 'High-level overview of all key HR metrics for C-suite presentations',
+          icon: '📊',
+          type: 'executive',
+          metrics: ['turnover', 'engagement', 'productivity', 'revenue-per-employee']
+        },
+        {
+          id: 'workforce-analytics',
+          name: 'Workforce Analytics',
+          description: 'Detailed workforce composition, turnover, and productivity analysis',
+          icon: '👥',
+          type: 'operational',
+          metrics: ['headcount', 'turnover', 'absenteeism', 'demographics']
+        },
+        {
+          id: 'recruitment-performance',
+          name: 'Recruitment Performance',
+          description: 'Hiring efficiency, time-to-hire, and candidate quality metrics',
+          icon: '🎯',
+          type: 'operational',
+          metrics: ['time-to-hire', 'cost-per-hire', 'offer-acceptance', 'quality-of-hire']
+        }
+      ];
+
+    case 'HSE':
+      return [
+        {
+          id: 'safety-overview',
+          name: 'Safety Performance Overview',
+          description: 'Comprehensive safety metrics including TRIR, LTIFR, and incident trends',
+          icon: '🦺',
+          type: 'executive',
+          metrics: ['trir', 'ltifr', 'dart-rate', 'near-miss-rate']
+        },
+        {
+          id: 'incident-analysis',
+          name: 'Incident Analysis Report',
+          description: 'Detailed breakdown of safety incidents, root causes, and corrective actions',
+          icon: '🚨',
+          type: 'operational',
+          metrics: ['incident-types', 'severity', 'departments', 'trends']
+        },
+        {
+          id: 'safety-compliance',
+          name: 'Safety Compliance Audit',
+          description: 'OSHA compliance status, training completion, and PPE compliance tracking',
+          icon: '✅',
+          type: 'compliance',
+          metrics: ['training-completion', 'ppe-compliance', 'audit-scores', 'violations']
+        }
+      ];
+
+    case 'Operations':
+      return [
+        {
+          id: 'production-overview',
+          name: 'Production Performance',
+          description: 'OEE, production volume, cycle time, and capacity utilization metrics',
+          icon: '⚙️',
+          type: 'executive',
+          metrics: ['oee', 'production-volume', 'cycle-time', 'capacity-util']
+        },
+        {
+          id: 'downtime-analysis',
+          name: 'Downtime Analysis',
+          description: 'Detailed analysis of unplanned downtime, causes, and impact on production',
+          icon: '⏱️',
+          type: 'operational',
+          metrics: ['downtime-percentage', 'downtime-causes', 'mttr', 'mtbf']
+        },
+        {
+          id: 'efficiency-report',
+          name: 'Operational Efficiency',
+          description: 'Setup times, changeover efficiency, and on-time delivery performance',
+          icon: '📈',
+          type: 'operational',
+          metrics: ['setup-time', 'changeover-eff', 'otd-rate', 'yield-rate']
+        }
+      ];
+
+    case 'Quality Control':
+      return [
+        {
+          id: 'quality-overview',
+          name: 'Quality Performance Dashboard',
+          description: 'Defect rates, first pass yield, scrap, and rework metrics overview',
+          icon: '✓',
+          type: 'executive',
+          metrics: ['defect-rate', 'first-pass-yield', 'scrap-rate', 'rework-rate']
+        },
+        {
+          id: 'customer-quality',
+          name: 'Customer Quality Report',
+          description: 'Customer returns, complaints, and satisfaction with product quality',
+          icon: '🎯',
+          type: 'operational',
+          metrics: ['return-rate', 'complaints', 'csat', 'warranty-claims']
+        },
+        {
+          id: 'supplier-quality',
+          name: 'Supplier Quality Index',
+          description: 'Incoming material quality, supplier performance, and corrective actions',
+          icon: '📦',
+          type: 'operational',
+          metrics: ['supplier-defects', 'supplier-rating', 'ncr-rate', 'capa-effectiveness']
+        }
+      ];
+
+    case 'Supply Chain':
+      return [
+        {
+          id: 'sc-overview',
+          name: 'Supply Chain Performance',
+          description: 'Perfect order rate, OTIF delivery, inventory turnover, and DSO metrics',
+          icon: '🚚',
+          type: 'executive',
+          metrics: ['perfect-order-rate', 'otif', 'inventory-turnover', 'dso']
+        },
+        {
+          id: 'logistics-performance',
+          name: 'Logistics & Distribution',
+          description: 'Freight costs, delivery performance, and warehouse utilization analysis',
+          icon: '📦',
+          type: 'operational',
+          metrics: ['freight-cost', 'warehouse-util', 'order-accuracy', 'lead-time']
+        },
+        {
+          id: 'cash-flow',
+          name: 'Cash-to-Cash Cycle',
+          description: 'Working capital efficiency, payment terms, and cash flow optimization',
+          icon: '💰',
+          type: 'operational',
+          metrics: ['cash-cycle', 'dso', 'dpo', 'working-capital']
+        }
+      ];
+
+    case 'Finance':
+      return [
+        {
+          id: 'financial-overview',
+          name: 'Financial Performance Summary',
+          description: 'Revenue growth, profit margins, EBITDA, and key financial ratios',
+          icon: '💰',
+          type: 'executive',
+          metrics: ['revenue-growth', 'gross-margin', 'ebitda', 'roe']
+        },
+        {
+          id: 'cash-flow-analysis',
+          name: 'Cash Flow Analysis',
+          description: 'Operating cash flow, liquidity ratios, and working capital management',
+          icon: '💵',
+          type: 'operational',
+          metrics: ['cash-from-ops', 'current-ratio', 'quick-ratio', 'cash-conversion']
+        },
+        {
+          id: 'profitability',
+          name: 'Profitability Analysis',
+          description: 'Margin analysis, cost structure, and return on assets performance',
+          icon: '📊',
+          type: 'operational',
+          metrics: ['operating-margin', 'net-margin', 'roa', 'cost-structure']
+        }
+      ];
+
+    case 'IT & Administration':
+      return [
+        {
+          id: 'it-overview',
+          name: 'IT Operations Dashboard',
+          description: 'System uptime, help desk performance, and IT project delivery metrics',
+          icon: '💻',
+          type: 'executive',
+          metrics: ['uptime', 'ticket-resolution', 'project-delivery', 'user-satisfaction']
+        },
+        {
+          id: 'cybersecurity',
+          name: 'Cybersecurity Report',
+          description: 'Security incidents, vulnerabilities, backup success, and compliance status',
+          icon: '🔒',
+          type: 'compliance',
+          metrics: ['security-incidents', 'vulnerabilities', 'backup-success', 'compliance']
+        },
+        {
+          id: 'it-costs',
+          name: 'IT Cost Analysis',
+          description: 'IT spending per employee, license utilization, and budget variance',
+          icon: '💰',
+          type: 'operational',
+          metrics: ['cost-per-employee', 'license-util', 'budget-variance', 'project-costs']
+        }
+      ];
+
+    case 'Sales':
+      return [
+        {
+          id: 'sales-overview',
+          name: 'Sales Performance Dashboard',
+          description: 'Revenue growth, pipeline value, win rates, and quota attainment',
+          icon: '💰',
+          type: 'executive',
+          metrics: ['revenue', 'pipeline-value', 'win-rate', 'quota-attainment']
+        },
+        {
+          id: 'pipeline-analysis',
+          name: 'Sales Pipeline Analysis',
+          description: 'Deal progression, sales cycle length, and conversion rates by stage',
+          icon: '📊',
+          type: 'operational',
+          metrics: ['pipeline-stages', 'cycle-length', 'conversion-rates', 'deal-size']
+        },
+        {
+          id: 'rep-performance',
+          name: 'Sales Rep Performance',
+          description: 'Individual and team performance, revenue per rep, and activity metrics',
+          icon: '👥',
+          type: 'operational',
+          metrics: ['revenue-per-rep', 'activities', 'deals-closed', 'performance-ranking']
+        }
+      ];
+
+    case 'Customer Success':
+      return [
+        {
+          id: 'cs-overview',
+          name: 'Customer Success Dashboard',
+          description: 'CSAT, NPS, retention rate, churn analysis, and customer lifetime value',
+          icon: '❤️',
+          type: 'executive',
+          metrics: ['csat', 'nps', 'retention-rate', 'churn-rate']
+        },
+        {
+          id: 'support-performance',
+          name: 'Support Performance Report',
+          description: 'Ticket volume, response times, resolution rates, and customer effort score',
+          icon: '🎧',
+          type: 'operational',
+          metrics: ['ticket-volume', 'response-time', 'resolution-rate', 'ces']
+        },
+        {
+          id: 'customer-health',
+          name: 'Customer Health Analysis',
+          description: 'Customer lifecycle, renewal rates, expansion revenue, and at-risk customers',
+          icon: '📊',
+          type: 'operational',
+          metrics: ['renewal-rate', 'expansion-revenue', 'at-risk-customers', 'clv']
+        }
+      ];
+
+    case 'Marketing':
+      return [
+        {
+          id: 'marketing-overview',
+          name: 'Marketing Performance Dashboard',
+          description: 'Marketing ROI, lead generation, conversion rates, and campaign effectiveness',
+          icon: '📢',
+          type: 'executive',
+          metrics: ['marketing-roi', 'leads-generated', 'conversion-rate', 'cpl']
+        },
+        {
+          id: 'campaign-analysis',
+          name: 'Campaign Performance Report',
+          description: 'Campaign metrics, click-through rates, engagement, and attribution analysis',
+          icon: '🎯',
+          type: 'operational',
+          metrics: ['campaign-roi', 'ctr', 'engagement', 'attribution']
+        },
+        {
+          id: 'digital-marketing',
+          name: 'Digital Marketing Analytics',
+          description: 'Website traffic, social media engagement, content performance, and SEO metrics',
+          icon: '💻',
+          type: 'operational',
+          metrics: ['website-traffic', 'social-engagement', 'content-performance', 'seo-ranking']
+        }
+      ];
+
+    default:
+      return [];
   }
-];
+};
 
 export default function CustomReports() {
   const location = useLocation();
@@ -103,6 +339,9 @@ export default function CustomReports() {
   const dashboardPath = isHSE ? '/hse' : isOps ? '/ops' : isQC ? '/qc' : isSC ? '/supplychain' :
                         isFinance ? '/finance' : isAdmin ? '/administration' : isSales ? '/sales' :
                         isCustomerSuccess ? '/customer-success' : isMarketing ? '/marketing' : '/';
+
+  // Get department-specific report templates
+  const REPORT_TEMPLATES = getReportTemplates(department);
 
   // Mock data for charts
   const executiveSummaryData = [
