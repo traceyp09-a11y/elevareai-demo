@@ -714,6 +714,6 @@ docker-compose up -d
 
 **Built with ❤️ for C-Suite Excellence**
 
-ElevareIQ Platform | Version 1.0.0 | 2024
+ElevareIQ Platform | Version 1.0.0 | 2025
 
 </div>

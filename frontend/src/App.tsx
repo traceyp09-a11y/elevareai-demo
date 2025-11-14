@@ -540,7 +540,7 @@ function AppContent() {
       <footer className="bg-gray-900/80 backdrop-blur-sm border-t border-cyan-500/30 mt-12">
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <p className="text-center text-sm text-gray-400">
-            © 2024 ElevareIQ Platform | 11 Department Analytics for C-Suite Excellence: HR • HSE • Operations • Quality Control • Supply Chain • Finance • IT & Admin • Sales • Customer Success • Marketing • Executive Dashboard |
+            © 2025 ElevareIQ Platform | 11 Department Analytics for C-Suite Excellence: HR • HSE • Operations • Quality Control • Supply Chain • Finance • IT & Admin • Sales • Customer Success • Marketing • Executive Dashboard |
             <span className="ml-2 text-cyan-400">All Calculations Transparent & Auditable</span>
           </p>
         </div>
