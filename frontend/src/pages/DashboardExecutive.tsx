@@ -3,8 +3,13 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import {
   TrendingUp, AlertTriangle, Building2, BarChart3, ArrowRight,
-  CheckCircle, XCircle, AlertCircle, Activity
+  CheckCircle, XCircle, AlertCircle, Activity, DollarSign
 } from 'lucide-react';
+import {
+  calculateEnterpriseROI,
+  formatCurrency,
+  formatPercentage,
+} from '../utils/roiCalculations';
 
 interface Metric {
   name: string;
@@ -138,6 +143,7 @@ const DashboardExecutive: React.FC = () => {
   }
 
   const { executiveSummary, departments = [], topExecutiveKPIs = [] } = data;
+  const enterpriseROI = calculateEnterpriseROI();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900 p-8">
@@ -205,6 +211,79 @@ const DashboardExecutive: React.FC = () => {
             </div>
             <p className="text-gray-300 text-sm font-semibold">Critical Alerts</p>
             <p className="text-gray-500 text-xs mt-1">Requires immediate attention</p>
+          </div>
+        </div>
+
+        {/* ROI & Financial Impact Section */}
+        <div className="mb-8">
+          <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
+            <DollarSign className="text-green-400" size={28} />
+            Platform ROI & Financial Impact
+          </h2>
+
+          {/* ROI Summary Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+            <div className="bg-gradient-to-br from-green-900/30 to-green-800/30 border border-green-500/30 rounded-lg p-6">
+              <div className="flex items-center justify-between mb-4">
+                <span className="text-green-400 text-sm font-medium">ANNUAL SAVINGS</span>
+                <span className="text-2xl">💰</span>
+              </div>
+              <div className="text-3xl font-bold text-white mb-2">
+                {formatCurrency(enterpriseROI.totalAnnualSavings)}
+              </div>
+              <p className="text-sm text-gray-400">across all departments</p>
+            </div>
+
+            <div className="bg-gradient-to-br from-cyan-900/30 to-cyan-800/30 border border-cyan-500/30 rounded-lg p-6">
+              <div className="flex items-center justify-between mb-4">
+                <span className="text-cyan-400 text-sm font-medium">ROI</span>
+                <span className="text-2xl">📈</span>
+              </div>
+              <div className="text-3xl font-bold text-white mb-2">
+                {formatPercentage(enterpriseROI.totalROI)}
+              </div>
+              <p className="text-sm text-gray-400">return on investment</p>
+            </div>
+
+            <div className="bg-gradient-to-br from-blue-900/30 to-blue-800/30 border border-blue-500/30 rounded-lg p-6">
+              <div className="flex items-center justify-between mb-4">
+                <span className="text-blue-400 text-sm font-medium">PAYBACK PERIOD</span>
+                <span className="text-2xl">⏱️</span>
+              </div>
+              <div className="text-3xl font-bold text-white mb-2">
+                {enterpriseROI.paybackMonths.toFixed(1)} mo
+              </div>
+              <p className="text-sm text-gray-400">to break even</p>
+            </div>
+
+            <div className="bg-gradient-to-br from-purple-900/30 to-purple-800/30 border border-purple-500/30 rounded-lg p-6">
+              <div className="flex items-center justify-between mb-4">
+                <span className="text-purple-400 text-sm font-medium">3-YEAR NPV</span>
+                <span className="text-2xl">🎯</span>
+              </div>
+              <div className="text-3xl font-bold text-white mb-2">
+                {formatCurrency(enterpriseROI.threeYearNPV)}
+              </div>
+              <p className="text-sm text-gray-400">@ 8% discount rate</p>
+            </div>
+          </div>
+
+          {/* Department ROI Breakdown */}
+          <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-6">
+            <h3 className="text-lg font-bold text-white mb-4">Savings by Department</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {enterpriseROI.departments.map((dept) => (
+                <div key={dept.department} className="bg-gray-900/50 rounded-lg p-4 border border-gray-700">
+                  <div className="text-sm text-gray-400 mb-2">{dept.department}</div>
+                  <div className="text-2xl font-bold text-green-400 mb-1">
+                    {formatCurrency(dept.potentialSavings)}
+                  </div>
+                  <div className="text-xs text-gray-500">
+                    ROI: {formatPercentage(dept.roiPercentage)} • Payback: {dept.paybackMonths.toFixed(1)} mo
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
