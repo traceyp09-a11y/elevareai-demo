@@ -189,7 +189,7 @@ function AppContent() {
                     to="/reports"
                     className="text-gray-300 hover:text-cyan-400 px-4 py-2 text-sm font-medium transition-all duration-200 relative group"
                   >
-                    <span className="relative z-10">Custom Reports</span>
+                    <span className="relative z-10">HR Reports</span>
                     <div className="absolute inset-0 bg-cyan-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   </Link>
                   <Link
