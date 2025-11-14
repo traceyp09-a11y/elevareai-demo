@@ -338,6 +338,38 @@ const getDepartmentData = (department: string, templateId: string) => {
             { label: 'Absenteeism Rate', value: '3.8%', target: '< 3%', status: 'warning' }
           ]
         };
+      } else if (templateId === 'workforce-analytics') {
+        return {
+          chartData: monthLabels.map((month, i) => ({
+            month,
+            headcount: 1850 + Math.floor(Math.random() * 100),
+            turnover: 13.5 + (Math.random() - 0.5) * 2,
+            absenteeism: 3.8 + (Math.random() - 0.5) * 0.8,
+            productivity: 98 + (Math.random() - 0.5) * 6
+          })),
+          metrics: [
+            { label: 'Total Headcount', value: '1,892', target: '1,850', status: 'good' },
+            { label: 'Turnover Rate', value: '13.5%', target: '< 12%', status: 'warning' },
+            { label: 'Absenteeism', value: '3.8%', target: '< 3%', status: 'warning' },
+            { label: 'Productivity Index', value: '98', target: '> 100', status: 'warning' }
+          ]
+        };
+      } else if (templateId === 'recruitment-performance') {
+        return {
+          chartData: monthLabels.map((month, i) => ({
+            month,
+            timeToHire: 42 + (Math.random() - 0.5) * 8,
+            costPerHire: 4200 + (Math.random() - 0.5) * 500,
+            offerAcceptance: 72 + (Math.random() - 0.5) * 8,
+            qualityOfHire: 3.6 + (Math.random() - 0.5) * 0.6
+          })),
+          metrics: [
+            { label: 'Time to Hire', value: '42 days', target: '< 30 days', status: 'critical' },
+            { label: 'Cost per Hire', value: '$4,200', target: '< $3,500', status: 'warning' },
+            { label: 'Offer Acceptance', value: '72%', target: '> 85%', status: 'warning' },
+            { label: 'Quality of Hire', value: '3.6/5', target: '> 4.0/5', status: 'warning' }
+          ]
+        };
       }
       break;
 
@@ -356,6 +388,38 @@ const getDepartmentData = (department: string, templateId: string) => {
             { label: 'LTIFR', value: '2.1', target: '< 1.0', status: 'critical' },
             { label: 'DART Rate', value: '3.1', target: '< 2.0', status: 'warning' },
             { label: 'Near Miss Rate', value: '14.2/month', target: '> 20/month', status: 'warning' }
+          ]
+        };
+      } else if (templateId === 'incident-analysis') {
+        return {
+          chartData: monthLabels.map((month, i) => ({
+            month,
+            incidents: 8 + Math.floor(Math.random() * 6),
+            severity: 2.5 + (Math.random() - 0.5) * 1,
+            lostTime: 120 + Math.floor(Math.random() * 80),
+            resolved: 85 + (Math.random() - 0.5) * 10
+          })),
+          metrics: [
+            { label: 'Total Incidents', value: '94/year', target: '< 50/year', status: 'critical' },
+            { label: 'Average Severity', value: '2.5/5', target: '< 2.0/5', status: 'warning' },
+            { label: 'Lost Time Hours', value: '1,440 hrs', target: '< 500 hrs', status: 'critical' },
+            { label: 'Resolution Rate', value: '85%', target: '> 95%', status: 'warning' }
+          ]
+        };
+      } else if (templateId === 'safety-compliance') {
+        return {
+          chartData: monthLabels.map((month, i) => ({
+            month,
+            training: 78 + (Math.random() - 0.5) * 8,
+            ppeCompliance: 92 + (Math.random() - 0.5) * 6,
+            auditScore: 82 + (Math.random() - 0.5) * 8,
+            violations: 3 + Math.floor(Math.random() * 4)
+          })),
+          metrics: [
+            { label: 'Training Completion', value: '78%', target: '> 95%', status: 'critical' },
+            { label: 'PPE Compliance', value: '92%', target: '> 98%', status: 'warning' },
+            { label: 'Audit Score', value: '82%', target: '> 90%', status: 'warning' },
+            { label: 'OSHA Violations', value: '5/year', target: '0/year', status: 'critical' }
           ]
         };
       }
@@ -378,6 +442,38 @@ const getDepartmentData = (department: string, templateId: string) => {
             { label: 'Capacity Utilization', value: '78%', target: '> 90%', status: 'warning' }
           ]
         };
+      } else if (templateId === 'downtime-analysis') {
+        return {
+          chartData: monthLabels.map((month, i) => ({
+            month,
+            plannedDowntime: 3.2 + (Math.random() - 0.5) * 1,
+            unplannedDowntime: 9.1 + (Math.random() - 0.5) * 3,
+            mttr: 4.5 + (Math.random() - 0.5) * 2,
+            mtbf: 180 + Math.floor(Math.random() * 60)
+          })),
+          metrics: [
+            { label: 'Unplanned Downtime', value: '9.1%', target: '< 3%', status: 'critical' },
+            { label: 'Planned Downtime', value: '3.2%', target: '< 5%', status: 'good' },
+            { label: 'MTTR', value: '4.5 hrs', target: '< 2 hrs', status: 'critical' },
+            { label: 'MTBF', value: '180 hrs', target: '> 300 hrs', status: 'warning' }
+          ]
+        };
+      } else if (templateId === 'efficiency-report') {
+        return {
+          chartData: monthLabels.map((month, i) => ({
+            month,
+            setupTime: 45 + Math.floor(Math.random() * 20),
+            changeoverEff: 68 + (Math.random() - 0.5) * 12,
+            otdRate: 87 + (Math.random() - 0.5) * 8,
+            yieldRate: 94 + (Math.random() - 0.5) * 4
+          })),
+          metrics: [
+            { label: 'Setup Time', value: '45 mins', target: '< 30 mins', status: 'warning' },
+            { label: 'Changeover Efficiency', value: '68%', target: '> 85%', status: 'warning' },
+            { label: 'On-Time Delivery', value: '87%', target: '> 95%', status: 'warning' },
+            { label: 'Yield Rate', value: '94%', target: '> 97%', status: 'warning' }
+          ]
+        };
       }
       break;
 
@@ -396,6 +492,38 @@ const getDepartmentData = (department: string, templateId: string) => {
             { label: 'First Pass Yield', value: '91.2%', target: '> 95%', status: 'warning' },
             { label: 'Scrap Rate', value: '2.8%', target: '< 2%', status: 'warning' },
             { label: 'Rework Rate', value: '4.2%', target: '< 3%', status: 'warning' }
+          ]
+        };
+      } else if (templateId === 'customer-quality') {
+        return {
+          chartData: monthLabels.map((month, i) => ({
+            month,
+            returnRate: 1.8 + (Math.random() - 0.5) * 0.6,
+            complaints: 45 + Math.floor(Math.random() * 20),
+            csat: 7.2 + (Math.random() - 0.5) * 1,
+            warrantyClaims: 28 + Math.floor(Math.random() * 12)
+          })),
+          metrics: [
+            { label: 'Return Rate', value: '1.8%', target: '< 1%', status: 'warning' },
+            { label: 'Customer Complaints', value: '52/month', target: '< 30/month', status: 'warning' },
+            { label: 'Quality CSAT', value: '7.2/10', target: '> 8.5/10', status: 'warning' },
+            { label: 'Warranty Claims', value: '32/month', target: '< 20/month', status: 'warning' }
+          ]
+        };
+      } else if (templateId === 'supplier-quality') {
+        return {
+          chartData: monthLabels.map((month, i) => ({
+            month,
+            supplierDefects: 4200 + Math.floor(Math.random() * 800),
+            supplierRating: 3.4 + (Math.random() - 0.5) * 0.8,
+            ncrRate: 6.2 + (Math.random() - 0.5) * 2,
+            capaEff: 72 + (Math.random() - 0.5) * 12
+          })),
+          metrics: [
+            { label: 'Supplier Defects', value: '4,650 PPM', target: '< 2,000 PPM', status: 'critical' },
+            { label: 'Supplier Rating', value: '3.4/5', target: '> 4.0/5', status: 'warning' },
+            { label: 'NCR Rate', value: '6.2%', target: '< 3%', status: 'critical' },
+            { label: 'CAPA Effectiveness', value: '72%', target: '> 90%', status: 'warning' }
           ]
         };
       }
@@ -418,6 +546,38 @@ const getDepartmentData = (department: string, templateId: string) => {
             { label: 'DSO', value: '52 days', target: '< 45 days', status: 'warning' }
           ]
         };
+      } else if (templateId === 'logistics-performance') {
+        return {
+          chartData: monthLabels.map((month, i) => ({
+            month,
+            freightCost: 8.2 + (Math.random() - 0.5) * 1.5,
+            warehouseUtil: 78 + (Math.random() - 0.5) * 8,
+            orderAccuracy: 96 + (Math.random() - 0.5) * 3,
+            leadTime: 14 + Math.floor(Math.random() * 6)
+          })),
+          metrics: [
+            { label: 'Freight Cost/Unit', value: '$8.20', target: '< $6.50', status: 'warning' },
+            { label: 'Warehouse Utilization', value: '78%', target: '75-85%', status: 'good' },
+            { label: 'Order Accuracy', value: '96%', target: '> 99%', status: 'warning' },
+            { label: 'Lead Time', value: '14 days', target: '< 10 days', status: 'warning' }
+          ]
+        };
+      } else if (templateId === 'cash-flow') {
+        return {
+          chartData: monthLabels.map((month, i) => ({
+            month,
+            cashCycle: 62 + Math.floor(Math.random() * 12),
+            dso: 52 + Math.floor(Math.random() * 10),
+            dpo: 38 + Math.floor(Math.random() * 8),
+            workingCapital: 18.5 + (Math.random() - 0.5) * 4
+          })),
+          metrics: [
+            { label: 'Cash-to-Cash Cycle', value: '62 days', target: '< 45 days', status: 'warning' },
+            { label: 'DSO', value: '52 days', target: '< 45 days', status: 'warning' },
+            { label: 'DPO', value: '38 days', target: '> 45 days', status: 'warning' },
+            { label: 'Working Capital %', value: '18.5%', target: '< 15%', status: 'warning' }
+          ]
+        };
       }
       break;
 
@@ -436,6 +596,38 @@ const getDepartmentData = (department: string, templateId: string) => {
             { label: 'Gross Margin', value: '28.4%', target: '> 35%', status: 'warning' },
             { label: 'EBITDA Margin', value: '12.1%', target: '> 15%', status: 'warning' },
             { label: 'ROE', value: '14.2%', target: '> 18%', status: 'warning' }
+          ]
+        };
+      } else if (templateId === 'cash-flow-analysis') {
+        return {
+          chartData: monthLabels.map((month, i) => ({
+            month,
+            cashFromOps: 2.8 + (Math.random() - 0.5) * 0.8,
+            currentRatio: 1.65 + (Math.random() - 0.5) * 0.3,
+            quickRatio: 1.15 + (Math.random() - 0.5) * 0.2,
+            cashConversion: 78 + (Math.random() - 0.5) * 12
+          })),
+          metrics: [
+            { label: 'Operating Cash Flow', value: '$2.8M', target: '> $4M', status: 'warning' },
+            { label: 'Current Ratio', value: '1.65', target: '> 2.0', status: 'warning' },
+            { label: 'Quick Ratio', value: '1.15', target: '> 1.5', status: 'warning' },
+            { label: 'Cash Conversion', value: '78%', target: '> 90%', status: 'warning' }
+          ]
+        };
+      } else if (templateId === 'profitability') {
+        return {
+          chartData: monthLabels.map((month, i) => ({
+            month,
+            operatingMargin: 14.5 + (Math.random() - 0.5) * 2,
+            netMargin: 8.2 + (Math.random() - 0.5) * 1.5,
+            roa: 9.8 + (Math.random() - 0.5) * 2,
+            costStructure: 72 + (Math.random() - 0.5) * 4
+          })),
+          metrics: [
+            { label: 'Operating Margin', value: '14.5%', target: '> 18%', status: 'warning' },
+            { label: 'Net Margin', value: '8.2%', target: '> 12%', status: 'warning' },
+            { label: 'Return on Assets', value: '9.8%', target: '> 12%', status: 'warning' },
+            { label: 'OpEx % Revenue', value: '72%', target: '< 65%', status: 'warning' }
           ]
         };
       }
@@ -458,6 +650,38 @@ const getDepartmentData = (department: string, templateId: string) => {
             { label: 'User Satisfaction', value: '3.8/5', target: '> 4.5/5', status: 'warning' }
           ]
         };
+      } else if (templateId === 'cybersecurity') {
+        return {
+          chartData: monthLabels.map((month, i) => ({
+            month,
+            incidents: 8 + Math.floor(Math.random() * 6),
+            vulnerabilities: 42 + Math.floor(Math.random() * 20),
+            backupSuccess: 94 + (Math.random() - 0.5) * 4,
+            compliance: 88 + (Math.random() - 0.5) * 6
+          })),
+          metrics: [
+            { label: 'Security Incidents', value: '11/month', target: '< 5/month', status: 'warning' },
+            { label: 'Critical Vulnerabilities', value: '52', target: '< 10', status: 'critical' },
+            { label: 'Backup Success Rate', value: '94%', target: '> 99%', status: 'warning' },
+            { label: 'Compliance Score', value: '88%', target: '> 95%', status: 'warning' }
+          ]
+        };
+      } else if (templateId === 'it-costs') {
+        return {
+          chartData: monthLabels.map((month, i) => ({
+            month,
+            costPerEmployee: 4200 + Math.floor(Math.random() * 800),
+            licenseUtil: 72 + (Math.random() - 0.5) * 12,
+            budgetVariance: 8 + (Math.random() - 0.5) * 6,
+            projectCosts: 185000 + Math.floor(Math.random() * 50000)
+          })),
+          metrics: [
+            { label: 'IT Cost/Employee', value: '$4,600', target: '< $3,500', status: 'warning' },
+            { label: 'License Utilization', value: '72%', target: '> 85%', status: 'warning' },
+            { label: 'Budget Variance', value: '+8%', target: '< 5%', status: 'warning' },
+            { label: 'Project Spend', value: '$210K', target: '< $180K', status: 'warning' }
+          ]
+        };
       }
       break;
 
@@ -476,6 +700,38 @@ const getDepartmentData = (department: string, templateId: string) => {
             { label: 'Pipeline Value', value: '$45M', target: '$60M', status: 'warning' },
             { label: 'Win Rate', value: '28%', target: '> 35%', status: 'warning' },
             { label: 'Quota Attainment', value: '78%', target: '> 100%', status: 'critical' }
+          ]
+        };
+      } else if (templateId === 'pipeline-analysis') {
+        return {
+          chartData: monthLabels.map((month, i) => ({
+            month,
+            prospects: 120 + Math.floor(Math.random() * 40),
+            qualified: 65 + Math.floor(Math.random() * 20),
+            proposal: 28 + Math.floor(Math.random() * 12),
+            closed: 18 + Math.floor(Math.random() * 8)
+          })),
+          metrics: [
+            { label: 'Sales Cycle Length', value: '87 days', target: '< 60 days', status: 'warning' },
+            { label: 'Lead-to-Opp Conv.', value: '54%', target: '> 65%', status: 'warning' },
+            { label: 'Avg Deal Size', value: '$472K', target: '> $600K', status: 'warning' },
+            { label: 'Pipeline Coverage', value: '2.8x', target: '> 3.5x', status: 'warning' }
+          ]
+        };
+      } else if (templateId === 'rep-performance') {
+        return {
+          chartData: monthLabels.map((month, i) => ({
+            month,
+            revenuePerRep: 425 + Math.floor(Math.random() * 100),
+            activities: 85 + Math.floor(Math.random() * 30),
+            dealsClosed: 3.2 + (Math.random() - 0.5) * 1.5,
+            avgDealSize: 470 + Math.floor(Math.random() * 120)
+          })),
+          metrics: [
+            { label: 'Revenue/Rep', value: '$475K', target: '> $600K', status: 'warning' },
+            { label: 'Activities/Week', value: '95', target: '> 120', status: 'warning' },
+            { label: 'Deals Closed/Month', value: '3.2', target: '> 5', status: 'warning' },
+            { label: 'Top Rep Performance', value: '$1.2M', target: '$1.5M', status: 'warning' }
           ]
         };
       }
@@ -498,6 +754,38 @@ const getDepartmentData = (department: string, templateId: string) => {
             { label: 'Churn Rate', value: '3.2%', target: '< 2%', status: 'warning' }
           ]
         };
+      } else if (templateId === 'support-performance') {
+        return {
+          chartData: monthLabels.map((month, i) => ({
+            month,
+            tickets: 420 + Math.floor(Math.random() * 120),
+            responseTime: 4.2 + (Math.random() - 0.5) * 2,
+            resolutionRate: 82 + (Math.random() - 0.5) * 8,
+            ces: 3.1 + (Math.random() - 0.5) * 0.8
+          })),
+          metrics: [
+            { label: 'Ticket Volume', value: '485/month', target: '< 350/month', status: 'warning' },
+            { label: 'Avg Response Time', value: '4.2 hrs', target: '< 2 hrs', status: 'warning' },
+            { label: 'First Contact Resolution', value: '82%', target: '> 90%', status: 'warning' },
+            { label: 'Customer Effort Score', value: '3.1/5', target: '< 2.5/5', status: 'warning' }
+          ]
+        };
+      } else if (templateId === 'customer-health') {
+        return {
+          chartData: monthLabels.map((month, i) => ({
+            month,
+            renewalRate: 88 + (Math.random() - 0.5) * 4,
+            expansion: 12 + (Math.random() - 0.5) * 4,
+            atRisk: 18 + Math.floor(Math.random() * 8),
+            clv: 245000 + Math.floor(Math.random() * 60000)
+          })),
+          metrics: [
+            { label: 'Renewal Rate', value: '88%', target: '> 95%', status: 'warning' },
+            { label: 'Expansion Revenue', value: '12%', target: '> 20%', status: 'warning' },
+            { label: 'At-Risk Customers', value: '22', target: '< 10', status: 'critical' },
+            { label: 'Customer LTV', value: '$275K', target: '> $350K', status: 'warning' }
+          ]
+        };
       }
       break;
 
@@ -516,6 +804,38 @@ const getDepartmentData = (department: string, templateId: string) => {
             { label: 'Leads Generated', value: '420/month', target: '> 600/month', status: 'warning' },
             { label: 'Conversion Rate', value: '12%', target: '> 18%', status: 'warning' },
             { label: 'Cost per Lead', value: '$185', target: '< $150', status: 'warning' }
+          ]
+        };
+      } else if (templateId === 'campaign-analysis') {
+        return {
+          chartData: monthLabels.map((month, i) => ({
+            month,
+            campaignROI: 3.2 + (Math.random() - 0.5) * 1,
+            ctr: 2.4 + (Math.random() - 0.5) * 0.8,
+            engagement: 4.5 + (Math.random() - 0.5) * 1.5,
+            mqls: 185 + Math.floor(Math.random() * 60)
+          })),
+          metrics: [
+            { label: 'Campaign ROI', value: '3.2x', target: '> 5x', status: 'warning' },
+            { label: 'Click-Through Rate', value: '2.4%', target: '> 3.5%', status: 'warning' },
+            { label: 'Engagement Rate', value: '4.5%', target: '> 6%', status: 'warning' },
+            { label: 'MQLs Generated', value: '215/month', target: '> 300/month', status: 'warning' }
+          ]
+        };
+      } else if (templateId === 'digital-marketing') {
+        return {
+          chartData: monthLabels.map((month, i) => ({
+            month,
+            websiteTraffic: 42000 + Math.floor(Math.random() * 10000),
+            socialEngagement: 3.2 + (Math.random() - 0.5) * 1,
+            contentPerf: 8500 + Math.floor(Math.random() * 2000),
+            seoRanking: 18 + Math.floor(Math.random() * 8)
+          })),
+          metrics: [
+            { label: 'Website Traffic', value: '47K/month', target: '> 60K/month', status: 'warning' },
+            { label: 'Social Engagement', value: '3.2%', target: '> 5%', status: 'warning' },
+            { label: 'Content Views', value: '9.5K/month', target: '> 12K/month', status: 'warning' },
+            { label: 'Avg SEO Ranking', value: '#22', target: '< #10', status: 'warning' }
           ]
         };
       }
