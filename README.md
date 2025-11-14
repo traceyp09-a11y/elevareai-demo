@@ -33,7 +33,7 @@ ElevareIQ is a comprehensive enterprise analytics platform designed for C-Suite 
 - **Employee Count**: 847 employees
 - **Locations**: 4 facilities across the US
 - **Annual Revenue**: $127M
-- **Fiscal Year**: Q4 2024
+- **Fiscal Year**: Q4 2025
 
 ## 🚀 Platform Modules
 
@@ -679,7 +679,7 @@ This is a proprietary platform developed for ElevareIQ. For feature requests or 
 
 ## 📄 License
 
-Proprietary - ElevareIQ Platform © 2024
+Proprietary - ElevareIQ Platform © 2025
 
 All rights reserved. Unauthorized copying, distribution, or modification is prohibited.
 
