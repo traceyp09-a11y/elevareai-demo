@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import {
   LineChart,
   Line,
@@ -80,9 +80,29 @@ const REPORT_TEMPLATES: ReportTemplate[] = [
 ];
 
 export default function CustomReports() {
+  const location = useLocation();
   const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
   const [timeRange, setTimeRange] = useState<TimeRange>('1y');
   const [generatingReport, setGeneratingReport] = useState(false);
+
+  // Determine department from URL path
+  const isHSE = location.pathname.startsWith('/hse');
+  const isOps = location.pathname.startsWith('/ops');
+  const isQC = location.pathname.startsWith('/qc');
+  const isSC = location.pathname.startsWith('/supplychain');
+  const isFinance = location.pathname.startsWith('/finance');
+  const isAdmin = location.pathname.startsWith('/administration');
+  const isSales = location.pathname.startsWith('/sales');
+  const isCustomerSuccess = location.pathname.startsWith('/customer-success');
+  const isMarketing = location.pathname.startsWith('/marketing');
+
+  const department = isHSE ? 'HSE' : isOps ? 'Operations' : isQC ? 'Quality Control' : isSC ? 'Supply Chain' :
+                     isFinance ? 'Finance' : isAdmin ? 'IT & Administration' : isSales ? 'Sales' :
+                     isCustomerSuccess ? 'Customer Success' : isMarketing ? 'Marketing' : 'HR';
+
+  const dashboardPath = isHSE ? '/hse' : isOps ? '/ops' : isQC ? '/qc' : isSC ? '/supplychain' :
+                        isFinance ? '/finance' : isAdmin ? '/administration' : isSales ? '/sales' :
+                        isCustomerSuccess ? '/customer-success' : isMarketing ? '/marketing' : '/';
 
   // Mock data for charts
   const executiveSummaryData = [
@@ -122,12 +142,12 @@ export default function CustomReports() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-4xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent mb-2">
-              Custom Reports
+              {department} Reports
             </h1>
-            <p className="text-gray-400 text-lg">Generate comprehensive HR analytics reports</p>
+            <p className="text-gray-400 text-lg">Generate comprehensive {department} analytics reports</p>
           </div>
           <Link
-            to="/"
+            to={dashboardPath}
             className="inline-flex items-center text-cyan-400 hover:text-cyan-300 font-medium transition-colors"
           >
             <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -370,7 +390,7 @@ export default function CustomReports() {
             <div className="text-5xl mb-4">📊</div>
             <h3 className="text-2xl font-bold text-white mb-2">Select a Report Template</h3>
             <p className="text-gray-400">
-              Choose a report template above to generate comprehensive HR analytics reports
+              Choose a report template above to generate comprehensive {department} analytics reports
               with customizable time ranges and export options.
             </p>
           </div>
