@@ -165,15 +165,15 @@ const DashboardExecutive: React.FC = () => {
         </div>
 
         {/* Executive Summary Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
           {/* Overall Health */}
           <div
             onClick={() => setSelectedModal('health')}
-            className={`${getHealthColor(executiveSummary?.overallHealth || 0)} border-2 rounded-lg p-4 cursor-pointer hover:scale-105 transition-transform`}>
-            <div className="flex items-center justify-between mb-3">
-              <Activity className="text-current" size={28} />
+            className={`${getHealthColor(executiveSummary?.overallHealth || 0)} border-2 rounded-lg p-3 cursor-pointer hover:scale-105 transition-transform`}>
+            <div className="flex items-center justify-between mb-2">
+              <Activity className="text-current" size={24} />
               <div className="text-right">
-                <p className="text-3xl font-bold text-white">{executiveSummary?.overallHealth || 0}</p>
+                <p className="text-2xl font-bold text-white">{executiveSummary?.overallHealth || 0}</p>
                 <p className="text-xs text-current font-semibold">{executiveSummary?.overallHealthStatus || 'N/A'}</p>
               </div>
             </div>
@@ -184,10 +184,10 @@ const DashboardExecutive: React.FC = () => {
           {/* Departments Monitored */}
           <div
             onClick={() => setSelectedModal('departments')}
-            className="bg-blue-500/10 border-2 border-blue-500 rounded-lg p-4 cursor-pointer hover:scale-105 transition-transform">
-            <div className="flex items-center justify-between mb-3">
-              <Building2 className="text-blue-400" size={28} />
-              <p className="text-3xl font-bold text-white">{executiveSummary?.departmentsMonitored || 0}</p>
+            className="bg-blue-500/10 border-2 border-blue-500 rounded-lg p-3 cursor-pointer hover:scale-105 transition-transform">
+            <div className="flex items-center justify-between mb-2">
+              <Building2 className="text-blue-400" size={24} />
+              <p className="text-2xl font-bold text-white">{executiveSummary?.departmentsMonitored || 0}</p>
             </div>
             <p className="text-gray-300 text-sm font-semibold">Departments Monitored</p>
             <p className="text-gray-500 text-xs mt-1">Full business coverage</p>
@@ -196,10 +196,10 @@ const DashboardExecutive: React.FC = () => {
           {/* Total KPIs */}
           <div
             onClick={() => setSelectedModal('kpis')}
-            className="bg-purple-500/10 border-2 border-purple-500 rounded-lg p-4 cursor-pointer hover:scale-105 transition-transform">
-            <div className="flex items-center justify-between mb-3">
-              <BarChart3 className="text-purple-400" size={28} />
-              <p className="text-3xl font-bold text-white">{executiveSummary?.totalKPIs || 0}+</p>
+            className="bg-purple-500/10 border-2 border-purple-500 rounded-lg p-3 cursor-pointer hover:scale-105 transition-transform">
+            <div className="flex items-center justify-between mb-2">
+              <BarChart3 className="text-purple-400" size={24} />
+              <p className="text-2xl font-bold text-white">{executiveSummary?.totalKPIs || 0}+</p>
             </div>
             <p className="text-gray-300 text-sm font-semibold">Total KPIs Tracked</p>
             <p className="text-gray-500 text-xs mt-1">Real-time monitoring</p>
@@ -208,15 +208,15 @@ const DashboardExecutive: React.FC = () => {
           {/* Critical Alerts */}
           <div
             onClick={() => setSelectedModal('alerts')}
-            className={`${(executiveSummary?.criticalAlerts || 0) > 0 ? 'bg-red-500/10 border-red-500' : 'bg-green-500/10 border-green-500'} border-2 rounded-lg p-4 cursor-pointer hover:scale-105 transition-transform`}>
-            <div className="flex items-center justify-between mb-3">
+            className={`${(executiveSummary?.criticalAlerts || 0) > 0 ? 'bg-red-500/10 border-red-500' : 'bg-green-500/10 border-green-500'} border-2 rounded-lg p-3 cursor-pointer hover:scale-105 transition-transform`}>
+            <div className="flex items-center justify-between mb-2">
               {(executiveSummary?.criticalAlerts || 0) > 0 ? (
-                <AlertTriangle className="text-red-400" size={28} />
+                <AlertTriangle className="text-red-400" size={24} />
               ) : (
-                <CheckCircle className="text-green-400" size={28} />
+                <CheckCircle className="text-green-400" size={24} />
               )}
               <div className="text-right">
-                <p className="text-3xl font-bold text-white">{executiveSummary?.criticalAlerts || 0}</p>
+                <p className="text-2xl font-bold text-white">{executiveSummary?.criticalAlerts || 0}</p>
                 <p className="text-xs text-yellow-400 font-semibold">+{executiveSummary?.warningAlerts || 0} warnings</p>
               </div>
             </div>
@@ -227,21 +227,21 @@ const DashboardExecutive: React.FC = () => {
 
         {/* ROI & Financial Impact Section */}
         <div className="mb-8">
-          <h2 className="text-4xl font-bold text-white mb-6 flex items-center gap-3">
-            <DollarSign className="text-green-400" size={36} />
+          <h2 className="text-6xl font-bold text-white mb-8 flex items-center gap-4">
+            <DollarSign className="text-green-400" size={48} />
             Platform ROI & Financial Impact
           </h2>
 
           {/* ROI Summary Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-3 mb-6">
             <div
               onClick={() => setSelectedModal('annual-savings')}
-              className="bg-gradient-to-br from-green-900/30 to-green-800/30 border border-green-500/30 rounded-lg p-4 cursor-pointer hover:scale-105 transition-transform">
-              <div className="flex items-center justify-between mb-3">
+              className="bg-gradient-to-br from-green-900/30 to-green-800/30 border border-green-500/30 rounded-lg p-3 cursor-pointer hover:scale-105 transition-transform">
+              <div className="flex items-center justify-between mb-2">
                 <span className="text-green-400 text-xs font-medium">ANNUAL SAVINGS</span>
-                <span className="text-xl">💰</span>
+                <span className="text-lg">💰</span>
               </div>
-              <div className="text-2xl font-bold text-white mb-1">
+              <div className="text-xl font-bold text-white mb-1">
                 {formatCurrency(enterpriseROI.totalAnnualSavings)}
               </div>
               <p className="text-xs text-gray-400">across all departments</p>
@@ -249,12 +249,12 @@ const DashboardExecutive: React.FC = () => {
 
             <div
               onClick={() => setSelectedModal('roi-percentage')}
-              className="bg-gradient-to-br from-cyan-900/30 to-cyan-800/30 border border-cyan-500/30 rounded-lg p-4 cursor-pointer hover:scale-105 transition-transform">
-              <div className="flex items-center justify-between mb-3">
+              className="bg-gradient-to-br from-cyan-900/30 to-cyan-800/30 border border-cyan-500/30 rounded-lg p-3 cursor-pointer hover:scale-105 transition-transform">
+              <div className="flex items-center justify-between mb-2">
                 <span className="text-cyan-400 text-xs font-medium">ROI</span>
-                <span className="text-xl">📈</span>
+                <span className="text-lg">📈</span>
               </div>
-              <div className="text-2xl font-bold text-white mb-1">
+              <div className="text-xl font-bold text-white mb-1">
                 {formatPercentage(enterpriseROI.totalROI)}
               </div>
               <p className="text-xs text-gray-400">return on investment</p>
@@ -262,12 +262,12 @@ const DashboardExecutive: React.FC = () => {
 
             <div
               onClick={() => setSelectedModal('payback')}
-              className="bg-gradient-to-br from-blue-900/30 to-blue-800/30 border border-blue-500/30 rounded-lg p-4 cursor-pointer hover:scale-105 transition-transform">
-              <div className="flex items-center justify-between mb-3">
+              className="bg-gradient-to-br from-blue-900/30 to-blue-800/30 border border-blue-500/30 rounded-lg p-3 cursor-pointer hover:scale-105 transition-transform">
+              <div className="flex items-center justify-between mb-2">
                 <span className="text-blue-400 text-xs font-medium">PAYBACK PERIOD</span>
-                <span className="text-xl">⏱️</span>
+                <span className="text-lg">⏱️</span>
               </div>
-              <div className="text-2xl font-bold text-white mb-1">
+              <div className="text-xl font-bold text-white mb-1">
                 {enterpriseROI.paybackMonths.toFixed(1)} mo
               </div>
               <p className="text-xs text-gray-400">to break even</p>
@@ -275,12 +275,12 @@ const DashboardExecutive: React.FC = () => {
 
             <div
               onClick={() => setSelectedModal('npv')}
-              className="bg-gradient-to-br from-purple-900/30 to-purple-800/30 border border-purple-500/30 rounded-lg p-4 cursor-pointer hover:scale-105 transition-transform">
-              <div className="flex items-center justify-between mb-3">
+              className="bg-gradient-to-br from-purple-900/30 to-purple-800/30 border border-purple-500/30 rounded-lg p-3 cursor-pointer hover:scale-105 transition-transform">
+              <div className="flex items-center justify-between mb-2">
                 <span className="text-purple-400 text-xs font-medium">3-YEAR NPV</span>
-                <span className="text-xl">🎯</span>
+                <span className="text-lg">🎯</span>
               </div>
-              <div className="text-2xl font-bold text-white mb-1">
+              <div className="text-xl font-bold text-white mb-1">
                 {formatCurrency(enterpriseROI.threeYearNPV)}
               </div>
               <p className="text-xs text-gray-400">@ 8% discount rate</p>
@@ -288,9 +288,9 @@ const DashboardExecutive: React.FC = () => {
           </div>
 
           {/* Department ROI Breakdown */}
-          <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-4">
-            <h3 className="text-lg font-bold text-white mb-3">Savings by Department</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3">
+          <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-3">
+            <h3 className="text-base font-bold text-white mb-2">Savings by Department</h3>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2">
               {enterpriseROI.departments.map((dept) => (
                 <div
                   key={dept.department}
@@ -298,13 +298,13 @@ const DashboardExecutive: React.FC = () => {
                     setSelectedDepartment(dept.department);
                     setSelectedModal('department-detail');
                   }}
-                  className="bg-gray-900/50 rounded-lg p-3 border border-gray-700 cursor-pointer hover:scale-105 transition-transform hover:border-green-500">
+                  className="bg-gray-900/50 rounded-lg p-2 border border-gray-700 cursor-pointer hover:scale-105 transition-transform hover:border-green-500">
                   <div className="text-xs text-gray-400 mb-1">{dept.department}</div>
-                  <div className="text-xl font-bold text-green-400 mb-1">
+                  <div className="text-lg font-bold text-green-400 mb-1">
                     {formatCurrency(dept.potentialSavings)}
                   </div>
                   <div className="text-xs text-gray-500">
-                    ROI: {formatPercentage(dept.roiPercentage)} • Payback: {dept.paybackMonths.toFixed(1)} mo
+                    ROI: {formatPercentage(dept.roiPercentage)}
                   </div>
                 </div>
               ))}
@@ -314,8 +314,8 @@ const DashboardExecutive: React.FC = () => {
 
         {/* Top Executive KPIs */}
         <div className="mb-8">
-          <h2 className="text-4xl font-bold text-white mb-6 flex items-center gap-3">
-            <TrendingUp className="text-purple-400" size={36} />
+          <h2 className="text-6xl font-bold text-white mb-8 flex items-center gap-4">
+            <TrendingUp className="text-purple-400" size={48} />
             Key Performance Indicators
           </h2>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -346,8 +346,8 @@ const DashboardExecutive: React.FC = () => {
 
         {/* Department Overview Grid */}
         <div className="mb-8">
-          <h2 className="text-4xl font-bold text-white mb-6 flex items-center gap-3">
-            <Building2 className="text-purple-400" size={36} />
+          <h2 className="text-6xl font-bold text-white mb-8 flex items-center gap-4">
+            <Building2 className="text-purple-400" size={48} />
             Department Overview
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
@@ -387,7 +387,7 @@ const DashboardExecutive: React.FC = () => {
           <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4" onClick={() => setSelectedModal(null)}>
             <div className="bg-gray-900 border-2 border-cyan-500 rounded-xl max-w-[95vw] w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
               <div className="sticky top-0 bg-gray-900 border-b border-gray-700 p-6 flex items-center justify-between z-10">
-                <h2 className="text-3xl font-bold text-white">
+                <h2 className="text-4xl font-bold text-white">
                   {selectedModal === 'health' && '🏥 Overall Health Score Breakdown'}
                   {selectedModal === 'departments' && '🏢 Departments Overview'}
                   {selectedModal === 'kpis' && '📊 All KPIs by Department'}
@@ -906,9 +906,9 @@ const DashboardExecutive: React.FC = () => {
         )}
 
         {/* Footer */}
-        <div className="text-center text-gray-400 text-lg mt-12">
-          <p className="font-bold text-xl">ElevareAI Executive Dashboard</p>
-          <p className="mt-2 text-base">Last Updated: {new Date(data.generatedAt).toLocaleString()}</p>
+        <div className="text-center text-gray-300 text-lg mt-12">
+          <p className="font-bold text-2xl">ElevareAI Executive Dashboard</p>
+          <p className="mt-2 text-lg">Last Updated: {new Date(data.generatedAt).toLocaleString()}</p>
         </div>
       </div>
     </div>
