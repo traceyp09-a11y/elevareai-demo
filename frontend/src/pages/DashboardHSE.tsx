@@ -45,8 +45,19 @@ export default function DashboardHSE() {
   // Fetch HSE KPIs
   const fetchKPIs = async (isAutoRefresh = false) => {
     try {
+      console.log('🔍 Fetching HSE KPIs from /api/hse/kpis/current...');
       const response = await fetch(`/api/hse/kpis/current`);
       const result = await response.json();
+      console.log('📦 HSE API Response:', result);
+      console.log('📊 KPIs data:', result.kpis);
+
+      // Log individual KPI values
+      if (result.kpis) {
+        Object.keys(result.kpis).forEach(key => {
+          console.log(`  - ${key}:`, result.kpis[key]?.displayValue || 'undefined');
+        });
+      }
+
       setData(result);
 
       if (!isAutoRefresh) {
@@ -57,7 +68,7 @@ export default function DashboardHSE() {
       // Generate alerts based on critical metrics
       generateAlerts(result.kpis);
     } catch (error) {
-      console.error('Error fetching HSE KPIs:', error);
+      console.error('❌ Error fetching HSE KPIs:', error);
       setLoading(false);
     }
   };
@@ -147,9 +158,15 @@ export default function DashboardHSE() {
 
   // Transform KPI data for display
   const getKPIs = (): KPIData[] => {
-    if (!data?.kpis) return [];
+    console.log('🎯 getKPIs called, data:', data);
+    console.log('🎯 data.kpis:', data?.kpis);
 
-    return [
+    if (!data?.kpis) {
+      console.warn('⚠️ No KPIs data available!');
+      return [];
+    }
+
+    const kpiArray = [
       {
         name: 'TRIR',
         value: data.kpis['TRIR']?.value || 0,
@@ -241,6 +258,9 @@ export default function DashboardHSE() {
         benchmark: data.kpis['Investigation Closure Time']?.benchmark
       }
     ];
+
+    console.log('✅ Returning', kpiArray.length, 'KPIs');
+    return kpiArray;
   };
 
   // Filter and sort KPIs
