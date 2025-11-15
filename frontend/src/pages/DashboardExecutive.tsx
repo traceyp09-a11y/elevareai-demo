@@ -9,6 +9,7 @@ import {
   calculateEnterpriseROI,
   formatCurrency,
   formatPercentage,
+  getConfidenceColor,
 } from '../utils/roiCalculations';
 
 interface Metric {
