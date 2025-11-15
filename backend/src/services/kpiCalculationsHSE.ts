@@ -552,19 +552,46 @@ export class HSEKPICalculationService {
     };
   }
 
+  // Helper method to safely execute calculations with error handling
+  private safeCalculate(name: string, calculationFn: () => KPIResult): KPIResult {
+    try {
+      const result = calculationFn();
+      console.log(`✓ ${name} calculated:`, result.displayValue);
+      return result;
+    } catch (error: any) {
+      console.error(`✗ Error calculating ${name}:`, error.message);
+      // Return a default KPIResult if calculation fails
+      return {
+        value: 0,
+        displayValue: '0',
+        calculation: {
+          formula: `Error: ${error.message}`,
+          components: {},
+          steps: [`Calculation failed: ${error.message}`]
+        },
+        benchmark: {
+          value: 0,
+          status: 'at'
+        }
+      };
+    }
+  }
+
   // Get all HSE KPIs
   getAllHSEKPIs(startDate: string, endDate: string): { [key: string]: KPIResult } {
+    console.log(`\n📊 Calculating HSE KPIs for period: ${startDate} to ${endDate}`);
+
     return {
-      'TRIR': this.calculateTRIR(startDate, endDate),
-      'LTIFR': this.calculateLTIFR(startDate, endDate),
-      'Near Miss Rate': this.calculateNearMissRate(startDate, endDate),
-      'Safety Training Rate': this.calculateSafetyTrainingRate(startDate, endDate),
-      'PPE Compliance': this.calculatePPEComplianceRate(startDate, endDate),
-      'Environmental Compliance': this.calculateEnvironmentalCompliance(startDate, endDate),
-      'Safety Audit Score': this.calculateSafetyAuditScore(startDate, endDate),
-      'Investigation Closure Time': this.calculateInvestigationClosureTime(startDate, endDate),
-      'Hazard Identification Rate': this.calculateHazardIdentificationRate(startDate, endDate),
-      'Emergency Preparedness': this.calculateEmergencyPreparednessScore(startDate, endDate)
+      'TRIR': this.safeCalculate('TRIR', () => this.calculateTRIR(startDate, endDate)),
+      'LTIFR': this.safeCalculate('LTIFR', () => this.calculateLTIFR(startDate, endDate)),
+      'Near Miss Rate': this.safeCalculate('Near Miss Rate', () => this.calculateNearMissRate(startDate, endDate)),
+      'Safety Training Rate': this.safeCalculate('Safety Training Rate', () => this.calculateSafetyTrainingRate(startDate, endDate)),
+      'PPE Compliance': this.safeCalculate('PPE Compliance', () => this.calculatePPEComplianceRate(startDate, endDate)),
+      'Environmental Compliance': this.safeCalculate('Environmental Compliance', () => this.calculateEnvironmentalCompliance(startDate, endDate)),
+      'Safety Audit Score': this.safeCalculate('Safety Audit Score', () => this.calculateSafetyAuditScore(startDate, endDate)),
+      'Investigation Closure Time': this.safeCalculate('Investigation Closure Time', () => this.calculateInvestigationClosureTime(startDate, endDate)),
+      'Hazard Identification Rate': this.safeCalculate('Hazard Identification Rate', () => this.calculateHazardIdentificationRate(startDate, endDate)),
+      'Emergency Preparedness': this.safeCalculate('Emergency Preparedness', () => this.calculateEmergencyPreparednessScore(startDate, endDate))
     };
   }
 }
