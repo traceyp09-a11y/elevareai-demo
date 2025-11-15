@@ -3734,7 +3734,7 @@ app.use((err: Error, req: Request, res: Response, next: any) => {
 });
 
 // Start server
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`\n🚀 ElevareIQ-MVP API Server running on port ${PORT}`);
   console.log(`📊 Dashboard: http://localhost:3000`);
   console.log(`\n🔗 HR Analytics API Endpoints:`);
