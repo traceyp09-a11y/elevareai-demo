@@ -18,6 +18,11 @@ const scriptsDir = path.join(__dirname);
 
 const scripts = [
   { name: 'Core Schemas (HR, HSE, OPS, QC, Supply Chain)', script: '../data/initDatabase.ts' },
+  { name: 'HR Data', script: '../data/seedData.ts' },
+  { name: 'HSE Data', script: '../data/seedDataHSE.ts' },
+  { name: 'Operations Data', script: '../data/seedDataOps.ts' },
+  { name: 'Quality Control Data', script: '../data/seedDataQC.ts' },
+  { name: 'Supply Chain Data', script: '../data/seedDataSupplyChain.ts' },
   { name: 'Finance Module', script: './initFinance.ts' },
   { name: 'Sales Module', script: './initSales.ts' },
   { name: 'Marketing Module', script: './initMarketing.ts' },
