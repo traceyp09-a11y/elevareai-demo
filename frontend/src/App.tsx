@@ -24,12 +24,17 @@ import PainPointsCustomerSuccess from './pages/PainPointsCustomerSuccess';
 import DashboardMarketing from './pages/DashboardMarketing';
 import PainPointsMarketing from './pages/PainPointsMarketing';
 import DashboardExecutive from './pages/DashboardExecutive';
+import Login from './pages/Login';
 import ElevareLogo from './components/ElevareLogo';
 import ErrorBoundary from './components/ErrorBoundary';
+import ProtectedRoute from './components/ProtectedRoute';
+import UserMenu from './components/UserMenu';
+import { AuthProvider } from './contexts/AuthContext';
 import './App.css';
 
 function AppContent() {
   const location = useLocation();
+  const isLoginPage = location.pathname === '/login';
   const isHSE = location.pathname.startsWith('/hse');
   const isOps = location.pathname.startsWith('/ops');
   const isQC = location.pathname.startsWith('/qc');
@@ -44,7 +49,8 @@ function AppContent() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black">
-      {/* Header with Dark Theme */}
+      {/* Header with Dark Theme (hidden on login page) */}
+      {!isLoginPage && (
       <header className="bg-gray-900/80 backdrop-blur-sm border-b border-cyan-500/30 sticky top-0 z-50">
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
           {/* Department Switcher */}
@@ -453,26 +459,33 @@ function AppContent() {
               )}
             </nav>
 
-            {/* Company Info */}
-            <div className="text-right">
-              <p className="text-sm font-semibold text-white">TitanBuild M&L</p>
-              <p className="text-xs text-cyan-400">Q4 2024</p>
+            {/* User Menu & Company Info */}
+            <div className="flex items-center space-x-4">
+              <div className="text-right pr-4 border-r border-gray-700">
+                <p className="text-sm font-semibold text-white">TitanBuild M&L</p>
+                <p className="text-xs text-cyan-400">Q4 2024</p>
+              </div>
+              <UserMenu />
             </div>
           </div>
         </div>
       </header>
+      )}
 
       {/* Main Content */}
       <main>
         <Routes>
-          {/* HR Analytics Routes */}
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/kpi/:kpiName" element={<KPIDetail />} />
-          <Route path="/reports" element={<CustomReports />} />
-          <Route path="/pain-points" element={<PainPoints />} />
+          {/* Public Routes */}
+          <Route path="/login" element={<Login />} />
 
-          {/* HSE Analytics Routes */}
-          <Route path="/hse" element={<DashboardHSE />} />
+          {/* Protected HR Analytics Routes */}
+          <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+          <Route path="/kpi/:kpiName" element={<ProtectedRoute><KPIDetail /></ProtectedRoute>} />
+          <Route path="/reports" element={<ProtectedRoute><CustomReports /></ProtectedRoute>} />
+          <Route path="/pain-points" element={<ProtectedRoute><PainPoints /></ProtectedRoute>} />
+
+          {/* Protected HSE Analytics Routes */}
+          <Route path="/hse" element={<ProtectedRoute><DashboardHSE /></ProtectedRoute>} />
           <Route path="/hse/kpi/:kpiName" element={<KPIDetail />} />
           <Route path="/hse/predictive" element={<PredictiveAnalytics />} />
           <Route path="/hse/reports" element={<CustomReports />} />
@@ -536,7 +549,8 @@ function AppContent() {
         </Routes>
       </main>
 
-      {/* Footer */}
+      {/* Footer (hidden on login page) */}
+      {!isLoginPage && (
       <footer className="bg-gray-900/80 backdrop-blur-sm border-t border-cyan-500/30 mt-12">
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <p className="text-center text-sm text-gray-400">
@@ -545,6 +559,7 @@ function AppContent() {
           </p>
         </div>
       </footer>
+      )}
     </div>
   );
 }
@@ -552,7 +567,9 @@ function AppContent() {
 function App() {
   return (
     <Router>
-      <AppContent />
+      <AuthProvider>
+        <AppContent />
+      </AuthProvider>
     </Router>
   );
 }
