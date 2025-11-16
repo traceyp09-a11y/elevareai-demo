@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { LineChart, Line, AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { TrendingUp, TrendingDown, Minus, AlertTriangle, CheckCircle2, XCircle, Activity } from 'lucide-react';
+import CalculationDetails from '../components/CalculationDetails';
 
 interface KPIData {
   value: number;
@@ -216,11 +217,11 @@ const DashboardQC: React.FC = () => {
         {kpiArray.map(([key, kpi]) => {
           const status = getKpiStatus(kpi, key);
           const trendInfo = getTrendDisplay(kpi);
+          const kpiName = key.replace(/([A-Z])/g, ' $1').toUpperCase().trim();
           return (
-            <div
-              key={key}
-              className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm border border-teal-500/30 rounded-xl p-6 hover:border-teal-400/50 transition-all duration-300 hover:shadow-lg hover:shadow-teal-500/20"
-            >
+            <div key={key} className="group">
+              <CalculationDetails kpiName={kpiName} calculation={kpi.calculation}>
+                <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm border border-teal-500/30 rounded-xl p-6 hover:border-teal-400/50 transition-all duration-300 hover:shadow-lg hover:shadow-teal-500/20 cursor-pointer">
               {/* KPI Header */}
               <div className="flex items-start justify-between mb-4">
                 <div className="flex-1">
@@ -251,6 +252,8 @@ const DashboardQC: React.FC = () => {
                   </span>
                 </div>
               </div>
+                </div>
+              </CalculationDetails>
             </div>
           );
         })}

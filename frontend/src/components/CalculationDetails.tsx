@@ -8,23 +8,35 @@ interface CalculationDetailsProps {
     components: { [key: string]: any };
     steps: string[];
   };
+  children?: React.ReactNode;
 }
 
-export default function CalculationDetails({ kpiName, calculation }: CalculationDetailsProps) {
+export default function CalculationDetails({ kpiName, calculation, children }: CalculationDetailsProps) {
   const [isOpen, setIsOpen] = useState(false);
 
-  if (!calculation) return null;
+  if (!calculation) {
+    // If no calculation but has children, render children without click handler
+    return children ? <>{children}</> : null;
+  }
+
+  // If children provided, make them clickable; otherwise show info button
+  const trigger = children ? (
+    <div onClick={() => setIsOpen(true)}>
+      {children}
+    </div>
+  ) : (
+    <button
+      onClick={() => setIsOpen(true)}
+      className="ml-2 p-1 rounded-full hover:bg-gray-700/50 transition-colors group"
+      title="View calculation details"
+    >
+      <Info className="w-4 h-4 text-gray-400 group-hover:text-cyan-400" />
+    </button>
+  );
 
   return (
     <>
-      {/* Trigger Button */}
-      <button
-        onClick={() => setIsOpen(true)}
-        className="ml-2 p-1 rounded-full hover:bg-gray-700/50 transition-colors group"
-        title="View calculation details"
-      >
-        <Info className="w-4 h-4 text-gray-400 group-hover:text-cyan-400" />
-      </button>
+      {trigger}
 
       {/* Modal */}
       {isOpen && (

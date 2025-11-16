@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Server, HelpCircle, DollarSign, Shield, FileText, Database, Folder, Users, Clock, Cpu, AlertTriangle } from 'lucide-react';
+import CalculationDetails from '../components/CalculationDetails';
 
 interface KPI {
   name: string;
@@ -49,7 +50,6 @@ export default function DashboardAdministration() {
   const [painPointsCount, setPainPointsCount] = useState<number>(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [expandedKPI, setExpandedKPI] = useState<string | null>(null);
 
   useEffect(() => {
     fetchKPIs();
@@ -177,12 +177,16 @@ export default function DashboardAdministration() {
 
       {/* KPI Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-        {kpiArray.map((kpi) => (
-          <div
-            key={kpi.key}
-            className={`border-2 rounded-lg p-6 cursor-pointer transition-all hover:scale-105 ${getStatusColor(kpi.status)}`}
-            onClick={() => setExpandedKPI(expandedKPI === kpi.key ? null : kpi.key)}
-          >
+        {kpiArray.map((kpi) => {
+          const calculation = {
+            formula: kpi.formula,
+            components: kpi.dataPoints,
+            steps: [] as string[]
+          };
+          return (
+            <div key={kpi.key} className="group">
+              <CalculationDetails kpiName={kpi.name} calculation={calculation}>
+                <div className={`border-2 rounded-lg p-6 cursor-pointer transition-all hover:scale-105 ${getStatusColor(kpi.status)}`}>
             {/* Icon and Name */}
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
@@ -210,28 +214,11 @@ export default function DashboardAdministration() {
                 Benchmark: {kpi.benchmark}{kpi.unit}
               </div>
             </div>
-
-            {/* Expanded Details */}
-            {expandedKPI === kpi.key && (
-              <div className="mt-4 pt-4 border-t border-gray-700">
-                <div className="mb-3">
-                  <h4 className="text-sm font-semibold text-blue-400 mb-1">Calculation Formula</h4>
-                  <p className="text-xs text-gray-300 font-mono bg-gray-800/50 p-2 rounded">
-                    {kpi.formula}
-                  </p>
                 </div>
-                <div>
-                  <h4 className="text-sm font-semibold text-blue-400 mb-1">Data Points</h4>
-                  <div className="text-xs text-gray-300 bg-gray-800/50 p-2 rounded">
-                    <pre className="whitespace-pre-wrap">
-                      {JSON.stringify(kpi.dataPoints, null, 2)}
-                    </pre>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        ))}
+              </CalculationDetails>
+            </div>
+          );
+        })}
       </div>
 
       {/* Visual Separator */}

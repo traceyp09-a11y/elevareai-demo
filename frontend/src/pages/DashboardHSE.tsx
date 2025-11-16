@@ -335,37 +335,29 @@ export default function DashboardHSE() {
         {/* HSE Metrics Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           {filteredKPIs.map((kpi) => (
-            <Link
-              key={kpi.name}
-              to={`/hse/kpi/${encodeURIComponent(kpi.name)}`}
-              className="group"
-            >
-              <div className={`
-                relative overflow-hidden rounded-2xl p-6 transition-all duration-300
-                border backdrop-blur-xl
-                ${kpi.status === 'critical'
-                  ? 'bg-red-500/10 border-red-500/30 hover:border-red-400/60'
-                  : kpi.status === 'warning'
-                  ? 'bg-yellow-500/10 border-yellow-500/30 hover:border-yellow-400/60'
-                  : kpi.status === 'good'
-                  ? 'bg-blue-500/10 border-blue-500/30 hover:border-blue-400/60'
-                  : 'bg-green-500/10 border-green-500/30 hover:border-green-400/60'
-                }
-                group-hover:scale-105 group-hover:shadow-2xl
-              `}>
-                {/* Priority Badge */}
-                <div className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-xs font-bold">
-                  {kpi.priority}
-                </div>
-
-                {/* KPI Name */}
-                <div className="mb-4">
-                  <div className="flex items-center gap-2 mb-1">
-                    <h3 className="text-lg font-semibold text-gray-200">{kpi.name}</h3>
-                    <div onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}>
-                      <CalculationDetails kpiName={kpi.name} calculation={kpi.calculation} />
-                    </div>
+            <div key={kpi.name} className="group">
+              <CalculationDetails kpiName={kpi.name} calculation={kpi.calculation}>
+                <div className={`
+                  relative overflow-hidden rounded-2xl p-6 transition-all duration-300
+                  border backdrop-blur-xl cursor-pointer
+                  ${kpi.status === 'critical'
+                    ? 'bg-red-500/10 border-red-500/30 hover:border-red-400/60'
+                    : kpi.status === 'warning'
+                    ? 'bg-yellow-500/10 border-yellow-500/30 hover:border-yellow-400/60'
+                    : kpi.status === 'good'
+                    ? 'bg-blue-500/10 border-blue-500/30 hover:border-blue-400/60'
+                    : 'bg-green-500/10 border-green-500/30 hover:border-green-400/60'
+                  }
+                  group-hover:scale-105 group-hover:shadow-2xl
+                `}>
+                  {/* Priority Badge */}
+                  <div className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-xs font-bold">
+                    {kpi.priority}
                   </div>
+
+                  {/* KPI Name */}
+                  <div className="mb-4">
+                    <h3 className="text-lg font-semibold text-gray-200 mb-1">{kpi.name}</h3>
                   <div className={`text-3xl font-bold ${
                     kpi.status === 'critical' ? 'text-red-400' :
                     kpi.status === 'warning' ? 'text-yellow-400' :
@@ -403,7 +395,8 @@ export default function DashboardHSE() {
                 {/* Hover effect gradient */}
                 <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/0 via-blue-500/0 to-purple-500/0 group-hover:from-cyan-500/5 group-hover:via-blue-500/5 group-hover:to-purple-500/5 transition-all duration-300 pointer-events-none"></div>
               </div>
-            </Link>
+              </CalculationDetails>
+            </div>
           ))}
         </div>
 

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import CalculationDetails from '../components/CalculationDetails';
 
 interface KPIData {
   value: number;
@@ -41,7 +42,6 @@ export default function DashboardSupplyChain() {
   const [kpiData, setKpiData] = useState<KPIResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [selectedKPI, setSelectedKPI] = useState<string | null>(null);
 
   useEffect(() => {
     fetchKPIData();
@@ -185,11 +185,9 @@ export default function DashboardSupplyChain() {
           const statusIcon = getStatusIcon(status);
 
           return (
-            <div
-              key={key}
-              onClick={() => setSelectedKPI(selectedKPI === key ? null : key)}
-              className={`border-2 rounded-lg p-6 cursor-pointer transition-all hover:scale-105 ${statusColor}`}
-            >
+            <div key={key} className="group">
+              <CalculationDetails kpiName={formatKpiName(key)} calculation={kpi.calculation}>
+                <div className={`border-2 rounded-lg p-6 cursor-pointer transition-all hover:scale-105 ${statusColor}`}>
               <div className="flex items-start justify-between mb-2">
                 <h3 className="text-sm font-semibold text-gray-300 uppercase tracking-wide">
                   {formatKpiName(key)}
@@ -205,92 +203,12 @@ export default function DashboardSupplyChain() {
                   {kpi.displayValue.includes('%') ? '%' : kpi.displayValue.includes('days') ? ' days' : kpi.displayValue.includes('x') ? 'x' : ''}
                 </div>
               )}
+                </div>
+              </CalculationDetails>
             </div>
           );
         })}
       </div>
-
-      {/* KPI Detail Section */}
-      {selectedKPI && kpiData.kpis[selectedKPI as keyof typeof kpiData.kpis] && (
-        <div className="bg-gray-800/50 border border-orange-500/30 rounded-lg p-6 mb-8 backdrop-blur-sm">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-2xl font-bold text-orange-400">
-              {formatKpiName(selectedKPI)}
-            </h2>
-            <button
-              onClick={() => setSelectedKPI(null)}
-              className="text-gray-400 hover:text-white text-2xl"
-            >
-              ✕
-            </button>
-          </div>
-
-          {(() => {
-            const kpi = kpiData.kpis[selectedKPI as keyof typeof kpiData.kpis];
-            return (
-              <div className="space-y-6">
-                {/* Current Value & Benchmark */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="bg-gray-900/50 rounded-lg p-4">
-                    <div className="text-sm text-gray-400 mb-1">Current Value</div>
-                    <div className="text-4xl font-bold text-orange-400">{kpi.displayValue}</div>
-                  </div>
-                  {kpi.benchmark && (
-                    <div className="bg-gray-900/50 rounded-lg p-4">
-                      <div className="text-sm text-gray-400 mb-1">Benchmark</div>
-                      <div className="text-2xl font-semibold text-blue-400">
-                        {kpi.benchmark.value}
-                        {kpi.displayValue.includes('%') ? '%' : kpi.displayValue.includes('days') ? ' days' : kpi.displayValue.includes('x') ? 'x' : ''}
-                      </div>
-                      <div className="text-xs text-gray-500 mt-1">{kpi.benchmark.description}</div>
-                    </div>
-                  )}
-                </div>
-
-                {/* Formula */}
-                <div className="bg-gray-900/50 rounded-lg p-4">
-                  <h3 className="text-sm font-semibold text-orange-400 mb-2 uppercase">Calculation Formula</h3>
-                  <div className="font-mono text-sm text-gray-300 bg-black/30 rounded p-3">
-                    {kpi.calculation.formula}
-                  </div>
-                </div>
-
-                {/* Components */}
-                <div className="bg-gray-900/50 rounded-lg p-4">
-                  <h3 className="text-sm font-semibold text-orange-400 mb-3 uppercase">Components</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                    {Object.entries(kpi.calculation.components).map(([compKey, compValue]) => (
-                      <div key={compKey} className="bg-black/30 rounded p-3">
-                        <div className="text-xs text-gray-400 capitalize">
-                          {compKey.replace(/([A-Z])/g, ' $1').trim()}
-                        </div>
-                        <div className="text-sm font-semibold text-white mt-1">
-                          {typeof compValue === 'number'
-                            ? compValue.toLocaleString(undefined, { maximumFractionDigits: 2 })
-                            : compValue}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Calculation Steps */}
-                <div className="bg-gray-900/50 rounded-lg p-4">
-                  <h3 className="text-sm font-semibold text-orange-400 mb-3 uppercase">Calculation Steps</h3>
-                  <ol className="space-y-2">
-                    {kpi.calculation.steps.map((step, index) => (
-                      <li key={index} className="flex gap-3">
-                        <span className="text-orange-400 font-semibold">{index + 1}.</span>
-                        <span className="text-gray-300">{step}</span>
-                      </li>
-                    ))}
-                  </ol>
-                </div>
-              </div>
-            );
-          })()}
-        </div>
-      )}
 
       {/* Summary Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">

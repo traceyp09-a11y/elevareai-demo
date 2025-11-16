@@ -5,6 +5,7 @@ import {
   Activity, Clock, CheckCircle, LifeBuoy, ChevronDown,
   ChevronUp, AlertCircle
 } from 'lucide-react';
+import CalculationDetails from '../components/CalculationDetails';
 
 interface KPI {
   name: string;
@@ -59,7 +60,6 @@ const DashboardCustomerSuccess: React.FC = () => {
   const [painPoints, setPainPoints] = useState<PainPointsResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [expandedKPI, setExpandedKPI] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -122,13 +122,16 @@ const DashboardCustomerSuccess: React.FC = () => {
     icon: React.ReactNode,
     bgGradient: string
   ) => {
-    const isExpanded = expandedKPI === kpiKey;
+    const calculation = {
+      formula: kpi.formula,
+      components: kpi.dataPoints,
+      steps: [] as string[]
+    };
 
     return (
-      <div
-        key={kpiKey}
-        className={`bg-gray-800 rounded-lg border-2 ${getStatusColor(kpi.status)} p-6 hover:shadow-lg transition-all duration-200`}
-      >
+      <div key={kpiKey} className="group">
+        <CalculationDetails kpiName={kpi.name} calculation={calculation}>
+          <div className={`bg-gray-800 rounded-lg border-2 ${getStatusColor(kpi.status)} p-6 hover:shadow-lg transition-all duration-200 cursor-pointer`}>
         <div className="flex items-start justify-between mb-4">
           <div className={`p-3 rounded-lg bg-gradient-to-br ${bgGradient}`}>
             {icon}
@@ -151,48 +154,8 @@ const DashboardCustomerSuccess: React.FC = () => {
             Benchmark: {kpi.benchmark}{kpi.unit}
           </span>
         </div>
-
-        <button
-          onClick={() => toggleKPIExpansion(kpiKey)}
-          className="w-full flex items-center justify-center gap-2 text-teal-400 hover:text-teal-300 text-sm font-medium transition-colors"
-        >
-          {isExpanded ? (
-            <>
-              <ChevronUp size={16} />
-              Hide Calculation
-            </>
-          ) : (
-            <>
-              <ChevronDown size={16} />
-              Show Calculation
-            </>
-          )}
-        </button>
-
-        {isExpanded && kpi.formula && (
-          <div className="mt-4 pt-4 border-t border-gray-700 space-y-3">
-            <div>
-              <h4 className="text-teal-400 text-xs font-semibold mb-1">Formula</h4>
-              <code className="text-gray-300 text-xs bg-gray-900 px-2 py-1 rounded block">
-                {kpi.formula}
-              </code>
-            </div>
-
-            <div>
-              <h4 className="text-teal-400 text-xs font-semibold mb-2">Data Points</h4>
-              <div className="space-y-1">
-                {Object.entries(kpi.dataPoints).map(([key, value], index) => (
-                  <div key={index} className="flex justify-between text-xs">
-                    <span className="text-gray-400">{key}:</span>
-                    <span className="text-gray-200 font-mono">
-                      {typeof value === 'object' ? JSON.stringify(value) : String(value)}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
           </div>
-        )}
+        </CalculationDetails>
       </div>
     );
   };

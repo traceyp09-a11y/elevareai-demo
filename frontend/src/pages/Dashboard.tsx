@@ -17,6 +17,7 @@ import {
 } from 'recharts';
 import DashboardFilters from '../components/DashboardFilters';
 import AlertBanner from '../components/AlertBanner';
+import CalculationDetails from '../components/CalculationDetails';
 
 interface KPIData {
   value: number;
@@ -24,6 +25,11 @@ interface KPIData {
   benchmark?: {
     value: number;
     status: 'above' | 'at' | 'below';
+  };
+  calculation?: {
+    formula: string;
+    components: { [key: string]: any };
+    steps: string[];
   };
 }
 
@@ -477,17 +483,14 @@ function Dashboard() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredKPIs.map((kpi, index) => (
-              <Link
-                key={kpi.key}
-                to={`/kpi/${kpi.key}`}
-                className="group relative"
-              >
+              <div key={kpi.key} className="group relative">
                 {/* Priority Badge */}
                 <div className="absolute -top-2 -left-2 z-10 w-8 h-8 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-full flex items-center justify-center text-xs font-bold text-white shadow-lg">
                   {kpi.priority}
                 </div>
 
-                <div className="h-full bg-gradient-to-br from-gray-800/80 to-gray-900/80 border border-gray-700 rounded-xl p-6 backdrop-blur-sm hover:border-cyan-500/50 transition-all duration-300 hover:shadow-xl hover:shadow-cyan-500/20 hover:-translate-y-1">
+                <CalculationDetails kpiName={kpi.name} calculation={kpi.data.calculation}>
+                  <div className="h-full bg-gradient-to-br from-gray-800/80 to-gray-900/80 border border-gray-700 rounded-xl p-6 backdrop-blur-sm hover:border-cyan-500/50 transition-all duration-300 hover:shadow-xl hover:shadow-cyan-500/20 hover:-translate-y-1 cursor-pointer">
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex-1">
                       <div className="text-4xl mb-3 group-hover:scale-110 transition-transform inline-block">
@@ -544,7 +547,8 @@ function Dashboard() {
                     </span>
                   </div>
                 </div>
-              </Link>
+                </CalculationDetails>
+              </div>
             ))}
           </div>
         </div>

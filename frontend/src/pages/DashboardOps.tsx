@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { AreaChart, Area, BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import DashboardFilters from '../components/DashboardFilters';
 import AlertBanner, { Alert } from '../components/AlertBanner';
+import CalculationDetails from '../components/CalculationDetails';
 
 interface KPIData {
   name: string;
@@ -19,6 +20,11 @@ interface KPIData {
   benchmark?: {
     value: number;
     status: 'above' | 'at' | 'below';
+  };
+  calculation?: {
+    formula: string;
+    components: { [key: string]: any };
+    steps: string[];
   };
 }
 
@@ -230,7 +236,8 @@ export default function DashboardOps() {
         priority: kpi.priority,
         status,
         trend: kpiData.trend,
-        benchmark: kpiData.benchmark
+        benchmark: kpiData.benchmark,
+        calculation: kpiData.calculation
       };
     });
   };
@@ -362,18 +369,19 @@ export default function DashboardOps() {
         {/* KPI Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredKPIs.map((kpi) => (
-            <div
-              key={kpi.name}
-              className={`bg-gray-800/50 backdrop-blur-sm rounded-lg p-6 border ${
-                kpi.status === 'critical'
-                  ? 'border-red-500/50 shadow-lg shadow-red-500/20'
-                  : kpi.status === 'warning'
-                  ? 'border-yellow-500/50 shadow-lg shadow-yellow-500/20'
-                  : kpi.status === 'excellent'
-                  ? 'border-green-500/50 shadow-lg shadow-green-500/20'
-                  : 'border-blue-500/30'
-              } hover:shadow-xl transition-all duration-300 cursor-pointer group`}
-            >
+            <div key={kpi.name} className="group">
+              <CalculationDetails kpiName={kpi.name} calculation={kpi.calculation}>
+                <div
+                  className={`bg-gray-800/50 backdrop-blur-sm rounded-lg p-6 border ${
+                    kpi.status === 'critical'
+                      ? 'border-red-500/50 shadow-lg shadow-red-500/20'
+                      : kpi.status === 'warning'
+                      ? 'border-yellow-500/50 shadow-lg shadow-yellow-500/20'
+                      : kpi.status === 'excellent'
+                      ? 'border-green-500/50 shadow-lg shadow-green-500/20'
+                      : 'border-blue-500/30'
+                  } hover:shadow-xl transition-all duration-300 cursor-pointer`}
+                >
               {/* Status Badge */}
               <div className="flex items-center justify-between mb-4">
                 <span className="text-xs font-semibold text-gray-500">RANK #{kpi.priority}</span>
@@ -451,6 +459,8 @@ export default function DashboardOps() {
                   {kpi.trend.change > 0 ? '↑' : '↓'} {Math.abs(kpi.trend.changePercent).toFixed(1)}% vs previous period
                 </div>
               )}
+                </div>
+              </CalculationDetails>
             </div>
           ))}
         </div>

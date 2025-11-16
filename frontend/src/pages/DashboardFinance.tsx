@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import CalculationDetails from '../components/CalculationDetails';
 
 interface KPIResult {
   kpiName: string;
@@ -45,7 +46,6 @@ const DashboardFinance: React.FC = () => {
   const [painPoints, setPainPoints] = useState<PainPoint[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [selectedKPI, setSelectedKPI] = useState<KPIResult | null>(null);
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
 
   useEffect(() => {
@@ -218,12 +218,16 @@ const DashboardFinance: React.FC = () => {
 
       {/* KPI Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 mb-8">
-        {kpiArray.map((kpi, index) => (
-          <div
-            key={index}
-            className={`border-2 rounded-lg p-6 cursor-pointer transition-all hover:scale-105 ${getStatusColor(kpi.status)}`}
-            onClick={() => setSelectedKPI(selectedKPI?.kpiName === kpi.kpiName ? null : kpi)}
-          >
+        {kpiArray.map((kpi, index) => {
+          const calculation = {
+            formula: kpi.formula,
+            components: kpi.components,
+            steps: kpi.calculationSteps
+          };
+          return (
+            <div key={index} className="group">
+              <CalculationDetails kpiName={kpi.kpiName} calculation={calculation}>
+                <div className={`border-2 rounded-lg p-6 cursor-pointer transition-all hover:scale-105 ${getStatusColor(kpi.status)}`}>
             <div className="flex items-start justify-between mb-2">
               <h3 className="text-sm font-semibold text-gray-300 uppercase tracking-wide flex-1">
                 {kpi.kpiName}
@@ -237,86 +241,12 @@ const DashboardFinance: React.FC = () => {
             <div className="text-sm text-gray-400">
               Target: {kpi.benchmark.toLocaleString()}{kpi.unit}
             </div>
-          </div>
-        ))}
+                </div>
+              </CalculationDetails>
+            </div>
+          );
+        })}
       </div>
-
-      {/* Selected KPI Detail Panel */}
-      {selectedKPI && (
-        <div className="bg-gray-800/50 border-2 border-green-500 rounded-lg p-6 mb-8">
-          <div className="flex justify-between items-start mb-6">
-            <h2 className="text-2xl font-bold text-white">{selectedKPI.kpiName} - Detailed Analysis</h2>
-            <button
-              onClick={() => setSelectedKPI(null)}
-              className="text-gray-400 hover:text-white text-2xl"
-            >
-              ×
-            </button>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Current Value vs Benchmark */}
-            <div className="bg-gray-700/30 p-4 rounded-lg">
-              <h3 className="text-lg font-semibold mb-3 text-green-400">Current Performance</h3>
-              <div className="space-y-2">
-                <div className="flex justify-between">
-                  <span className="text-gray-300">Current Value:</span>
-                  <span className="font-bold text-green-400">
-                    {selectedKPI.value.toLocaleString()} {selectedKPI.unit}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-300">Benchmark:</span>
-                  <span className="font-bold text-gray-200">{selectedKPI.benchmark.toLocaleString()} {selectedKPI.unit}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-300">Status:</span>
-                  <span className="font-bold text-gray-200">{selectedKPI.status}</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Formula */}
-            <div className="bg-gray-700/30 p-4 rounded-lg">
-              <h3 className="text-lg font-semibold mb-3 text-green-400">Calculation Formula</h3>
-              <p className="text-sm font-mono bg-gray-900/50 text-gray-200 p-3 rounded border border-gray-600">
-                {selectedKPI.formula}
-              </p>
-            </div>
-
-            {/* Components */}
-            <div className="bg-gray-700/30 p-4 rounded-lg">
-              <h3 className="text-lg font-semibold mb-3 text-green-400">Components</h3>
-              <div className="space-y-2">
-                {Object.entries(selectedKPI.components).map(([key, value]) => (
-                  <div key={key} className="flex justify-between text-sm">
-                    <span className="text-gray-300 capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}:</span>
-                    <span className="font-medium text-gray-200">
-                      {typeof value === 'number' ? value.toLocaleString() : value}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Calculation Steps */}
-            <div className="bg-gray-700/30 p-4 rounded-lg">
-              <h3 className="text-lg font-semibold mb-3 text-green-400">Calculation Steps</h3>
-              <ol className="space-y-2 text-sm">
-                {selectedKPI.calculationSteps.map((step, idx) => (
-                  <li key={idx} className="text-gray-300">{step}</li>
-                ))}
-              </ol>
-            </div>
-          </div>
-
-          {/* Industry Context */}
-          <div className="mt-6 bg-green-500/10 p-4 rounded-lg border border-green-500/30">
-            <h3 className="text-lg font-semibold mb-2 text-green-400">Industry Context</h3>
-            <p className="text-sm text-gray-300">{selectedKPI.industryContext}</p>
-          </div>
-        </div>
-      )}
 
       {/* Separator */}
       <div className="my-8 border-t-2 border-green-500/30"></div>
