@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { AreaChart, Area, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import DashboardFilters from '../components/DashboardFilters';
 import AlertBanner, { Alert } from '../components/AlertBanner';
+import CalculationDetails from '../components/CalculationDetails';
 
 interface KPIData {
   name: string;
@@ -19,6 +20,11 @@ interface KPIData {
   benchmark?: {
     value: number;
     status: 'above' | 'at' | 'below';
+  };
+  calculation?: {
+    formula: string;
+    components: { [key: string]: any };
+    steps: string[];
   };
 }
 
@@ -157,7 +163,8 @@ export default function DashboardHSE() {
         priority: 1,
         target: 3.0,
         status: data.kpis['TRIR']?.value < 2.0 ? 'excellent' : data.kpis['TRIR']?.value < 3.0 ? 'good' : data.kpis['TRIR']?.value < 4.0 ? 'warning' : 'critical',
-        benchmark: data.kpis['TRIR']?.benchmark
+        benchmark: data.kpis['TRIR']?.benchmark,
+        calculation: data.kpis['TRIR']?.calculation
       },
       {
         name: 'LTIFR',
@@ -166,7 +173,8 @@ export default function DashboardHSE() {
         priority: 2,
         target: 1.0,
         status: data.kpis['LTIFR']?.value < 0.5 ? 'excellent' : data.kpis['LTIFR']?.value < 1.0 ? 'good' : data.kpis['LTIFR']?.value < 2.0 ? 'warning' : 'critical',
-        benchmark: data.kpis['LTIFR']?.benchmark
+        benchmark: data.kpis['LTIFR']?.benchmark,
+        calculation: data.kpis['LTIFR']?.calculation
       },
       {
         name: 'PPE Compliance',
@@ -175,7 +183,8 @@ export default function DashboardHSE() {
         priority: 3,
         target: 95,
         status: data.kpis['PPE Compliance']?.value >= 98 ? 'excellent' : data.kpis['PPE Compliance']?.value >= 95 ? 'good' : data.kpis['PPE Compliance']?.value >= 90 ? 'warning' : 'critical',
-        benchmark: data.kpis['PPE Compliance']?.benchmark
+        benchmark: data.kpis['PPE Compliance']?.benchmark,
+        calculation: data.kpis['PPE Compliance']?.calculation
       },
       {
         name: 'Environmental Compliance',
@@ -184,7 +193,8 @@ export default function DashboardHSE() {
         priority: 4,
         target: 98,
         status: data.kpis['Environmental Compliance']?.value >= 99 ? 'excellent' : data.kpis['Environmental Compliance']?.value >= 98 ? 'good' : data.kpis['Environmental Compliance']?.value >= 95 ? 'warning' : 'critical',
-        benchmark: data.kpis['Environmental Compliance']?.benchmark
+        benchmark: data.kpis['Environmental Compliance']?.benchmark,
+        calculation: data.kpis['Environmental Compliance']?.calculation
       },
       {
         name: 'Safety Audit Score',
@@ -193,7 +203,8 @@ export default function DashboardHSE() {
         priority: 5,
         target: 90,
         status: data.kpis['Safety Audit Score']?.value >= 95 ? 'excellent' : data.kpis['Safety Audit Score']?.value >= 90 ? 'good' : data.kpis['Safety Audit Score']?.value >= 85 ? 'warning' : 'critical',
-        benchmark: data.kpis['Safety Audit Score']?.benchmark
+        benchmark: data.kpis['Safety Audit Score']?.benchmark,
+        calculation: data.kpis['Safety Audit Score']?.calculation
       },
       {
         name: 'Safety Training Rate',
@@ -202,7 +213,8 @@ export default function DashboardHSE() {
         priority: 6,
         target: 95,
         status: data.kpis['Safety Training Rate']?.value >= 98 ? 'excellent' : data.kpis['Safety Training Rate']?.value >= 95 ? 'good' : data.kpis['Safety Training Rate']?.value >= 90 ? 'warning' : 'critical',
-        benchmark: data.kpis['Safety Training Rate']?.benchmark
+        benchmark: data.kpis['Safety Training Rate']?.benchmark,
+        calculation: data.kpis['Safety Training Rate']?.calculation
       },
       {
         name: 'Near Miss Rate',
@@ -211,7 +223,8 @@ export default function DashboardHSE() {
         priority: 7,
         target: 10,
         status: data.kpis['Near Miss Rate']?.value >= 15 ? 'excellent' : data.kpis['Near Miss Rate']?.value >= 10 ? 'good' : data.kpis['Near Miss Rate']?.value >= 5 ? 'warning' : 'critical',
-        benchmark: data.kpis['Near Miss Rate']?.benchmark
+        benchmark: data.kpis['Near Miss Rate']?.benchmark,
+        calculation: data.kpis['Near Miss Rate']?.calculation
       },
       {
         name: 'Hazard Identification Rate',
@@ -220,7 +233,8 @@ export default function DashboardHSE() {
         priority: 8,
         target: 15,
         status: data.kpis['Hazard Identification Rate']?.value >= 20 ? 'excellent' : data.kpis['Hazard Identification Rate']?.value >= 15 ? 'good' : data.kpis['Hazard Identification Rate']?.value >= 10 ? 'warning' : 'critical',
-        benchmark: data.kpis['Hazard Identification Rate']?.benchmark
+        benchmark: data.kpis['Hazard Identification Rate']?.benchmark,
+        calculation: data.kpis['Hazard Identification Rate']?.calculation
       },
       {
         name: 'Emergency Preparedness',
@@ -229,7 +243,8 @@ export default function DashboardHSE() {
         priority: 9,
         target: 90,
         status: data.kpis['Emergency Preparedness']?.value >= 95 ? 'excellent' : data.kpis['Emergency Preparedness']?.value >= 90 ? 'good' : data.kpis['Emergency Preparedness']?.value >= 85 ? 'warning' : 'critical',
-        benchmark: data.kpis['Emergency Preparedness']?.benchmark
+        benchmark: data.kpis['Emergency Preparedness']?.benchmark,
+        calculation: data.kpis['Emergency Preparedness']?.calculation
       },
       {
         name: 'Investigation Closure Time',
@@ -238,7 +253,8 @@ export default function DashboardHSE() {
         priority: 10,
         target: 30,
         status: data.kpis['Investigation Closure Time']?.value <= 20 ? 'excellent' : data.kpis['Investigation Closure Time']?.value <= 30 ? 'good' : data.kpis['Investigation Closure Time']?.value <= 45 ? 'warning' : 'critical',
-        benchmark: data.kpis['Investigation Closure Time']?.benchmark
+        benchmark: data.kpis['Investigation Closure Time']?.benchmark,
+        calculation: data.kpis['Investigation Closure Time']?.calculation
       }
     ];
   };
@@ -344,7 +360,12 @@ export default function DashboardHSE() {
 
                 {/* KPI Name */}
                 <div className="mb-4">
-                  <h3 className="text-lg font-semibold text-gray-200 mb-1">{kpi.name}</h3>
+                  <div className="flex items-center gap-2 mb-1">
+                    <h3 className="text-lg font-semibold text-gray-200">{kpi.name}</h3>
+                    <div onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}>
+                      <CalculationDetails kpiName={kpi.name} calculation={kpi.calculation} />
+                    </div>
+                  </div>
                   <div className={`text-3xl font-bold ${
                     kpi.status === 'critical' ? 'text-red-400' :
                     kpi.status === 'warning' ? 'text-yellow-400' :
