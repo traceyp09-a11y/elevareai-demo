@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useMemo } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import {
   LineChart,
   Line,
@@ -28,61 +28,314 @@ interface ReportTemplate {
   metrics: string[];
 }
 
-const REPORT_TEMPLATES: ReportTemplate[] = [
-  {
-    id: 'executive-summary',
-    name: 'Executive Summary',
-    description: 'High-level overview of all key HR metrics for C-suite presentations',
-    icon: '📊',
-    type: 'executive',
-    metrics: ['turnover', 'engagement', 'productivity', 'revenue-per-employee']
-  },
-  {
-    id: 'workforce-analytics',
-    name: 'Workforce Analytics',
-    description: 'Detailed workforce composition, turnover, and productivity analysis',
-    icon: '👥',
-    type: 'operational',
-    metrics: ['headcount', 'turnover', 'absenteeism', 'demographics']
-  },
-  {
-    id: 'recruitment-performance',
-    name: 'Recruitment Performance',
-    description: 'Hiring efficiency, time-to-hire, and candidate quality metrics',
-    icon: '🎯',
-    type: 'operational',
-    metrics: ['time-to-hire', 'cost-per-hire', 'offer-acceptance', 'quality-of-hire']
-  },
-  {
-    id: 'safety-compliance',
-    name: 'Safety & Compliance',
-    description: 'OSHA compliance, incident tracking, and safety training effectiveness',
-    icon: '🛡️',
-    type: 'compliance',
-    metrics: ['trir', 'incident-rate', 'safety-training', 'compliance-score']
-  },
-  {
-    id: 'compensation-benefits',
-    name: 'Compensation & Benefits',
-    description: 'Pay equity, benefits utilization, and total rewards analysis',
-    icon: '💰',
-    type: 'operational',
-    metrics: ['compensation-ratio', 'benefits-cost', 'pay-equity', 'retention']
-  },
-  {
-    id: 'learning-development',
-    name: 'Learning & Development',
-    description: 'Training ROI, skill development, and career progression metrics',
-    icon: '🎓',
-    type: 'operational',
-    metrics: ['training-roi', 'completion-rate', 'skill-gap', 'career-progression']
-  }
-];
+// Department-specific report templates
+const getReportTemplates = (department: string): ReportTemplate[] => {
+  const templates: { [key: string]: ReportTemplate[] } = {
+    hr: [
+      {
+        id: 'executive-summary',
+        name: 'HR Executive Summary',
+        description: 'High-level overview of all key HR metrics for C-suite presentations',
+        icon: '📊',
+        type: 'executive',
+        metrics: ['turnover', 'engagement', 'productivity', 'revenue-per-employee']
+      },
+      {
+        id: 'workforce-analytics',
+        name: 'Workforce Analytics',
+        description: 'Detailed workforce composition, turnover, and productivity analysis',
+        icon: '👥',
+        type: 'operational',
+        metrics: ['headcount', 'turnover', 'absenteeism', 'demographics']
+      },
+      {
+        id: 'recruitment-performance',
+        name: 'Recruitment Performance',
+        description: 'Hiring efficiency, time-to-hire, and candidate quality metrics',
+        icon: '🎯',
+        type: 'operational',
+        metrics: ['time-to-hire', 'cost-per-hire', 'offer-acceptance', 'quality-of-hire']
+      }
+    ],
+    hse: [
+      {
+        id: 'safety-overview',
+        name: 'Safety Overview',
+        description: 'Comprehensive safety metrics including TRIR, LTIFR, and incident trends',
+        icon: '🦺',
+        type: 'executive',
+        metrics: ['trir', 'ltifr', 'near-miss-rate', 'safety-training']
+      },
+      {
+        id: 'incident-analysis',
+        name: 'Incident Analysis',
+        description: 'Detailed incident tracking, root cause analysis, and corrective actions',
+        icon: '🚨',
+        type: 'operational',
+        metrics: ['incidents', 'lost-time-injuries', 'investigation-time', 'corrective-actions']
+      },
+      {
+        id: 'compliance-report',
+        name: 'Safety Compliance',
+        description: 'OSHA compliance, audit scores, and regulatory reporting',
+        icon: '📋',
+        type: 'compliance',
+        metrics: ['osha-compliance', 'audit-score', 'training-completion', 'ppe-compliance']
+      }
+    ],
+    ops: [
+      {
+        id: 'operations-overview',
+        name: 'Operations Overview',
+        description: 'Key operational metrics including OEE, downtime, and throughput',
+        icon: '⚙️',
+        type: 'executive',
+        metrics: ['oee', 'downtime', 'throughput', 'capacity-utilization']
+      },
+      {
+        id: 'production-analysis',
+        name: 'Production Analysis',
+        description: 'Detailed production metrics, efficiency trends, and bottleneck analysis',
+        icon: '🏭',
+        type: 'operational',
+        metrics: ['production-volume', 'cycle-time', 'changeover-time', 'scrap-rate']
+      },
+      {
+        id: 'maintenance-report',
+        name: 'Maintenance Report',
+        description: 'Equipment reliability, maintenance costs, and preventive maintenance metrics',
+        icon: '🔧',
+        type: 'operational',
+        metrics: ['mtbf', 'mttr', 'maintenance-cost', 'pm-completion']
+      }
+    ],
+    qc: [
+      {
+        id: 'quality-overview',
+        name: 'Quality Overview',
+        description: 'Quality metrics including defect rates, first pass yield, and customer returns',
+        icon: '✅',
+        type: 'executive',
+        metrics: ['defect-rate', 'first-pass-yield', 'customer-returns', 'scrap-rate']
+      },
+      {
+        id: 'inspection-analysis',
+        name: 'Inspection Analysis',
+        description: 'Inspection results, non-conformance trends, and corrective actions',
+        icon: '🔍',
+        type: 'operational',
+        metrics: ['inspection-pass-rate', 'non-conformances', 'capa-completion', 'audit-findings']
+      },
+      {
+        id: 'supplier-quality',
+        name: 'Supplier Quality',
+        description: 'Incoming quality metrics, supplier scorecards, and material defects',
+        icon: '📦',
+        type: 'operational',
+        metrics: ['incoming-quality', 'supplier-defects', 'material-rejections', 'supplier-audits']
+      }
+    ],
+    supplychain: [
+      {
+        id: 'supply-chain-overview',
+        name: 'Supply Chain Overview',
+        description: 'Key supply chain metrics including OTIF, inventory turns, and order accuracy',
+        icon: '🚚',
+        type: 'executive',
+        metrics: ['otif', 'inventory-turnover', 'order-accuracy', 'lead-time']
+      },
+      {
+        id: 'inventory-analysis',
+        name: 'Inventory Analysis',
+        description: 'Inventory levels, stock-outs, excess inventory, and carrying costs',
+        icon: '📊',
+        type: 'operational',
+        metrics: ['inventory-value', 'stockouts', 'excess-stock', 'carrying-cost']
+      },
+      {
+        id: 'logistics-performance',
+        name: 'Logistics Performance',
+        description: 'Shipping performance, freight costs, and delivery reliability',
+        icon: '🚛',
+        type: 'operational',
+        metrics: ['on-time-delivery', 'freight-cost', 'claims-rate', 'carrier-performance']
+      }
+    ],
+    finance: [
+      {
+        id: 'financial-overview',
+        name: 'Financial Overview',
+        description: 'Key financial metrics including profit margins, cash flow, and ROI',
+        icon: '💰',
+        type: 'executive',
+        metrics: ['gross-margin', 'ebitda', 'operating-cash-flow', 'roi']
+      },
+      {
+        id: 'pnl-analysis',
+        name: 'P&L Analysis',
+        description: 'Detailed profit and loss analysis with variance reporting',
+        icon: '📈',
+        type: 'operational',
+        metrics: ['revenue', 'cogs', 'operating-expenses', 'net-income']
+      },
+      {
+        id: 'cash-flow-report',
+        name: 'Cash Flow Report',
+        description: 'Cash flow analysis, working capital, and liquidity metrics',
+        icon: '💵',
+        type: 'operational',
+        metrics: ['operating-cash-flow', 'investing-cash-flow', 'financing-cash-flow', 'working-capital']
+      }
+    ],
+    sales: [
+      {
+        id: 'sales-overview',
+        name: 'Sales Overview',
+        description: 'Sales performance metrics including revenue growth, win rate, and pipeline',
+        icon: '💼',
+        type: 'executive',
+        metrics: ['revenue-growth', 'win-rate', 'pipeline-value', 'quota-attainment']
+      },
+      {
+        id: 'sales-pipeline',
+        name: 'Sales Pipeline',
+        description: 'Pipeline analysis, deal stages, and conversion rates',
+        icon: '🎯',
+        type: 'operational',
+        metrics: ['pipeline-coverage', 'stage-conversion', 'deal-velocity', 'average-deal-size']
+      },
+      {
+        id: 'sales-rep-performance',
+        name: 'Sales Rep Performance',
+        description: 'Individual rep performance, activities, and quota achievement',
+        icon: '👤',
+        type: 'operational',
+        metrics: ['rep-quota', 'activities', 'meetings-booked', 'deals-closed']
+      }
+    ],
+    'customer-success': [
+      {
+        id: 'cs-overview',
+        name: 'Customer Success Overview',
+        description: 'Customer health metrics including NPS, churn, and satisfaction scores',
+        icon: '❤️',
+        type: 'executive',
+        metrics: ['nps', 'churn-rate', 'csat', 'customer-health']
+      },
+      {
+        id: 'retention-analysis',
+        name: 'Retention Analysis',
+        description: 'Customer retention, expansion, and at-risk account analysis',
+        icon: '🔄',
+        type: 'operational',
+        metrics: ['retention-rate', 'expansion-mrr', 'at-risk-accounts', 'churn-reasons']
+      },
+      {
+        id: 'support-metrics',
+        name: 'Support Metrics',
+        description: 'Support ticket metrics, resolution times, and customer satisfaction',
+        icon: '🎫',
+        type: 'operational',
+        metrics: ['ticket-volume', 'resolution-time', 'first-response-time', 'satisfaction']
+      }
+    ],
+    marketing: [
+      {
+        id: 'marketing-overview',
+        name: 'Marketing Overview',
+        description: 'Marketing performance including ROI, lead generation, and conversion rates',
+        icon: '📢',
+        type: 'executive',
+        metrics: ['marketing-roi', 'mql', 'sql', 'conversion-rate']
+      },
+      {
+        id: 'campaign-performance',
+        name: 'Campaign Performance',
+        description: 'Campaign analysis, channel performance, and attribution',
+        icon: '🎯',
+        type: 'operational',
+        metrics: ['campaign-roi', 'channel-performance', 'cpl', 'cpa']
+      },
+      {
+        id: 'content-marketing',
+        name: 'Content Marketing',
+        description: 'Content performance, engagement metrics, and SEO rankings',
+        icon: '📝',
+        type: 'operational',
+        metrics: ['content-engagement', 'organic-traffic', 'seo-rankings', 'social-shares']
+      }
+    ],
+    administration: [
+      {
+        id: 'it-overview',
+        name: 'IT Overview',
+        description: 'IT metrics including system uptime, helpdesk performance, and security',
+        icon: '💻',
+        type: 'executive',
+        metrics: ['system-uptime', 'ticket-resolution', 'security-incidents', 'user-satisfaction']
+      },
+      {
+        id: 'infrastructure-report',
+        name: 'Infrastructure Report',
+        description: 'Infrastructure health, capacity utilization, and performance metrics',
+        icon: '🖥️',
+        type: 'operational',
+        metrics: ['server-uptime', 'capacity-utilization', 'backup-success', 'network-performance']
+      },
+      {
+        id: 'security-report',
+        name: 'Security Report',
+        description: 'Security incidents, vulnerabilities, and compliance status',
+        icon: '🔒',
+        type: 'compliance',
+        metrics: ['security-incidents', 'vulnerabilities', 'patch-compliance', 'audit-findings']
+      }
+    ]
+  };
+
+  return templates[department] || templates.hr;
+};
+
+const getDepartmentInfo = (department: string): { name: string; backLink: string; icon: string } => {
+  const info: { [key: string]: { name: string; backLink: string; icon: string } } = {
+    hr: { name: 'HR Analytics', backLink: '/', icon: '👥' },
+    hse: { name: 'HSE Analytics', backLink: '/hse', icon: '🦺' },
+    ops: { name: 'Operations', backLink: '/ops', icon: '⚙️' },
+    qc: { name: 'Quality Control', backLink: '/qc', icon: '✅' },
+    supplychain: { name: 'Supply Chain', backLink: '/supplychain', icon: '🚚' },
+    finance: { name: 'Finance', backLink: '/finance', icon: '💰' },
+    sales: { name: 'Sales', backLink: '/sales', icon: '💼' },
+    'customer-success': { name: 'Customer Success', backLink: '/customer-success', icon: '❤️' },
+    marketing: { name: 'Marketing', backLink: '/marketing', icon: '📢' },
+    administration: { name: 'IT & Administration', backLink: '/administration', icon: '💻' }
+  };
+
+  return info[department] || info.hr;
+};
 
 export default function CustomReports() {
+  const location = useLocation();
   const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
   const [timeRange, setTimeRange] = useState<TimeRange>('1y');
   const [generatingReport, setGeneratingReport] = useState(false);
+
+  // Detect department from URL
+  const department = useMemo(() => {
+    const path = location.pathname;
+    if (path.startsWith('/hse/')) return 'hse';
+    if (path.startsWith('/ops/')) return 'ops';
+    if (path.startsWith('/qc/')) return 'qc';
+    if (path.startsWith('/supplychain/')) return 'supplychain';
+    if (path.startsWith('/finance/')) return 'finance';
+    if (path.startsWith('/sales/')) return 'sales';
+    if (path.startsWith('/customer-success/')) return 'customer-success';
+    if (path.startsWith('/marketing/')) return 'marketing';
+    if (path.startsWith('/administration/')) return 'administration';
+    return 'hr';
+  }, [location.pathname]);
+
+  const REPORT_TEMPLATES = useMemo(() => getReportTemplates(department), [department]);
+  const deptInfo = useMemo(() => getDepartmentInfo(department), [department]);
 
   // Mock data for charts
   const executiveSummaryData = [
@@ -121,13 +374,14 @@ export default function CustomReports() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent mb-2">
-              Custom Reports
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent mb-2 flex items-center gap-3">
+              <span>{deptInfo.icon}</span>
+              {deptInfo.name} Reports
             </h1>
-            <p className="text-gray-400 text-lg">Generate comprehensive HR analytics reports</p>
+            <p className="text-gray-400 text-lg">Generate comprehensive {deptInfo.name.toLowerCase()} analytics reports</p>
           </div>
           <Link
-            to="/"
+            to={deptInfo.backLink}
             className="inline-flex items-center text-cyan-400 hover:text-cyan-300 font-medium transition-colors"
           >
             <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
