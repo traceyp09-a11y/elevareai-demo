@@ -80,7 +80,11 @@ export default function CalculationDetails({ kpiName, calculation, children }: C
                         {key.replace(/([A-Z])/g, ' $1').trim()}:
                       </span>
                       <span className="text-white font-mono">
-                        {typeof value === 'number' ? value.toLocaleString() : value}
+                        {typeof value === 'number'
+                          ? value.toLocaleString()
+                          : typeof value === 'object' && value !== null
+                          ? JSON.stringify(value)
+                          : String(value)}
                       </span>
                     </div>
                   ))}
