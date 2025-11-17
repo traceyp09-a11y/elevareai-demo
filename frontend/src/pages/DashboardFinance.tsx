@@ -57,8 +57,8 @@ const DashboardFinance: React.FC = () => {
   const fetchFinanceData = async () => {
     try {
       const [kpisResponse, painPointsResponse] = await Promise.all([
-        axios.get('http://localhost:3001/api/finance/kpis/current'),
-        axios.get('http://localhost:3001/api/finance/pain-points'),
+        axios.get('/api/finance/kpis/current'),
+        axios.get('/api/finance/pain-points'),
       ]);
 
       setKpis(kpisResponse.data.kpis);
