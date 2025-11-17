@@ -5,7 +5,6 @@ import {
   TrendingUp, AlertTriangle, Building2, BarChart3, ArrowRight,
   CheckCircle, XCircle, AlertCircle, Activity
 } from 'lucide-react';
-import DashboardFilters from '../components/DashboardFilters';
 
 interface Metric {
   name: string;
@@ -218,14 +217,60 @@ const DashboardExecutive: React.FC = () => {
           </p>
         </div>
 
-        {/* KPI Filters */}
-        <DashboardFilters
-          onSearch={handleSearch}
-          onDepartmentChange={handleDepartmentChange}
-          onDateRangeChange={handleDateRangeChange}
-          onRefresh={handleRefresh}
-          onExportPDF={handleExportPDF}
-        />
+        {/* Quick Filters Bar */}
+        <div className="mb-6 flex flex-wrap items-center gap-4">
+          {/* Search */}
+          <div className="flex-1 min-w-[300px]">
+            <div className="relative">
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => handleSearch(e.target.value)}
+                placeholder="Search departments or KPIs..."
+                className="w-full bg-gray-800/50 border border-gray-600 rounded-lg px-4 py-2.5 pl-10 text-gray-100 placeholder-gray-500 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all"
+              />
+              <svg
+                className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </div>
+          </div>
+
+          {/* Department Filter */}
+          <select
+            value={selectedDepartment}
+            onChange={(e) => handleDepartmentChange(e.target.value)}
+            className="bg-gray-800/50 border border-gray-600 rounded-lg px-4 py-2.5 text-gray-100 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all"
+          >
+            <option value="all">All Departments</option>
+            <option value="hr">👥 HR Analytics</option>
+            <option value="hse">🦺 HSE Analytics</option>
+            <option value="operations">⚙️ Operations</option>
+            <option value="qc">✓ Quality Control</option>
+            <option value="supplychain">🚚 Supply Chain</option>
+            <option value="finance">💰 Finance</option>
+            <option value="administration">💻 IT & Administration</option>
+            <option value="sales">💵 Sales & Revenue</option>
+            <option value="customer-success">❤️ Customer Success</option>
+            <option value="marketing">📢 Marketing</option>
+          </select>
+
+          {/* Refresh Button */}
+          <button
+            onClick={handleRefresh}
+            className="bg-purple-600 hover:bg-purple-500 text-white rounded-lg px-4 py-2.5 transition-all flex items-center gap-2"
+            title="Refresh Data"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+            Refresh
+          </button>
+        </div>
 
         {/* Department Quick Navigation */}
         <div className="mb-8 bg-gray-800/50 border border-purple-500/30 rounded-lg p-4">
