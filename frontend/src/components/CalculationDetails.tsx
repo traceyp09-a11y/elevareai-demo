@@ -74,7 +74,7 @@ export default function CalculationDetails({ kpiName, calculation, children }: C
                   Components
                 </h4>
                 <div className="bg-gray-800/50 rounded-lg p-4 space-y-2">
-                  {Object.entries(calculation.components).map(([key, value]) => (
+                  {calculation.components && Object.entries(calculation.components).map(([key, value]) => (
                     <div key={key} className="flex items-center justify-between py-2 border-b border-gray-700 last:border-0">
                       <span className="text-gray-300 font-medium capitalize">
                         {key.replace(/([A-Z])/g, ' $1').trim()}:
@@ -88,6 +88,9 @@ export default function CalculationDetails({ kpiName, calculation, children }: C
                       </span>
                     </div>
                   ))}
+                  {!calculation.components && (
+                    <p className="text-gray-400 text-sm">No component data available</p>
+                  )}
                 </div>
               </div>
 
@@ -97,7 +100,7 @@ export default function CalculationDetails({ kpiName, calculation, children }: C
                   Step-by-Step Calculation
                 </h4>
                 <div className="space-y-3">
-                  {calculation.steps.map((step, index) => (
+                  {calculation.steps && calculation.steps.map((step, index) => (
                     <div
                       key={index}
                       className="flex items-start gap-3 bg-gray-800/30 rounded-lg p-3 border border-gray-700/50"
@@ -108,6 +111,9 @@ export default function CalculationDetails({ kpiName, calculation, children }: C
                       <p className="text-gray-300 text-sm leading-relaxed pt-0.5">{step}</p>
                     </div>
                   ))}
+                  {!calculation.steps && (
+                    <p className="text-gray-400 text-sm">No calculation steps available</p>
+                  )}
                 </div>
               </div>
 
