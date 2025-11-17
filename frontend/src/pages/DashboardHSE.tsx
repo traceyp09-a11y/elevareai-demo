@@ -70,9 +70,9 @@ export default function DashboardHSE() {
       newAlerts.push({
         id: 'trir-critical',
         type: 'critical',
-        title: 'TRIR Above Industry Benchmark',
-        message: `TRIR is ${kpis['TRIR'].displayValue}, above the benchmark of ${kpis['TRIR'].benchmark.value}. Immediate safety review required.`,
-        kpi: 'TRIR'
+        metric: 'TRIR',
+        message: `Above industry benchmark (${kpis['TRIR'].benchmark.value}). Immediate safety review required.`,
+        value: kpis['TRIR'].displayValue
       });
     }
 
@@ -81,9 +81,9 @@ export default function DashboardHSE() {
       newAlerts.push({
         id: 'ltifr-warning',
         type: 'warning',
-        title: 'Lost Time Injuries Elevated',
-        message: `LTIFR is ${kpis['LTIFR'].displayValue}. Review incident investigations and corrective actions.`,
-        kpi: 'LTIFR'
+        metric: 'LTIFR',
+        message: `Lost time injuries elevated. Review incident investigations and corrective actions.`,
+        value: kpis['LTIFR'].displayValue
       });
     }
 
@@ -92,9 +92,9 @@ export default function DashboardHSE() {
       newAlerts.push({
         id: 'ppe-warning',
         type: 'warning',
-        title: 'PPE Compliance Below Target',
-        message: `PPE compliance is ${kpis['PPE Compliance'].displayValue}. Target is 95%. Increase enforcement and training.`,
-        kpi: 'PPE Compliance'
+        metric: 'PPE Compliance',
+        message: `Below 95% target. Increase enforcement and training.`,
+        value: kpis['PPE Compliance'].displayValue
       });
     }
 
@@ -103,9 +103,9 @@ export default function DashboardHSE() {
       newAlerts.push({
         id: 'env-warning',
         type: 'warning',
-        title: 'Environmental Compliance Issue',
-        message: `Environmental compliance is ${kpis['Environmental Compliance'].displayValue}. Review violations and corrective actions.`,
-        kpi: 'Environmental Compliance'
+        metric: 'Environmental Compliance',
+        message: `Review violations and corrective actions.`,
+        value: kpis['Environmental Compliance'].displayValue
       });
     }
 
@@ -114,9 +114,9 @@ export default function DashboardHSE() {
       newAlerts.push({
         id: 'investigation-info',
         type: 'info',
-        title: 'Investigation Closure Time High',
-        message: `Average closure time is ${kpis['Investigation Closure Time'].displayValue}. Target is 30 days. Streamline investigation process.`,
-        kpi: 'Investigation Closure Time'
+        metric: 'Investigation Closure Time',
+        message: `Exceeds 30 day target. Streamline investigation process.`,
+        value: kpis['Investigation Closure Time'].displayValue
       });
     }
 
@@ -125,9 +125,9 @@ export default function DashboardHSE() {
       newAlerts.push({
         id: 'training-info',
         type: 'info',
-        title: 'Safety Training Completion Low',
-        message: `Safety training completion is ${kpis['Safety Training Rate'].displayValue}. Push for 95%+ completion.`,
-        kpi: 'Safety Training Rate'
+        metric: 'Safety Training Rate',
+        message: `Below 95% completion target. Push for higher completion.`,
+        value: kpis['Safety Training Rate'].displayValue
       });
     }
 

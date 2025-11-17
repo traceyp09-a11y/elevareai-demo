@@ -70,9 +70,9 @@ export default function DashboardOps() {
       newAlerts.push({
         id: 'otif-critical',
         type: 'critical',
-        title: 'On-Time Delivery Below Target',
-        message: `OTIF is ${kpis.onTimeDelivery.displayValue}, below the 95% target. Customer satisfaction at risk.`,
-        kpi: 'On-Time Delivery'
+        metric: 'On-Time Delivery',
+        message: `OTIF is below the 95% target. Customer satisfaction at risk.`,
+        value: kpis.onTimeDelivery.displayValue
       });
     }
 
@@ -81,9 +81,9 @@ export default function DashboardOps() {
       newAlerts.push({
         id: 'schedule-warning',
         type: 'warning',
-        title: 'Production Schedule Slippage',
-        message: `Schedule adherence is ${kpis.scheduleAdherence.displayValue}. Review production planning and capacity.`,
-        kpi: 'Schedule Adherence'
+        metric: 'Schedule Adherence',
+        message: `Production schedule slippage detected. Review production planning and capacity.`,
+        value: kpis.scheduleAdherence.displayValue
       });
     }
 
@@ -92,9 +92,9 @@ export default function DashboardOps() {
       newAlerts.push({
         id: 'oee-warning',
         type: 'warning',
-        title: 'OEE Below Industry Standard',
-        message: `OEE is ${kpis.oee.displayValue}. Target is 85%. Address availability, performance, or quality losses.`,
-        kpi: 'OEE'
+        metric: 'OEE',
+        message: `OEE below industry standard (85%). Address availability, performance, or quality losses.`,
+        value: kpis.oee.displayValue
       });
     }
 
@@ -103,9 +103,9 @@ export default function DashboardOps() {
       newAlerts.push({
         id: 'fpy-critical',
         type: 'critical',
-        title: 'Quality Issues Detected',
-        message: `First Pass Yield is ${kpis.firstPassYield.displayValue}. High rework costs impacting profitability.`,
-        kpi: 'First Pass Yield'
+        metric: 'First Pass Yield',
+        message: `Quality issues detected. High rework costs impacting profitability.`,
+        value: kpis.firstPassYield.displayValue
       });
     }
 
@@ -114,9 +114,9 @@ export default function DashboardOps() {
       newAlerts.push({
         id: 'inventory-info',
         type: 'info',
-        title: 'Inventory Turnover Low',
-        message: `Inventory turnover is ${kpis.inventoryTurnover.displayValue}. Working capital tied up. Target is 6+.`,
-        kpi: 'Inventory Turnover'
+        metric: 'Inventory Turnover',
+        message: `Working capital tied up. Target is 6+.`,
+        value: kpis.inventoryTurnover.displayValue
       });
     }
 
@@ -125,9 +125,9 @@ export default function DashboardOps() {
       newAlerts.push({
         id: 'supplier-warning',
         type: 'warning',
-        title: 'Supplier Delivery Issues',
-        message: `Supplier on-time delivery is ${kpis.supplierOTD.displayValue}. Review vendor performance and alternatives.`,
-        kpi: 'Supplier OTD'
+        metric: 'Supplier OTD',
+        message: `Supplier delivery issues detected. Review vendor performance and alternatives.`,
+        value: kpis.supplierOTD.displayValue
       });
     }
 
@@ -136,9 +136,9 @@ export default function DashboardOps() {
       newAlerts.push({
         id: 'maintenance-warning',
         type: 'warning',
-        title: 'Preventive Maintenance Overdue',
-        message: `Maintenance compliance is ${kpis.maintenanceCompliance.displayValue}. Breakdown risk increasing.`,
-        kpi: 'Maintenance Compliance'
+        metric: 'Maintenance Compliance',
+        message: `Preventive maintenance overdue. Breakdown risk increasing.`,
+        value: kpis.maintenanceCompliance.displayValue
       });
     }
 
@@ -147,13 +147,17 @@ export default function DashboardOps() {
       newAlerts.push({
         id: 'coq-info',
         type: 'info',
-        title: 'Cost of Quality Elevated',
-        message: `COQ is ${kpis.costOfQuality.displayValue}. Target is below 5%. Focus on defect prevention.`,
-        kpi: 'Cost of Quality'
+        metric: 'Cost of Quality',
+        message: `COQ elevated. Target is below 5%. Focus on defect prevention.`,
+        value: kpis.costOfQuality.displayValue
       });
     }
 
     setAlerts(newAlerts);
+  };
+
+  const handleDismissAlert = (id: string) => {
+    setAlerts(alerts.filter(alert => alert.id !== id));
   };
 
   useEffect(() => {
@@ -297,7 +301,7 @@ export default function DashboardOps() {
         {/* Alerts */}
         {alerts.length > 0 && (
           <div className="mb-6">
-            <AlertBanner alerts={alerts} />
+            <AlertBanner alerts={alerts} onDismiss={handleDismissAlert} />
           </div>
         )}
 
