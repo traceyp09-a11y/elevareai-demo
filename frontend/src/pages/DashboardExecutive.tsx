@@ -143,7 +143,7 @@ const DashboardExecutive: React.FC = () => {
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900 p-8">
       <div className="max-w-[1800px] mx-auto">
         {/* Header */}
-        <div className="mb-8">
+        <div className="mb-6">
           <h1 className="text-5xl font-bold bg-gradient-to-r from-purple-400 via-pink-500 to-purple-600 bg-clip-text text-transparent mb-2">
             💼 Executive Dashboard
           </h1>
@@ -153,6 +153,86 @@ const DashboardExecutive: React.FC = () => {
           <p className="text-gray-500 text-sm mt-1">
             Period: {executiveSummary?.period?.startDate || 'N/A'} to {executiveSummary?.period?.endDate || 'N/A'}
           </p>
+        </div>
+
+        {/* Department Quick Navigation */}
+        <div className="mb-8 bg-gray-800/50 border border-purple-500/30 rounded-lg p-4">
+          <div className="flex items-center gap-2 mb-3">
+            <Building2 className="text-purple-400" size={20} />
+            <span className="text-sm font-semibold text-gray-400 uppercase tracking-wide">Quick Department Access</span>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-10 gap-2">
+            <Link
+              to="/"
+              className="flex items-center justify-center gap-2 px-3 py-2 bg-gray-700/50 hover:bg-cyan-500/20 border border-gray-600 hover:border-cyan-500 rounded-lg transition-all text-xs font-medium text-gray-300 hover:text-cyan-400"
+            >
+              <span>👥</span>
+              <span>HR</span>
+            </Link>
+            <Link
+              to="/hse"
+              className="flex items-center justify-center gap-2 px-3 py-2 bg-gray-700/50 hover:bg-cyan-500/20 border border-gray-600 hover:border-cyan-500 rounded-lg transition-all text-xs font-medium text-gray-300 hover:text-cyan-400"
+            >
+              <span>🦺</span>
+              <span>HSE</span>
+            </Link>
+            <Link
+              to="/ops"
+              className="flex items-center justify-center gap-2 px-3 py-2 bg-gray-700/50 hover:bg-blue-500/20 border border-gray-600 hover:border-blue-500 rounded-lg transition-all text-xs font-medium text-gray-300 hover:text-blue-400"
+            >
+              <span>⚙️</span>
+              <span>Operations</span>
+            </Link>
+            <Link
+              to="/qc"
+              className="flex items-center justify-center gap-2 px-3 py-2 bg-gray-700/50 hover:bg-teal-500/20 border border-gray-600 hover:border-teal-500 rounded-lg transition-all text-xs font-medium text-gray-300 hover:text-teal-400"
+            >
+              <span>✓</span>
+              <span>QC</span>
+            </Link>
+            <Link
+              to="/supplychain"
+              className="flex items-center justify-center gap-2 px-3 py-2 bg-gray-700/50 hover:bg-orange-500/20 border border-gray-600 hover:border-orange-500 rounded-lg transition-all text-xs font-medium text-gray-300 hover:text-orange-400"
+            >
+              <span>🚚</span>
+              <span>Supply Chain</span>
+            </Link>
+            <Link
+              to="/finance"
+              className="flex items-center justify-center gap-2 px-3 py-2 bg-gray-700/50 hover:bg-green-500/20 border border-gray-600 hover:border-green-500 rounded-lg transition-all text-xs font-medium text-gray-300 hover:text-green-400"
+            >
+              <span>💰</span>
+              <span>Finance</span>
+            </Link>
+            <Link
+              to="/administration"
+              className="flex items-center justify-center gap-2 px-3 py-2 bg-gray-700/50 hover:bg-blue-500/20 border border-gray-600 hover:border-blue-500 rounded-lg transition-all text-xs font-medium text-gray-300 hover:text-blue-400"
+            >
+              <span>💻</span>
+              <span>IT & Admin</span>
+            </Link>
+            <Link
+              to="/sales"
+              className="flex items-center justify-center gap-2 px-3 py-2 bg-gray-700/50 hover:bg-amber-500/20 border border-gray-600 hover:border-amber-500 rounded-lg transition-all text-xs font-medium text-gray-300 hover:text-amber-400"
+            >
+              <span>💰</span>
+              <span>Sales</span>
+            </Link>
+            <Link
+              to="/customer-success"
+              className="flex items-center justify-center gap-2 px-3 py-2 bg-gray-700/50 hover:bg-teal-500/20 border border-gray-600 hover:border-teal-500 rounded-lg transition-all text-xs font-medium text-gray-300 hover:text-teal-400"
+            >
+              <span>❤️</span>
+              <span>Customer Success</span>
+            </Link>
+            <Link
+              to="/marketing"
+              className="flex items-center justify-center gap-2 px-3 py-2 bg-gray-700/50 hover:bg-orange-500/20 border border-gray-600 hover:border-orange-500 rounded-lg transition-all text-xs font-medium text-gray-300 hover:text-orange-400"
+            >
+              <span>📢</span>
+              <span>Marketing</span>
+            </Link>
+          </div>
         </div>
 
         {/* Executive Summary Cards */}
