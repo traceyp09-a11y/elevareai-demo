@@ -1,5 +1,7 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
+import compression from 'compression';
+import morgan from 'morgan';
 import path from 'path';
 import { KPICalculationService } from './services/kpiCalculations';
 import { HSEKPICalculationService } from './services/kpiCalculationsHSE';
@@ -20,6 +22,22 @@ const PORT = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.json());
 
+// Compression middleware - reduces response size by 40-60%
+app.use(compression());
+
+// Request logging
+app.use(morgan('combined'));
+
+// Response time tracking
+app.use((req: Request, res: Response, next) => {
+  const start = Date.now();
+  res.on('finish', () => {
+    const duration = Date.now() - start;
+    console.log(`${req.method} ${req.path} - ${duration}ms`);
+  });
+  next();
+});
+
 // Initialize services
 const dbPath = path.join(__dirname, '../database/elevareiq.db');
 const kpiService = new KPICalculationService(dbPath);
@@ -34,9 +52,22 @@ const csKpiService = new CustomerSuccessKPICalculationService(dbPath);
 const marketingKpiService = new MarketingKPICalculationService(dbPath);
 const predictiveService = new PredictiveAnalyticsService(dbPath);
 
-// Health check
+// Health check with detailed metrics
 app.get('/api/health', (req: Request, res: Response) => {
-  res.json({ status: 'ok', message: 'ElevareIQ-MVP API is running' });
+  const uptime = process.uptime();
+  const memoryUsage = process.memoryUsage();
+
+  res.json({
+    status: 'ok',
+    message: 'ElevareAI Platform API is running',
+    uptime: `${Math.floor(uptime / 60)} minutes`,
+    memory: {
+      used: `${Math.round(memoryUsage.heapUsed / 1024 / 1024)}MB`,
+      total: `${Math.round(memoryUsage.heapTotal / 1024 / 1024)}MB`
+    },
+    timestamp: new Date().toISOString(),
+    version: '1.0.0'
+  });
 });
 
 // Get all KPIs for current quarter
