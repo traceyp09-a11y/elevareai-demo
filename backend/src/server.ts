@@ -2,7 +2,11 @@ import express, { Request, Response } from 'express';
 import cors from 'cors';
 import compression from 'compression';
 import morgan from 'morgan';
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
+import Database from 'better-sqlite3';
 import path from 'path';
+import { createAuthRoutes } from './routes/auth';
 import { KPICalculationService } from './services/kpiCalculations';
 import { HSEKPICalculationService } from './services/kpiCalculationsHSE';
 import { OpsKPICalculationService } from './services/kpiCalculationsOps';
@@ -17,6 +21,19 @@ import { PredictiveAnalyticsService } from './services/predictiveAnalytics';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
+
+// Security middleware
+app.use(helmet({
+  contentSecurityPolicy: false, // Disable for development
+  crossOriginEmbedderPolicy: false
+}));
+
+// Rate limiting
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100 // limit each IP to 100 requests per windowMs
+});
+app.use('/api/', limiter);
 
 // Middleware
 app.use(cors());
@@ -51,6 +68,12 @@ const salesKpiService = new SalesKPICalculationService(dbPath);
 const csKpiService = new CustomerSuccessKPICalculationService(dbPath);
 const marketingKpiService = new MarketingKPICalculationService(dbPath);
 const predictiveService = new PredictiveAnalyticsService(dbPath);
+
+// Initialize database for authentication
+const db = new Database(dbPath);
+
+// Authentication routes
+app.use('/api/auth', createAuthRoutes(db));
 
 // Health check with detailed metrics
 app.get('/api/health', (req: Request, res: Response) => {
