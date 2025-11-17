@@ -5,6 +5,7 @@ import {
   TrendingUp, AlertTriangle, Building2, BarChart3, ArrowRight,
   CheckCircle, XCircle, AlertCircle, Activity
 } from 'lucide-react';
+import DashboardFilters from '../components/DashboardFilters';
 
 interface Metric {
   name: string;
@@ -58,26 +59,87 @@ interface DashboardData {
 
 const DashboardExecutive: React.FC = () => {
   const [data, setData] = useState<DashboardData | null>(null);
+  const [filteredDepartments, setFilteredDepartments] = useState<Department[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedDepartment, setSelectedDepartment] = useState('all');
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get('/api/executive/dashboard');
-        setData(response.data);
-        setError(null);
-      } catch (err) {
-        console.error('Error fetching Executive Dashboard data:', err);
-        setError('Failed to load Executive Dashboard. Please ensure the backend is running.');
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchData();
   }, []);
+
+  useEffect(() => {
+    // Apply filters when data or filters change
+    if (data?.departments) {
+      applyFilters();
+    }
+  }, [data, searchQuery, selectedDepartment]);
+
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get('/api/executive/dashboard');
+      setData(response.data);
+      setError(null);
+    } catch (err) {
+      console.error('Error fetching Executive Dashboard data:', err);
+      setError('Failed to load Executive Dashboard. Please ensure the backend is running.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const applyFilters = () => {
+    if (!data?.departments) return;
+
+    let filtered = [...data.departments];
+
+    // Filter by department
+    if (selectedDepartment !== 'all') {
+      filtered = filtered.filter(dept =>
+        dept.id.toLowerCase() === selectedDepartment.toLowerCase() ||
+        dept.name.toLowerCase().includes(selectedDepartment.toLowerCase())
+      );
+    }
+
+    // Filter by search query
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(dept =>
+        dept.name.toLowerCase().includes(query) ||
+        dept.keyMetrics.some(metric =>
+          metric.name.toLowerCase().includes(query) ||
+          metric.value.toLowerCase().includes(query)
+        )
+      );
+    }
+
+    setFilteredDepartments(filtered);
+  };
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+  };
+
+  const handleDepartmentChange = (department: string) => {
+    setSelectedDepartment(department);
+  };
+
+  const handleDateRangeChange = (startDate: string, endDate: string) => {
+    // Could implement date filtering in the future
+    console.log('Date range changed:', startDate, endDate);
+  };
+
+  const handleRefresh = () => {
+    fetchData();
+  };
+
+  const handleExportPDF = () => {
+    // Implement PDF export functionality
+    console.log('Exporting to PDF...');
+    alert('PDF export functionality coming soon!');
+  };
 
   const getHealthColor = (score: number) => {
     if (score >= 80) return 'text-green-400 border-green-500 bg-green-500/10';
@@ -138,6 +200,7 @@ const DashboardExecutive: React.FC = () => {
   }
 
   const { executiveSummary, departments = [], topExecutiveKPIs = [] } = data;
+  const displayDepartments = filteredDepartments.length > 0 ? filteredDepartments : departments;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900 p-8">
@@ -154,6 +217,15 @@ const DashboardExecutive: React.FC = () => {
             Period: {executiveSummary?.period?.startDate || 'N/A'} to {executiveSummary?.period?.endDate || 'N/A'}
           </p>
         </div>
+
+        {/* KPI Filters */}
+        <DashboardFilters
+          onSearch={handleSearch}
+          onDepartmentChange={handleDepartmentChange}
+          onDateRangeChange={handleDateRangeChange}
+          onRefresh={handleRefresh}
+          onExportPDF={handleExportPDF}
+        />
 
         {/* Department Quick Navigation */}
         <div className="mb-8 bg-gray-800/50 border border-purple-500/30 rounded-lg p-4">
@@ -325,9 +397,21 @@ const DashboardExecutive: React.FC = () => {
           <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
             <Building2 className="text-purple-400" size={28} />
             Department Overview
+            {(searchQuery || selectedDepartment !== 'all') && (
+              <span className="text-sm text-gray-400 font-normal">
+                ({displayDepartments.length} {displayDepartments.length === 1 ? 'department' : 'departments'})
+              </span>
+            )}
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
-            {departments.map((dept) => (
+          {displayDepartments.length === 0 ? (
+            <div className="text-center py-12 bg-gray-800/30 border border-gray-700 rounded-lg">
+              <AlertCircle className="mx-auto mb-4 text-gray-500" size={48} />
+              <p className="text-gray-400 text-lg">No departments match your filters</p>
+              <p className="text-gray-500 text-sm mt-2">Try adjusting your search or department filter</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+              {displayDepartments.map((dept) => (
               <Link
                 key={dept?.id || Math.random()}
                 to={dept?.url || '#'}
@@ -354,8 +438,9 @@ const DashboardExecutive: React.FC = () => {
                   <ArrowRight size={16} />
                 </div>
               </Link>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Footer */}

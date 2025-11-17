@@ -22,11 +22,16 @@ export default function DashboardFilters({
 
   const departments = [
     { value: 'all', label: 'All Departments' },
-    { value: 'manufacturing', label: 'Manufacturing' },
-    { value: 'logistics', label: 'Logistics' },
-    { value: 'administration', label: 'Administration' },
-    { value: 'sales', label: 'Sales & Marketing' },
-    { value: 'it', label: 'IT & Technology' }
+    { value: 'hr', label: '👥 HR Analytics' },
+    { value: 'hse', label: '🦺 HSE Analytics' },
+    { value: 'operations', label: '⚙️ Operations' },
+    { value: 'qc', label: '✓ Quality Control' },
+    { value: 'supplychain', label: '🚚 Supply Chain' },
+    { value: 'finance', label: '💰 Finance' },
+    { value: 'administration', label: '💻 IT & Administration' },
+    { value: 'sales', label: '💵 Sales & Revenue' },
+    { value: 'customer-success', label: '❤️ Customer Success' },
+    { value: 'marketing', label: '📢 Marketing' }
   ];
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
