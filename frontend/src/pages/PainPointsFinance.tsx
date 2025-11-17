@@ -48,7 +48,7 @@ export default function PainPointsFinance() {
 
   const fetchPainPoints = async () => {
     try {
-      const response = await axios.get<PainPointsResponse>('http://localhost:3001/api/finance/pain-points');
+      const response = await axios.get<PainPointsResponse>('/api/finance/pain-points');
       setPainPoints(response.data.pain_points);
       setFilteredPainPoints(response.data.pain_points);
       setLoading(false);

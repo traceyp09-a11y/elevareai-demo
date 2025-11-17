@@ -20,7 +20,7 @@ module.exports = {
         use: {
           loader: 'ts-loader',
           options: {
-            transpileOnly: true, // Skip type checking for faster builds
+            transpileOnly: false, // Enable type checking for production quality
             compilerOptions: {
               noUnusedLocals: false,
               noUnusedParameters: false
@@ -67,6 +67,34 @@ module.exports = {
       }
     }
   },
-  devtool: 'source-map',
-  cache: false // Disable caching to avoid issues
+  devtool: process.env.NODE_ENV === 'production' ? 'source-map' : 'eval-source-map',
+  cache: {
+    type: 'filesystem',
+    buildDependencies: {
+      config: [__filename]
+    }
+  },
+  performance: {
+    maxEntrypointSize: 512000,
+    maxAssetSize: 512000,
+    hints: process.env.NODE_ENV === 'production' ? 'warning' : false
+  },
+  optimization: {
+    minimize: process.env.NODE_ENV === 'production',
+    splitChunks: {
+      chunks: 'all',
+      cacheGroups: {
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendors',
+          priority: 10
+        },
+        common: {
+          minChunks: 2,
+          priority: 5,
+          reuseExistingChunk: true
+        }
+      }
+    }
+  }
 };

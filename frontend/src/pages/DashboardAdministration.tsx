@@ -58,7 +58,7 @@ export default function DashboardAdministration() {
 
   const fetchKPIs = async () => {
     try {
-      const response = await axios.get<KPIResponse>('http://localhost:3001/api/administration/kpis/current');
+      const response = await axios.get<KPIResponse>('/api/administration/kpis/current');
       setKpiData(response.data);
       setLoading(false);
     } catch (err: any) {
@@ -69,7 +69,7 @@ export default function DashboardAdministration() {
 
   const fetchPainPointsCount = async () => {
     try {
-      const response = await axios.get<PainPointsResponse>('http://localhost:3001/api/administration/pain-points');
+      const response = await axios.get<PainPointsResponse>('/api/administration/pain-points');
       setPainPointsCount(response.data.pain_points.length);
     } catch (err) {
       console.error('Error fetching pain points count:', err);

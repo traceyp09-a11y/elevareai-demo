@@ -36,7 +36,7 @@ const PainPointsQC: React.FC = () => {
 
   const fetchPainPoints = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/qc/pain-points');
+      const response = await fetch('/api/qc/pain-points');
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }

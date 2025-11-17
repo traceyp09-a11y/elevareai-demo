@@ -51,7 +51,7 @@ export default function DashboardSupplyChain() {
 
   const fetchKPIData = async () => {
     try {
-      const response = await axios.get<KPIResponse>('http://localhost:3001/api/supplychain/kpis/current');
+      const response = await axios.get<KPIResponse>('/api/supplychain/kpis/current');
       setKpiData(response.data);
       setLoading(false);
     } catch (err: any) {
