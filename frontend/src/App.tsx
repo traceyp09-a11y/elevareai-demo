@@ -443,14 +443,21 @@ function AppContent() {
                 <>
                   <Link
                     to="/executive"
-                    className="text-gray-300 hover:text-cyan-400 px-5 py-2 text-base font-semibold transition-all duration-200 relative group"
+                    className="text-gray-300 hover:text-cyan-400 px-2 py-1 text-[10px] font-semibold transition-all duration-200 relative group"
                   >
                     <span className="relative z-10">Overview</span>
                     <div className="absolute inset-0 bg-cyan-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   </Link>
                   <Link
+                    to="/executive/board-reports"
+                    className="text-gray-300 hover:text-purple-400 px-2 py-1 text-[10px] font-semibold transition-all duration-200 relative group"
+                  >
+                    <span className="relative z-10">Board Reports</span>
+                    <div className="absolute inset-0 bg-purple-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                  </Link>
+                  <Link
                     to="/executive/strategic"
-                    className="text-gray-300 hover:text-cyan-400 px-5 py-2 text-base font-semibold transition-all duration-200 relative group"
+                    className="text-gray-300 hover:text-cyan-400 px-2 py-1 text-[10px] font-semibold transition-all duration-200 relative group"
                   >
                     <span className="relative z-10">Strategic View</span>
                     <div className="absolute inset-0 bg-cyan-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
