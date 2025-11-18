@@ -305,78 +305,79 @@ function Dashboard() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-gray-100">
-      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-[1800px] mx-auto px-6 lg:px-8 py-10">
 
         {/* Hero Header with Glassmorphism */}
-        <div className="relative overflow-hidden rounded-2xl mb-8">
+        <div className="relative overflow-hidden rounded-2xl mb-10">
           {/* Animated background */}
-          <div className="absolute inset-0 bg-gradient-to-r from-cyan-600/20 via-blue-600/20 to-purple-600/20 animate-gradient-x"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-cyan-600/10 via-blue-600/10 to-purple-600/10"></div>
           <div className="absolute inset-0 backdrop-blur-3xl"></div>
 
-          <div className="relative p-8 border border-cyan-500/30 rounded-2xl">
-            <div className="flex items-center justify-between mb-6">
+          <div className="relative p-10 border border-cyan-500/20 rounded-2xl">
+            <div className="flex items-center justify-between mb-8">
               <div>
-                <h1 className="text-4xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent mb-2">
-                  HR Analytics Command Center
+                <h1 className="text-5xl font-bold bg-gradient-to-r from-cyan-400 via-blue-400 to-cyan-300 bg-clip-text text-transparent mb-3">
+                  HR Analytics
                 </h1>
-                <p className="text-gray-400 text-lg">TitanBuild Manufacturing & Logistics</p>
+                <p className="text-gray-400 text-base font-medium">TitanBuild Manufacturing & Logistics</p>
               </div>
               <div className="text-right">
-                <div className="text-sm text-gray-400">Last Updated</div>
-                <div className="text-cyan-400 font-mono text-sm">
+                <div className="text-xs text-gray-500 uppercase tracking-wider mb-1">Last Updated</div>
+                <div className="text-cyan-400 font-mono text-base font-semibold mb-3">
                   {lastRefresh.toLocaleTimeString()}
                 </div>
-                <div className="mt-2 px-3 py-1 bg-green-500/20 border border-green-500/30 rounded-full text-green-400 text-xs inline-block">
-                  ● Live
+                <div className="px-4 py-1.5 bg-green-500/10 border border-green-500/30 rounded-full text-green-400 text-sm font-medium inline-flex items-center gap-2">
+                  <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+                  Live
                 </div>
               </div>
             </div>
 
             {/* Quick Stats with Glow Effect */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <div className="bg-gradient-to-br from-cyan-900/40 to-cyan-800/20 border border-cyan-500/30 rounded-xl p-4 backdrop-blur-sm hover:border-cyan-400/50 transition-all duration-300 group">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-5">
+              <div className="bg-gradient-to-br from-cyan-900/30 to-cyan-800/10 border border-cyan-500/20 rounded-xl p-5 backdrop-blur-sm hover:border-cyan-400/40 hover:shadow-lg hover:shadow-cyan-500/10 transition-all duration-300 group">
                 <div className="flex items-center justify-between">
                   <div>
-                    <div className="text-xs text-cyan-300 mb-1">Total Revenue</div>
-                    <div className="text-2xl font-bold text-white">$87.5M</div>
-                    <div className="text-xs text-green-400 mt-1 flex items-center gap-1">
+                    <div className="text-xs text-cyan-400/80 mb-2 uppercase tracking-wider font-medium">Total Revenue</div>
+                    <div className="text-3xl font-bold text-white mb-2">$87.5M</div>
+                    <div className="text-xs text-green-400 flex items-center gap-1 font-medium">
                       <span>↗</span> +4.9% YoY
                     </div>
                   </div>
-                  <div className="text-3xl group-hover:scale-110 transition-transform">💰</div>
+                  <div className="text-4xl group-hover:scale-110 transition-transform opacity-80">💰</div>
                 </div>
               </div>
 
-              <div className="bg-gradient-to-br from-blue-900/40 to-blue-800/20 border border-blue-500/30 rounded-xl p-4 backdrop-blur-sm hover:border-blue-400/50 transition-all duration-300 group">
+              <div className="bg-gradient-to-br from-blue-900/30 to-blue-800/10 border border-blue-500/20 rounded-xl p-5 backdrop-blur-sm hover:border-blue-400/40 hover:shadow-lg hover:shadow-blue-500/10 transition-all duration-300 group">
                 <div className="flex items-center justify-between">
                   <div>
-                    <div className="text-xs text-blue-300 mb-1">Total Employees</div>
-                    <div className="text-2xl font-bold text-white">847</div>
-                    <div className="text-xs text-gray-400 mt-1">Across 4 facilities</div>
+                    <div className="text-xs text-blue-400/80 mb-2 uppercase tracking-wider font-medium">Total Employees</div>
+                    <div className="text-3xl font-bold text-white mb-2">847</div>
+                    <div className="text-xs text-gray-400 font-medium">Across 4 facilities</div>
                   </div>
-                  <div className="text-3xl group-hover:scale-110 transition-transform">👥</div>
+                  <div className="text-4xl group-hover:scale-110 transition-transform opacity-80">👥</div>
                 </div>
               </div>
 
-              <div className="bg-gradient-to-br from-purple-900/40 to-purple-800/20 border border-purple-500/30 rounded-xl p-4 backdrop-blur-sm hover:border-purple-400/50 transition-all duration-300 group">
+              <div className="bg-gradient-to-br from-purple-900/30 to-purple-800/10 border border-purple-500/20 rounded-xl p-5 backdrop-blur-sm hover:border-purple-400/40 hover:shadow-lg hover:shadow-purple-500/10 transition-all duration-300 group">
                 <div className="flex items-center justify-between">
                   <div>
-                    <div className="text-xs text-purple-300 mb-1">Labor Costs</div>
-                    <div className="text-2xl font-bold text-white">$46.6M</div>
-                    <div className="text-xs text-gray-400 mt-1">53.2% of revenue</div>
+                    <div className="text-xs text-purple-400/80 mb-2 uppercase tracking-wider font-medium">Labor Costs</div>
+                    <div className="text-3xl font-bold text-white mb-2">$46.6M</div>
+                    <div className="text-xs text-gray-400 font-medium">53.2% of revenue</div>
                   </div>
-                  <div className="text-3xl group-hover:scale-110 transition-transform">📊</div>
+                  <div className="text-4xl group-hover:scale-110 transition-transform opacity-80">📊</div>
                 </div>
               </div>
 
-              <div className="bg-gradient-to-br from-green-900/40 to-green-800/20 border border-green-500/30 rounded-xl p-4 backdrop-blur-sm hover:border-green-400/50 transition-all duration-300 group">
+              <div className="bg-gradient-to-br from-green-900/30 to-green-800/10 border border-green-500/20 rounded-xl p-5 backdrop-blur-sm hover:border-green-400/40 hover:shadow-lg hover:shadow-green-500/10 transition-all duration-300 group">
                 <div className="flex items-center justify-between">
                   <div>
-                    <div className="text-xs text-green-300 mb-1">HR Budget</div>
-                    <div className="text-2xl font-bold text-white">$2.5M</div>
-                    <div className="text-xs text-green-400 mt-1">✓ On track</div>
+                    <div className="text-xs text-green-400/80 mb-2 uppercase tracking-wider font-medium">HR Budget</div>
+                    <div className="text-3xl font-bold text-white mb-2">$2.5M</div>
+                    <div className="text-xs text-green-400 font-medium">✓ On track</div>
                   </div>
-                  <div className="text-3xl group-hover:scale-110 transition-transform">💼</div>
+                  <div className="text-4xl group-hover:scale-110 transition-transform opacity-80">💼</div>
                 </div>
               </div>
             </div>
@@ -387,12 +388,13 @@ function Dashboard() {
         <AlertBanner alerts={alerts} onDismiss={(id) => setAlerts(alerts.filter(a => a.id !== id))} />
 
         {/* Historical Trends Charts */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-10">
           {/* Turnover Trend */}
-          <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl p-6">
-            <h3 className="text-lg font-semibold text-cyan-400 mb-4 flex items-center gap-2">
-              <span>📉</span> Turnover Rate Trend
-              <span className="ml-auto text-xs text-gray-400 font-normal">Last 12 Months</span>
+          <div className="bg-gray-800/30 backdrop-blur-sm border border-gray-700/50 rounded-xl p-7 hover:border-gray-600/50 transition-all">
+            <h3 className="text-xl font-bold text-white mb-5 flex items-center gap-3">
+              <span className="text-2xl">📉</span>
+              <span>Turnover Rate Trend</span>
+              <span className="ml-auto text-xs text-gray-500 font-medium uppercase tracking-wider">Last 12 Months</span>
             </h3>
             <ResponsiveContainer width="100%" height={200}>
               <AreaChart data={historicalData}>
@@ -415,10 +417,11 @@ function Dashboard() {
           </div>
 
           {/* Engagement Trend */}
-          <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl p-6">
-            <h3 className="text-lg font-semibold text-blue-400 mb-4 flex items-center gap-2">
-              <span>💙</span> Employee Engagement Trend
-              <span className="ml-auto text-xs text-gray-400 font-normal">Last 12 Months</span>
+          <div className="bg-gray-800/30 backdrop-blur-sm border border-gray-700/50 rounded-xl p-7 hover:border-gray-600/50 transition-all">
+            <h3 className="text-xl font-bold text-white mb-5 flex items-center gap-3">
+              <span className="text-2xl">💙</span>
+              <span>Employee Engagement Trend</span>
+              <span className="ml-auto text-xs text-gray-500 font-medium uppercase tracking-wider">Last 12 Months</span>
             </h3>
             <ResponsiveContainer width="100%" height={200}>
               <LineChart data={historicalData}>
@@ -437,17 +440,19 @@ function Dashboard() {
 
         {/* KPI Grid */}
         <div className="mb-8">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-white flex items-center gap-3">
-              <span className="text-3xl">🎯</span>
-              Key Performance Indicators
-              <span className="text-sm font-normal text-gray-400 ml-2">
-                (Sorted by Priority)
-              </span>
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="text-3xl font-bold text-white flex items-center gap-4">
+              <span className="text-4xl">🎯</span>
+              <div>
+                <div>Key Performance Indicators</div>
+                <div className="text-sm font-medium text-gray-500 uppercase tracking-wider mt-1">
+                  Sorted by Priority
+                </div>
+              </div>
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
             {sortedKPIs.map((kpi, index) => (
               <Link
                 key={kpi.key}
@@ -459,21 +464,21 @@ function Dashboard() {
                   {kpi.priority}
                 </div>
 
-                <div className="h-full bg-gradient-to-br from-gray-800/80 to-gray-900/80 border border-gray-700 rounded-xl p-6 backdrop-blur-sm hover:border-cyan-500/50 transition-all duration-300 hover:shadow-xl hover:shadow-cyan-500/20 hover:-translate-y-1">
-                  <div className="flex items-start justify-between mb-4">
+                <div className="h-full bg-gradient-to-br from-gray-800/60 to-gray-900/60 border border-gray-700/50 rounded-xl p-7 backdrop-blur-sm hover:border-cyan-500/40 transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-500/10 hover:-translate-y-2">
+                  <div className="flex items-start justify-between mb-5">
                     <div className="flex-1">
-                      <div className="text-4xl mb-3 group-hover:scale-110 transition-transform inline-block">
+                      <div className="text-5xl mb-4 group-hover:scale-110 transition-transform inline-block opacity-90">
                         {kpi.icon}
                       </div>
-                      <h4 className="text-base font-semibold text-white group-hover:text-cyan-400 transition-colors mb-1">
+                      <h4 className="text-lg font-bold text-white group-hover:text-cyan-400 transition-colors mb-2">
                         {kpi.name}
                       </h4>
-                      <p className="text-xs text-gray-400">{kpi.description}</p>
+                      <p className="text-xs text-gray-500 font-medium">{kpi.description}</p>
                     </div>
                   </div>
 
                   {/* Main Value with Glow */}
-                  <div className="text-3xl font-bold text-white mb-3 group-hover:text-cyan-400 transition-colors">
+                  <div className="text-4xl font-bold text-white mb-4 group-hover:text-cyan-400 transition-colors">
                     {kpi.data.displayValue}
                   </div>
 
@@ -522,18 +527,18 @@ function Dashboard() {
         </div>
 
         {/* Info Footer */}
-        <div className="bg-gradient-to-r from-cyan-900/30 via-blue-900/30 to-purple-900/30 border border-cyan-500/30 rounded-xl p-6 backdrop-blur-sm">
-          <div className="flex items-start gap-4">
-            <div className="flex-shrink-0">
-              <svg className="h-6 w-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="bg-gradient-to-r from-cyan-900/20 via-blue-900/20 to-purple-900/20 border border-cyan-500/20 rounded-xl p-8 backdrop-blur-sm">
+          <div className="flex items-start gap-5">
+            <div className="flex-shrink-0 mt-1">
+              <svg className="h-7 w-7 text-cyan-400/80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
             <div>
-              <h3 className="text-sm font-semibold text-cyan-400 mb-2">
-                🔬 All Calculations are Transparent & Auditable
+              <h3 className="text-base font-bold text-cyan-400 mb-3 flex items-center gap-2">
+                <span>🔬</span> All Calculations are Transparent & Auditable
               </h3>
-              <p className="text-sm text-gray-300 leading-relaxed">
+              <p className="text-sm text-gray-400 leading-relaxed">
                 Click on any KPI card to see the complete calculation breakdown, including formulas,
                 data sources, step-by-step calculations, and industry benchmarks. All metrics feed
                 into executive dashboards for CEO and CFO decision-making. Data refreshes automatically every 30 seconds.

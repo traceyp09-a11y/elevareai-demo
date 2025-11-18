@@ -1,3 +1,4 @@
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import Login from './pages/Login';
@@ -47,160 +48,117 @@ function AppContent() {
   const isMarketing = location.pathname.startsWith('/marketing');
   const isExecutive = location.pathname.startsWith('/executive');
   const currentDept = isHSE ? 'hse' : isOps ? 'ops' : isQC ? 'qc' : isSC ? 'supplychain' : isFinance ? 'finance' : isAdmin ? 'administration' : isSales ? 'sales' : isCustomerSuccess ? 'customer-success' : isMarketing ? 'marketing' : isExecutive ? 'executive' : 'hr';
+  const [deptMenuOpen, setDeptMenuOpen] = React.useState(false);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black">
       {/* Header with Dark Theme - Hidden on Login Page */}
       {!isLoginPage && (
-      <header className="bg-gray-900/80 backdrop-blur-sm border-b border-cyan-500/30 sticky top-0 z-50">
-        <div className="max-w-[1600px] mx-auto px-2 sm:px-4 lg:px-6">
-          {/* Department Switcher */}
-          <div className="flex flex-wrap items-center justify-center gap-2 py-3 border-b border-gray-700/50">
-            <Link
-              to="/"
-              className={`px-4 py-2 rounded-lg text-base font-bold transition-all ${
-                currentDept === 'hr'
-                  ? 'bg-cyan-500 text-white shadow-lg shadow-cyan-500/50'
-                  : 'bg-gray-800/50 text-gray-400 hover:bg-gray-700/50 hover:text-gray-300'
-              }`}
-            >
-              👥 HR
-            </Link>
-            <Link
-              to="/hse"
-              className={`px-4 py-2 rounded-lg text-base font-bold transition-all ${
-                currentDept === 'hse'
-                  ? 'bg-cyan-500 text-white shadow-lg shadow-cyan-500/50'
-                  : 'bg-gray-800/50 text-gray-400 hover:bg-gray-700/50 hover:text-gray-300'
-              }`}
-            >
-              🦺 HSE
-            </Link>
-            <Link
-              to="/ops"
-              className={`px-4 py-2 rounded-lg text-base font-bold transition-all ${
-                currentDept === 'ops'
-                  ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/50'
-                  : 'bg-gray-800/50 text-gray-400 hover:bg-gray-700/50 hover:text-gray-300'
-              }`}
-            >
-              ⚙️ Ops
-            </Link>
-            <Link
-              to="/qc"
-              className={`px-4 py-2 rounded-lg text-base font-bold transition-all ${
-                currentDept === 'qc'
-                  ? 'bg-teal-500 text-white shadow-lg shadow-teal-500/50'
-                  : 'bg-gray-800/50 text-gray-400 hover:bg-gray-700/50 hover:text-gray-300'
-              }`}
-            >
-              ✓ QC
-            </Link>
-            <Link
-              to="/supplychain"
-              className={`px-4 py-2 rounded-lg text-base font-bold transition-all ${
-                currentDept === 'supplychain'
-                  ? 'bg-orange-500 text-white shadow-lg shadow-orange-500/50'
-                  : 'bg-gray-800/50 text-gray-400 hover:bg-gray-700/50 hover:text-gray-300'
-              }`}
-            >
-              🚚 Supply
-            </Link>
-            <Link
-              to="/finance"
-              className={`px-4 py-2 rounded-lg text-base font-bold transition-all ${
-                currentDept === 'finance'
-                  ? 'bg-green-500 text-white shadow-lg shadow-green-500/50'
-                  : 'bg-gray-800/50 text-gray-400 hover:bg-gray-700/50 hover:text-gray-300'
-              }`}
-            >
-              💰 Finance
-            </Link>
-            <Link
-              to="/administration"
-              className={`px-4 py-2 rounded-lg text-base font-bold transition-all ${
-                currentDept === 'administration'
-                  ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/50'
-                  : 'bg-gray-800/50 text-gray-400 hover:bg-gray-700/50 hover:text-gray-300'
-              }`}
-            >
-              💻 IT
-            </Link>
-            <Link
-              to="/sales"
-              className={`px-4 py-2 rounded-lg text-base font-bold transition-all ${
-                currentDept === 'sales'
-                  ? 'bg-amber-500 text-white shadow-lg shadow-amber-500/50'
-                  : 'bg-gray-800/50 text-gray-400 hover:bg-gray-700/50 hover:text-gray-300'
-              }`}
-            >
-              💰 Sales
-            </Link>
-            <Link
-              to="/customer-success"
-              className={`px-4 py-2 rounded-lg text-base font-bold transition-all ${
-                currentDept === 'customer-success'
-                  ? 'bg-teal-500 text-white shadow-lg shadow-teal-500/50'
-                  : 'bg-gray-800/50 text-gray-400 hover:bg-gray-700/50 hover:text-gray-300'
-              }`}
-            >
-              ❤️ CS
-            </Link>
-            <Link
-              to="/marketing"
-              className={`px-4 py-2 rounded-lg text-base font-bold transition-all ${
-                currentDept === 'marketing'
-                  ? 'bg-orange-500 text-white shadow-lg shadow-orange-500/50'
-                  : 'bg-gray-800/50 text-gray-400 hover:bg-gray-700/50 hover:text-gray-300'
-              }`}
-            >
-              📢 Mktg
-            </Link>
-            <Link
-              to="/executive"
-              className={`px-4 py-2 rounded-lg text-base font-bold transition-all ${
-                currentDept === 'executive'
-                  ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg shadow-purple-500/50'
-                  : 'bg-gray-800/50 text-gray-400 hover:bg-gray-700/50 hover:text-gray-300'
-              }`}
-            >
-              💼 Exec
-            </Link>
-          </div>
-
-          <div className="flex justify-between items-center py-1.5">
-            {/* Logo */}
-            <div className="flex items-center space-x-1.5">
+      <header className="bg-gray-900/95 backdrop-blur-md border-b border-cyan-500/20 sticky top-0 z-50 shadow-xl shadow-black/50">
+        <div className="max-w-[1800px] mx-auto px-6 lg:px-8">
+          <div className="flex justify-between items-center py-4">
+            {/* Logo & Department Selector */}
+            <div className="flex items-center gap-6">
               <Link to="/" className="flex-shrink-0 hover:opacity-80 transition-opacity">
-                <ElevareLogo variant="dark" size="sm" />
+                <ElevareLogo variant="dark" size="md" />
               </Link>
-              <div className="h-5 w-px bg-gray-700"></div>
-              <span className="text-sm lg:text-base font-bold text-cyan-400">
-                {currentDept === 'hr' ? 'HR Analytics' : currentDept === 'hse' ? 'HSE Analytics' : currentDept === 'ops' ? 'Operations Analytics' : currentDept === 'qc' ? 'Quality Control Analytics' : currentDept === 'supplychain' ? 'Supply Chain Analytics' : currentDept === 'finance' ? 'Finance Analytics' : currentDept === 'administration' ? 'IT & Administration Analytics' : currentDept === 'sales' ? 'Sales & Revenue Analytics' : currentDept === 'customer-success' ? 'Customer Success & Experience Analytics' : currentDept === 'marketing' ? 'Marketing Analytics' : 'Executive View'}
-              </span>
+
+              {/* Elegant Department Dropdown */}
+              <div className="relative">
+                <button
+                  onClick={() => setDeptMenuOpen(!deptMenuOpen)}
+                  className="flex items-center gap-3 px-5 py-2.5 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 hover:from-cyan-500/20 hover:to-blue-500/20 border border-cyan-500/30 rounded-lg transition-all duration-300 group"
+                >
+                  <span className="text-lg">
+                    {currentDept === 'hr' ? '👥' : currentDept === 'hse' ? '🦺' : currentDept === 'ops' ? '⚙️' : currentDept === 'qc' ? '✓' : currentDept === 'supplychain' ? '🚚' : currentDept === 'finance' ? '💰' : currentDept === 'administration' ? '💻' : currentDept === 'sales' ? '💵' : currentDept === 'customer-success' ? '❤️' : currentDept === 'marketing' ? '📢' : '💼'}
+                  </span>
+                  <span className="text-base font-semibold text-white">
+                    {currentDept === 'hr' ? 'HR Analytics' : currentDept === 'hse' ? 'HSE Analytics' : currentDept === 'ops' ? 'Operations' : currentDept === 'qc' ? 'Quality Control' : currentDept === 'supplychain' ? 'Supply Chain' : currentDept === 'finance' ? 'Finance' : currentDept === 'administration' ? 'IT & Admin' : currentDept === 'sales' ? 'Sales & Revenue' : currentDept === 'customer-success' ? 'Customer Success' : currentDept === 'marketing' ? 'Marketing' : 'Executive View'}
+                  </span>
+                  <svg className={`w-4 h-4 text-cyan-400 transition-transform duration-200 ${deptMenuOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+
+                {/* Dropdown Menu */}
+                {deptMenuOpen && (
+                  <>
+                    <div className="fixed inset-0 z-40" onClick={() => setDeptMenuOpen(false)}></div>
+                    <div className="absolute top-full left-0 mt-2 w-72 bg-gray-900/95 backdrop-blur-md border border-cyan-500/30 rounded-xl shadow-2xl shadow-black/50 z-50 overflow-hidden">
+                      <div className="p-2 space-y-1">
+                        <Link to="/" onClick={() => setDeptMenuOpen(false)} className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${currentDept === 'hr' ? 'bg-cyan-500/20 text-cyan-300' : 'text-gray-300 hover:bg-gray-800/50 hover:text-white'}`}>
+                          <span className="text-lg">👥</span>
+                          <span className="font-medium">HR Analytics</span>
+                        </Link>
+                        <Link to="/hse" onClick={() => setDeptMenuOpen(false)} className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${currentDept === 'hse' ? 'bg-cyan-500/20 text-cyan-300' : 'text-gray-300 hover:bg-gray-800/50 hover:text-white'}`}>
+                          <span className="text-lg">🦺</span>
+                          <span className="font-medium">HSE Analytics</span>
+                        </Link>
+                        <Link to="/ops" onClick={() => setDeptMenuOpen(false)} className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${currentDept === 'ops' ? 'bg-cyan-500/20 text-cyan-300' : 'text-gray-300 hover:bg-gray-800/50 hover:text-white'}`}>
+                          <span className="text-lg">⚙️</span>
+                          <span className="font-medium">Operations</span>
+                        </Link>
+                        <Link to="/qc" onClick={() => setDeptMenuOpen(false)} className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${currentDept === 'qc' ? 'bg-cyan-500/20 text-cyan-300' : 'text-gray-300 hover:bg-gray-800/50 hover:text-white'}`}>
+                          <span className="text-lg">✓</span>
+                          <span className="font-medium">Quality Control</span>
+                        </Link>
+                        <Link to="/supplychain" onClick={() => setDeptMenuOpen(false)} className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${currentDept === 'supplychain' ? 'bg-cyan-500/20 text-cyan-300' : 'text-gray-300 hover:bg-gray-800/50 hover:text-white'}`}>
+                          <span className="text-lg">🚚</span>
+                          <span className="font-medium">Supply Chain</span>
+                        </Link>
+                        <Link to="/finance" onClick={() => setDeptMenuOpen(false)} className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${currentDept === 'finance' ? 'bg-cyan-500/20 text-cyan-300' : 'text-gray-300 hover:bg-gray-800/50 hover:text-white'}`}>
+                          <span className="text-lg">💰</span>
+                          <span className="font-medium">Finance</span>
+                        </Link>
+                        <Link to="/administration" onClick={() => setDeptMenuOpen(false)} className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${currentDept === 'administration' ? 'bg-cyan-500/20 text-cyan-300' : 'text-gray-300 hover:bg-gray-800/50 hover:text-white'}`}>
+                          <span className="text-lg">💻</span>
+                          <span className="font-medium">IT & Administration</span>
+                        </Link>
+                        <Link to="/sales" onClick={() => setDeptMenuOpen(false)} className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${currentDept === 'sales' ? 'bg-cyan-500/20 text-cyan-300' : 'text-gray-300 hover:bg-gray-800/50 hover:text-white'}`}>
+                          <span className="text-lg">💵</span>
+                          <span className="font-medium">Sales & Revenue</span>
+                        </Link>
+                        <Link to="/customer-success" onClick={() => setDeptMenuOpen(false)} className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${currentDept === 'customer-success' ? 'bg-cyan-500/20 text-cyan-300' : 'text-gray-300 hover:bg-gray-800/50 hover:text-white'}`}>
+                          <span className="text-lg">❤️</span>
+                          <span className="font-medium">Customer Success</span>
+                        </Link>
+                        <Link to="/marketing" onClick={() => setDeptMenuOpen(false)} className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${currentDept === 'marketing' ? 'bg-cyan-500/20 text-cyan-300' : 'text-gray-300 hover:bg-gray-800/50 hover:text-white'}`}>
+                          <span className="text-lg">📢</span>
+                          <span className="font-medium">Marketing</span>
+                        </Link>
+                        <div className="h-px bg-gradient-to-r from-transparent via-cyan-500/30 to-transparent my-2"></div>
+                        <Link to="/executive" onClick={() => setDeptMenuOpen(false)} className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${currentDept === 'executive' ? 'bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-purple-300' : 'text-gray-300 hover:bg-gradient-to-r hover:from-purple-500/10 hover:to-pink-500/10 hover:text-white'}`}>
+                          <span className="text-lg">💼</span>
+                          <span className="font-semibold">Executive View</span>
+                        </Link>
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
             </div>
 
             {/* Navigation */}
-            <nav className="flex space-x-1.5">
+            <nav className="flex gap-2">
               {currentDept === 'hr' && (
                 <>
                   <Link
                     to="/"
-                    className="text-gray-300 hover:text-cyan-400 px-2 py-1 text-[10px] font-semibold transition-all duration-200 relative group"
+                    className="text-gray-300 hover:text-cyan-400 px-4 py-2 text-[13px] font-semibold transition-all duration-200 relative group rounded-lg"
                   >
                     <span className="relative z-10">Dashboard</span>
                     <div className="absolute inset-0 bg-cyan-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   </Link>
                   <Link
                     to="/reports"
-                    className="text-gray-300 hover:text-cyan-400 px-2 py-1 text-[10px] font-semibold transition-all duration-200 relative group"
+                    className="text-gray-300 hover:text-cyan-400 px-4 py-2 text-[13px] font-semibold transition-all duration-200 relative group rounded-lg"
                   >
                     <span className="relative z-10">Custom Reports</span>
                     <div className="absolute inset-0 bg-cyan-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   </Link>
                   <Link
                     to="/pain-points"
-                    className="text-gray-300 hover:text-cyan-400 px-2 py-1 text-[10px] font-semibold transition-all duration-200 relative group"
+                    className="text-gray-300 hover:text-cyan-400 px-4 py-2 text-[13px] font-semibold transition-all duration-200 relative group rounded-lg"
                   >
                     <span className="relative z-10">Pain Points</span>
                     <div className="absolute inset-0 bg-cyan-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -211,28 +169,28 @@ function AppContent() {
                 <>
                   <Link
                     to="/hse"
-                    className="text-gray-300 hover:text-cyan-400 px-2 py-1 text-[10px] font-semibold transition-all duration-200 relative group"
+                    className="text-gray-300 hover:text-cyan-400 px-4 py-2 text-[13px] font-semibold transition-all duration-200 relative group rounded-lg"
                   >
                     <span className="relative z-10">Dashboard</span>
                     <div className="absolute inset-0 bg-cyan-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   </Link>
                   <Link
                     to="/hse/predictive"
-                    className="text-gray-300 hover:text-purple-400 px-2 py-1 text-[10px] font-semibold transition-all duration-200 relative group"
+                    className="text-gray-300 hover:text-purple-400 px-4 py-2 text-[13px] font-semibold transition-all duration-200 relative group rounded-lg"
                   >
                     <span className="relative z-10">🔮 Predictive Analytics</span>
                     <div className="absolute inset-0 bg-purple-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   </Link>
                   <Link
                     to="/hse/reports"
-                    className="text-gray-300 hover:text-cyan-400 px-2 py-1 text-[10px] font-semibold transition-all duration-200 relative group"
+                    className="text-gray-300 hover:text-cyan-400 px-4 py-2 text-[13px] font-semibold transition-all duration-200 relative group rounded-lg"
                   >
                     <span className="relative z-10">HSE Reports</span>
                     <div className="absolute inset-0 bg-cyan-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   </Link>
                   <Link
                     to="/hse/pain-points"
-                    className="text-gray-300 hover:text-cyan-400 px-2 py-1 text-[10px] font-semibold transition-all duration-200 relative group"
+                    className="text-gray-300 hover:text-cyan-400 px-4 py-2 text-[13px] font-semibold transition-all duration-200 relative group rounded-lg"
                   >
                     <span className="relative z-10">Pain Points</span>
                     <div className="absolute inset-0 bg-cyan-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -243,21 +201,21 @@ function AppContent() {
                 <>
                   <Link
                     to="/ops"
-                    className="text-gray-300 hover:text-blue-400 px-2 py-1 text-[10px] font-semibold transition-all duration-200 relative group"
+                    className="text-gray-300 hover:text-blue-400 px-4 py-2 text-[13px] font-semibold transition-all duration-200 relative group rounded-lg"
                   >
                     <span className="relative z-10">Dashboard</span>
                     <div className="absolute inset-0 bg-blue-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   </Link>
                   <Link
                     to="/ops/reports"
-                    className="text-gray-300 hover:text-blue-400 px-2 py-1 text-[10px] font-semibold transition-all duration-200 relative group"
+                    className="text-gray-300 hover:text-blue-400 px-4 py-2 text-[13px] font-semibold transition-all duration-200 relative group rounded-lg"
                   >
                     <span className="relative z-10">Operations Reports</span>
                     <div className="absolute inset-0 bg-blue-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   </Link>
                   <Link
                     to="/ops/pain-points"
-                    className="text-gray-300 hover:text-blue-400 px-2 py-1 text-[10px] font-semibold transition-all duration-200 relative group"
+                    className="text-gray-300 hover:text-blue-400 px-4 py-2 text-[13px] font-semibold transition-all duration-200 relative group rounded-lg"
                   >
                     <span className="relative z-10">Pain Points</span>
                     <div className="absolute inset-0 bg-blue-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -268,21 +226,21 @@ function AppContent() {
                 <>
                   <Link
                     to="/qc"
-                    className="text-gray-300 hover:text-teal-400 px-2 py-1 text-[10px] font-semibold transition-all duration-200 relative group"
+                    className="text-gray-300 hover:text-teal-400 px-4 py-2 text-[13px] font-semibold transition-all duration-200 relative group rounded-lg"
                   >
                     <span className="relative z-10">Dashboard</span>
                     <div className="absolute inset-0 bg-teal-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   </Link>
                   <Link
                     to="/qc/reports"
-                    className="text-gray-300 hover:text-teal-400 px-2 py-1 text-[10px] font-semibold transition-all duration-200 relative group"
+                    className="text-gray-300 hover:text-teal-400 px-4 py-2 text-[13px] font-semibold transition-all duration-200 relative group rounded-lg"
                   >
                     <span className="relative z-10">QC Reports</span>
                     <div className="absolute inset-0 bg-teal-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   </Link>
                   <Link
                     to="/qc/pain-points"
-                    className="text-gray-300 hover:text-teal-400 px-2 py-1 text-[10px] font-semibold transition-all duration-200 relative group"
+                    className="text-gray-300 hover:text-teal-400 px-4 py-2 text-[13px] font-semibold transition-all duration-200 relative group rounded-lg"
                   >
                     <span className="relative z-10">Pain Points</span>
                     <div className="absolute inset-0 bg-teal-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -293,21 +251,21 @@ function AppContent() {
                 <>
                   <Link
                     to="/supplychain"
-                    className="text-gray-300 hover:text-orange-400 px-2 py-1 text-[10px] font-semibold transition-all duration-200 relative group"
+                    className="text-gray-300 hover:text-orange-400 px-4 py-2 text-[13px] font-semibold transition-all duration-200 relative group rounded-lg"
                   >
                     <span className="relative z-10">Dashboard</span>
                     <div className="absolute inset-0 bg-orange-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   </Link>
                   <Link
                     to="/supplychain/reports"
-                    className="text-gray-300 hover:text-orange-400 px-2 py-1 text-[10px] font-semibold transition-all duration-200 relative group"
+                    className="text-gray-300 hover:text-orange-400 px-4 py-2 text-[13px] font-semibold transition-all duration-200 relative group rounded-lg"
                   >
                     <span className="relative z-10">SC Reports</span>
                     <div className="absolute inset-0 bg-orange-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   </Link>
                   <Link
                     to="/supplychain/pain-points"
-                    className="text-gray-300 hover:text-orange-400 px-2 py-1 text-[10px] font-semibold transition-all duration-200 relative group"
+                    className="text-gray-300 hover:text-orange-400 px-4 py-2 text-[13px] font-semibold transition-all duration-200 relative group rounded-lg"
                   >
                     <span className="relative z-10">Pain Points</span>
                     <div className="absolute inset-0 bg-orange-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -318,21 +276,21 @@ function AppContent() {
                 <>
                   <Link
                     to="/finance"
-                    className="text-gray-300 hover:text-green-400 px-2 py-1 text-[10px] font-semibold transition-all duration-200 relative group"
+                    className="text-gray-300 hover:text-green-400 px-4 py-2 text-[13px] font-semibold transition-all duration-200 relative group rounded-lg"
                   >
                     <span className="relative z-10">Dashboard</span>
                     <div className="absolute inset-0 bg-green-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   </Link>
                   <Link
                     to="/finance/reports"
-                    className="text-gray-300 hover:text-green-400 px-2 py-1 text-[10px] font-semibold transition-all duration-200 relative group"
+                    className="text-gray-300 hover:text-green-400 px-4 py-2 text-[13px] font-semibold transition-all duration-200 relative group rounded-lg"
                   >
                     <span className="relative z-10">Finance Reports</span>
                     <div className="absolute inset-0 bg-green-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   </Link>
                   <Link
                     to="/finance/pain-points"
-                    className="text-gray-300 hover:text-green-400 px-2 py-1 text-[10px] font-semibold transition-all duration-200 relative group"
+                    className="text-gray-300 hover:text-green-400 px-4 py-2 text-[13px] font-semibold transition-all duration-200 relative group rounded-lg"
                   >
                     <span className="relative z-10">Pain Points</span>
                     <div className="absolute inset-0 bg-green-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -343,21 +301,21 @@ function AppContent() {
                 <>
                   <Link
                     to="/administration"
-                    className="text-gray-300 hover:text-blue-400 px-2 py-1 text-[10px] font-semibold transition-all duration-200 relative group"
+                    className="text-gray-300 hover:text-blue-400 px-4 py-2 text-[13px] font-semibold transition-all duration-200 relative group rounded-lg"
                   >
                     <span className="relative z-10">Dashboard</span>
                     <div className="absolute inset-0 bg-blue-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   </Link>
                   <Link
                     to="/administration/reports"
-                    className="text-gray-300 hover:text-blue-400 px-2 py-1 text-[10px] font-semibold transition-all duration-200 relative group"
+                    className="text-gray-300 hover:text-blue-400 px-4 py-2 text-[13px] font-semibold transition-all duration-200 relative group rounded-lg"
                   >
                     <span className="relative z-10">IT Reports</span>
                     <div className="absolute inset-0 bg-blue-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   </Link>
                   <Link
                     to="/administration/pain-points"
-                    className="text-gray-300 hover:text-blue-400 px-2 py-1 text-[10px] font-semibold transition-all duration-200 relative group"
+                    className="text-gray-300 hover:text-blue-400 px-4 py-2 text-[13px] font-semibold transition-all duration-200 relative group rounded-lg"
                   >
                     <span className="relative z-10">Pain Points</span>
                     <div className="absolute inset-0 bg-blue-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -368,21 +326,21 @@ function AppContent() {
                 <>
                   <Link
                     to="/sales"
-                    className="text-gray-300 hover:text-amber-400 px-2 py-1 text-[10px] font-semibold transition-all duration-200 relative group"
+                    className="text-gray-300 hover:text-amber-400 px-4 py-2 text-[13px] font-semibold transition-all duration-200 relative group rounded-lg"
                   >
                     <span className="relative z-10">Dashboard</span>
                     <div className="absolute inset-0 bg-amber-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   </Link>
                   <Link
                     to="/sales/reports"
-                    className="text-gray-300 hover:text-amber-400 px-2 py-1 text-[10px] font-semibold transition-all duration-200 relative group"
+                    className="text-gray-300 hover:text-amber-400 px-4 py-2 text-[13px] font-semibold transition-all duration-200 relative group rounded-lg"
                   >
                     <span className="relative z-10">Sales Reports</span>
                     <div className="absolute inset-0 bg-amber-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   </Link>
                   <Link
                     to="/sales/pain-points"
-                    className="text-gray-300 hover:text-amber-400 px-2 py-1 text-[10px] font-semibold transition-all duration-200 relative group"
+                    className="text-gray-300 hover:text-amber-400 px-4 py-2 text-[13px] font-semibold transition-all duration-200 relative group rounded-lg"
                   >
                     <span className="relative z-10">Pain Points</span>
                     <div className="absolute inset-0 bg-amber-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -393,21 +351,21 @@ function AppContent() {
                 <>
                   <Link
                     to="/customer-success"
-                    className="text-gray-300 hover:text-teal-400 px-2 py-1 text-[10px] font-semibold transition-all duration-200 relative group"
+                    className="text-gray-300 hover:text-teal-400 px-4 py-2 text-[13px] font-semibold transition-all duration-200 relative group rounded-lg"
                   >
                     <span className="relative z-10">Dashboard</span>
                     <div className="absolute inset-0 bg-teal-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   </Link>
                   <Link
                     to="/customer-success/reports"
-                    className="text-gray-300 hover:text-teal-400 px-2 py-1 text-[10px] font-semibold transition-all duration-200 relative group"
+                    className="text-gray-300 hover:text-teal-400 px-4 py-2 text-[13px] font-semibold transition-all duration-200 relative group rounded-lg"
                   >
                     <span className="relative z-10">CS Reports</span>
                     <div className="absolute inset-0 bg-teal-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   </Link>
                   <Link
                     to="/customer-success/pain-points"
-                    className="text-gray-300 hover:text-teal-400 px-2 py-1 text-[10px] font-semibold transition-all duration-200 relative group"
+                    className="text-gray-300 hover:text-teal-400 px-4 py-2 text-[13px] font-semibold transition-all duration-200 relative group rounded-lg"
                   >
                     <span className="relative z-10">Pain Points</span>
                     <div className="absolute inset-0 bg-teal-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -418,21 +376,21 @@ function AppContent() {
                 <>
                   <Link
                     to="/marketing"
-                    className="text-gray-300 hover:text-orange-400 px-2 py-1 text-[10px] font-semibold transition-all duration-200 relative group"
+                    className="text-gray-300 hover:text-orange-400 px-4 py-2 text-[13px] font-semibold transition-all duration-200 relative group rounded-lg"
                   >
                     <span className="relative z-10">Dashboard</span>
                     <div className="absolute inset-0 bg-orange-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   </Link>
                   <Link
                     to="/marketing/reports"
-                    className="text-gray-300 hover:text-orange-400 px-2 py-1 text-[10px] font-semibold transition-all duration-200 relative group"
+                    className="text-gray-300 hover:text-orange-400 px-4 py-2 text-[13px] font-semibold transition-all duration-200 relative group rounded-lg"
                   >
                     <span className="relative z-10">Marketing Reports</span>
                     <div className="absolute inset-0 bg-orange-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   </Link>
                   <Link
                     to="/marketing/pain-points"
-                    className="text-gray-300 hover:text-orange-400 px-2 py-1 text-[10px] font-semibold transition-all duration-200 relative group"
+                    className="text-gray-300 hover:text-orange-400 px-4 py-2 text-[13px] font-semibold transition-all duration-200 relative group rounded-lg"
                   >
                     <span className="relative z-10">Pain Points</span>
                     <div className="absolute inset-0 bg-orange-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -443,21 +401,21 @@ function AppContent() {
                 <>
                   <Link
                     to="/executive"
-                    className="text-gray-300 hover:text-cyan-400 px-2 py-1 text-[10px] font-semibold transition-all duration-200 relative group"
+                    className="text-gray-300 hover:text-cyan-400 px-4 py-2 text-[13px] font-semibold transition-all duration-200 relative group rounded-lg"
                   >
                     <span className="relative z-10">Overview</span>
                     <div className="absolute inset-0 bg-cyan-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   </Link>
                   <Link
                     to="/executive/board-reports"
-                    className="text-gray-300 hover:text-purple-400 px-2 py-1 text-[10px] font-semibold transition-all duration-200 relative group"
+                    className="text-gray-300 hover:text-purple-400 px-4 py-2 text-[13px] font-semibold transition-all duration-200 relative group rounded-lg"
                   >
                     <span className="relative z-10">Board Reports</span>
                     <div className="absolute inset-0 bg-purple-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   </Link>
                   <Link
                     to="/executive/strategic"
-                    className="text-gray-300 hover:text-cyan-400 px-2 py-1 text-[10px] font-semibold transition-all duration-200 relative group"
+                    className="text-gray-300 hover:text-cyan-400 px-4 py-2 text-[13px] font-semibold transition-all duration-200 relative group rounded-lg"
                   >
                     <span className="relative z-10">Strategic View</span>
                     <div className="absolute inset-0 bg-cyan-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -467,11 +425,12 @@ function AppContent() {
             </nav>
 
             {/* Company Info & User Menu */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-6">
               <div className="text-right">
-                <p className="text-sm font-semibold text-white">TitanBuild M&L</p>
-                <p className="text-xs text-cyan-400">Q4 2024</p>
+                <p className="text-sm font-bold text-white tracking-wide">TitanBuild M&L</p>
+                <p className="text-xs text-cyan-400 font-medium">Q4 2024</p>
               </div>
+              <div className="h-10 w-px bg-gradient-to-b from-transparent via-cyan-500/30 to-transparent"></div>
               <UserMenu />
             </div>
           </div>
@@ -568,12 +527,19 @@ function AppContent() {
 
       {/* Footer - Hidden on Login Page */}
       {!isLoginPage && (
-      <footer className="bg-gray-900/80 backdrop-blur-sm border-t border-cyan-500/30 mt-12">
-        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <p className="text-center text-sm text-gray-400">
-            © 2024 ElevareIQ Platform | HR • HSE • Operations • Quality Control • Supply Chain • Finance • IT & Administration • Sales & Revenue • Customer Success • Marketing Analytics for C-Suite Executives |
-            <span className="ml-2 text-cyan-400">All Calculations Transparent & Auditable</span>
-          </p>
+      <footer className="bg-gray-900/95 backdrop-blur-md border-t border-cyan-500/20 mt-16">
+        <div className="max-w-[1800px] mx-auto px-6 lg:px-8 py-8">
+          <div className="flex flex-col items-center gap-4">
+            <p className="text-center text-sm text-gray-400">
+              © 2024 ElevareIQ Platform | Enterprise Analytics for Manufacturing & Logistics
+            </p>
+            <div className="flex items-center gap-2 text-xs text-cyan-400/80">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+              </svg>
+              <span>All Calculations Transparent & Auditable</span>
+            </div>
+          </div>
         </div>
       </footer>
       )}
