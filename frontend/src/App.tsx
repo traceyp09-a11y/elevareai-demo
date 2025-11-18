@@ -27,6 +27,7 @@ import DashboardMarketing from './pages/DashboardMarketing';
 import PainPointsMarketing from './pages/PainPointsMarketing';
 import DashboardExecutive from './pages/DashboardExecutive';
 import BoardReports from './pages/BoardReports';
+import StrategicView from './pages/StrategicView';
 import ElevareLogo from './components/ElevareLogo';
 import ErrorBoundary from './components/ErrorBoundary';
 import UserMenu from './components/UserMenu';
@@ -549,6 +550,11 @@ function AppContent() {
           <Route path="/executive/board-reports" element={
             <ErrorBoundary fallbackMessage="Unable to load Board Reports. The page may be updating. Please refresh in a moment.">
               <BoardReports />
+            </ErrorBoundary>
+          } />
+          <Route path="/executive/strategic" element={
+            <ErrorBoundary fallbackMessage="Unable to load Strategic View. The page may be updating. Please refresh in a moment.">
+              <StrategicView />
             </ErrorBoundary>
           } />
         </Routes>
