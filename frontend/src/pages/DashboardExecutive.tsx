@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import {
   TrendingUp, AlertTriangle, Building2, BarChart3, ArrowRight,
-  CheckCircle, XCircle, AlertCircle, Activity
+  CheckCircle, XCircle, AlertCircle, Activity, FileText
 } from 'lucide-react';
 
 interface Metric {
@@ -206,15 +206,26 @@ const DashboardExecutive: React.FC = () => {
       <div className="max-w-[1800px] mx-auto">
         {/* Header */}
         <div className="mb-6">
-          <h1 className="text-5xl font-bold bg-gradient-to-r from-purple-400 via-pink-500 to-purple-600 bg-clip-text text-transparent mb-2">
-            💼 Executive Dashboard
-          </h1>
-          <p className="text-gray-400 text-lg">
-            Comprehensive view of all business operations • {executiveSummary?.period?.label || 'Current Period'}
-          </p>
-          <p className="text-gray-500 text-sm mt-1">
-            Period: {executiveSummary?.period?.startDate || 'N/A'} to {executiveSummary?.period?.endDate || 'N/A'}
-          </p>
+          <div className="flex items-start justify-between mb-4">
+            <div>
+              <h1 className="text-5xl font-bold bg-gradient-to-r from-purple-400 via-pink-500 to-purple-600 bg-clip-text text-transparent mb-2">
+                💼 Executive Dashboard
+              </h1>
+              <p className="text-gray-400 text-lg">
+                Comprehensive view of all business operations • {executiveSummary?.period?.label || 'Current Period'}
+              </p>
+              <p className="text-gray-500 text-sm mt-1">
+                Period: {executiveSummary?.period?.startDate || 'N/A'} to {executiveSummary?.period?.endDate || 'N/A'}
+              </p>
+            </div>
+            <Link
+              to="/executive/board-reports"
+              className="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white rounded-lg font-semibold flex items-center gap-2 transition-all shadow-lg shadow-purple-500/50 hover:shadow-purple-500/70"
+            >
+              <FileText className="w-5 h-5" />
+              Board Reports
+            </Link>
+          </div>
         </div>
 
         {/* Quick Filters Bar */}
