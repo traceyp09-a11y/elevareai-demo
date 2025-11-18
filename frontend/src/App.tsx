@@ -55,10 +55,10 @@ function AppContent() {
       <header className="bg-gray-900/80 backdrop-blur-sm border-b border-cyan-500/30 sticky top-0 z-50">
         <div className="max-w-[1600px] mx-auto px-2 sm:px-4 lg:px-6">
           {/* Department Switcher */}
-          <div className="flex flex-wrap items-center justify-center gap-1 py-1.5 border-b border-gray-700/50">
+          <div className="flex flex-wrap items-center justify-center gap-2 py-3 border-b border-gray-700/50">
             <Link
               to="/"
-              className={`px-2 py-1 rounded text-[10px] font-bold transition-all ${
+              className={`px-4 py-2 rounded-lg text-base font-bold transition-all ${
                 currentDept === 'hr'
                   ? 'bg-cyan-500 text-white shadow-lg shadow-cyan-500/50'
                   : 'bg-gray-800/50 text-gray-400 hover:bg-gray-700/50 hover:text-gray-300'
@@ -68,7 +68,7 @@ function AppContent() {
             </Link>
             <Link
               to="/hse"
-              className={`px-2 py-1 rounded text-[10px] font-bold transition-all ${
+              className={`px-4 py-2 rounded-lg text-base font-bold transition-all ${
                 currentDept === 'hse'
                   ? 'bg-cyan-500 text-white shadow-lg shadow-cyan-500/50'
                   : 'bg-gray-800/50 text-gray-400 hover:bg-gray-700/50 hover:text-gray-300'
@@ -78,7 +78,7 @@ function AppContent() {
             </Link>
             <Link
               to="/ops"
-              className={`px-2 py-1 rounded text-[10px] font-bold transition-all ${
+              className={`px-4 py-2 rounded-lg text-base font-bold transition-all ${
                 currentDept === 'ops'
                   ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/50'
                   : 'bg-gray-800/50 text-gray-400 hover:bg-gray-700/50 hover:text-gray-300'
@@ -88,7 +88,7 @@ function AppContent() {
             </Link>
             <Link
               to="/qc"
-              className={`px-2 py-1 rounded text-[10px] font-bold transition-all ${
+              className={`px-4 py-2 rounded-lg text-base font-bold transition-all ${
                 currentDept === 'qc'
                   ? 'bg-teal-500 text-white shadow-lg shadow-teal-500/50'
                   : 'bg-gray-800/50 text-gray-400 hover:bg-gray-700/50 hover:text-gray-300'
@@ -98,7 +98,7 @@ function AppContent() {
             </Link>
             <Link
               to="/supplychain"
-              className={`px-2 py-1 rounded text-[10px] font-bold transition-all ${
+              className={`px-4 py-2 rounded-lg text-base font-bold transition-all ${
                 currentDept === 'supplychain'
                   ? 'bg-orange-500 text-white shadow-lg shadow-orange-500/50'
                   : 'bg-gray-800/50 text-gray-400 hover:bg-gray-700/50 hover:text-gray-300'
@@ -108,7 +108,7 @@ function AppContent() {
             </Link>
             <Link
               to="/finance"
-              className={`px-2 py-1 rounded text-[10px] font-bold transition-all ${
+              className={`px-4 py-2 rounded-lg text-base font-bold transition-all ${
                 currentDept === 'finance'
                   ? 'bg-green-500 text-white shadow-lg shadow-green-500/50'
                   : 'bg-gray-800/50 text-gray-400 hover:bg-gray-700/50 hover:text-gray-300'
@@ -118,7 +118,7 @@ function AppContent() {
             </Link>
             <Link
               to="/administration"
-              className={`px-2 py-1 rounded text-[10px] font-bold transition-all ${
+              className={`px-4 py-2 rounded-lg text-base font-bold transition-all ${
                 currentDept === 'administration'
                   ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/50'
                   : 'bg-gray-800/50 text-gray-400 hover:bg-gray-700/50 hover:text-gray-300'
@@ -128,7 +128,7 @@ function AppContent() {
             </Link>
             <Link
               to="/sales"
-              className={`px-2 py-1 rounded text-[10px] font-bold transition-all ${
+              className={`px-4 py-2 rounded-lg text-base font-bold transition-all ${
                 currentDept === 'sales'
                   ? 'bg-amber-500 text-white shadow-lg shadow-amber-500/50'
                   : 'bg-gray-800/50 text-gray-400 hover:bg-gray-700/50 hover:text-gray-300'
@@ -138,7 +138,7 @@ function AppContent() {
             </Link>
             <Link
               to="/customer-success"
-              className={`px-2 py-1 rounded text-[10px] font-bold transition-all ${
+              className={`px-4 py-2 rounded-lg text-base font-bold transition-all ${
                 currentDept === 'customer-success'
                   ? 'bg-teal-500 text-white shadow-lg shadow-teal-500/50'
                   : 'bg-gray-800/50 text-gray-400 hover:bg-gray-700/50 hover:text-gray-300'
@@ -148,7 +148,7 @@ function AppContent() {
             </Link>
             <Link
               to="/marketing"
-              className={`px-2 py-1 rounded text-[10px] font-bold transition-all ${
+              className={`px-4 py-2 rounded-lg text-base font-bold transition-all ${
                 currentDept === 'marketing'
                   ? 'bg-orange-500 text-white shadow-lg shadow-orange-500/50'
                   : 'bg-gray-800/50 text-gray-400 hover:bg-gray-700/50 hover:text-gray-300'
@@ -158,7 +158,7 @@ function AppContent() {
             </Link>
             <Link
               to="/executive"
-              className={`px-2 py-1 rounded text-[10px] font-bold transition-all ${
+              className={`px-4 py-2 rounded-lg text-base font-bold transition-all ${
                 currentDept === 'executive'
                   ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg shadow-purple-500/50'
                   : 'bg-gray-800/50 text-gray-400 hover:bg-gray-700/50 hover:text-gray-300'
