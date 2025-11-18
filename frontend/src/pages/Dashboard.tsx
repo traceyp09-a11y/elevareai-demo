@@ -15,7 +15,6 @@ import {
   ResponsiveContainer,
   Legend
 } from 'recharts';
-import DashboardFilters from '../components/DashboardFilters';
 import AlertBanner from '../components/AlertBanner';
 
 interface KPIData {
@@ -60,8 +59,6 @@ function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<AllKPIsResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedDepartment, setSelectedDepartment] = useState('all');
   const [alerts, setAlerts] = useState<Alert[]>([]);
   const [lastRefresh, setLastRefresh] = useState<Date>(new Date());
 
@@ -125,11 +122,6 @@ function Dashboard() {
     }
 
     setAlerts(newAlerts);
-  };
-
-  const handleExportPDF = () => {
-    alert('PDF Export functionality - Generating comprehensive HR Analytics Report...');
-    // In production, this would generate a PDF using libraries like jsPDF or html2pdf
   };
 
   const getStatusColor = (status?: 'above' | 'at' | 'below', inverse: boolean = false) => {
@@ -309,12 +301,6 @@ function Dashboard() {
   // Sort by priority
   const sortedKPIs = [...kpiCards].sort((a, b) => a.priority - b.priority);
 
-  // Filter KPIs based on search
-  const filteredKPIs = sortedKPIs.filter(kpi =>
-    kpi.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    kpi.description.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
   const historicalData = generateHistoricalData();
 
   return (
@@ -400,15 +386,6 @@ function Dashboard() {
         {/* Alerts */}
         <AlertBanner alerts={alerts} onDismiss={(id) => setAlerts(alerts.filter(a => a.id !== id))} />
 
-        {/* Filters */}
-        <DashboardFilters
-          onDateRangeChange={(start, end) => console.log('Date range:', start, end)}
-          onDepartmentChange={(dept) => setSelectedDepartment(dept)}
-          onSearch={(query) => setSearchQuery(query)}
-          onRefresh={() => fetchKPIs()}
-          onExportPDF={handleExportPDF}
-        />
-
         {/* Historical Trends Charts */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
           {/* Turnover Trend */}
@@ -468,15 +445,10 @@ function Dashboard() {
                 (Sorted by Priority)
               </span>
             </h2>
-            {searchQuery && (
-              <div className="text-sm text-gray-400">
-                Showing {filteredKPIs.length} of {kpiCards.length} metrics
-              </div>
-            )}
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredKPIs.map((kpi, index) => (
+            {sortedKPIs.map((kpi, index) => (
               <Link
                 key={kpi.key}
                 to={`/kpi/${kpi.key}`}
