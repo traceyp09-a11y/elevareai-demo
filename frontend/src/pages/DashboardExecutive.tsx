@@ -13,6 +13,7 @@ import {
   StatusBadge,
   MiniSparkline
 } from '../components/ExecutiveComponents';
+import DashboardFilters from '../components/DashboardFilters';
 
 interface Metric {
   name: string;
@@ -66,26 +67,87 @@ interface DashboardData {
 
 const DashboardExecutive: React.FC = () => {
   const [data, setData] = useState<DashboardData | null>(null);
+  const [filteredDepartments, setFilteredDepartments] = useState<Department[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedDepartment, setSelectedDepartment] = useState('all');
+
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get('/api/executive/dashboard');
+      setData(response.data);
+      setError(null);
+    } catch (err) {
+      console.error('Error fetching Executive Dashboard data:', err);
+      setError('Failed to load Executive Dashboard. Please ensure the backend is running.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get('/api/executive/dashboard');
-        setData(response.data);
-        setError(null);
-      } catch (err) {
-        console.error('Error fetching Executive Dashboard data:', err);
-        setError('Failed to load Executive Dashboard. Please ensure the backend is running.');
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchData();
   }, []);
+
+  useEffect(() => {
+    // Apply filters when data or filters change
+    if (data?.departments) {
+      applyFilters();
+    }
+  }, [data, searchQuery, selectedDepartment]);
+
+  const applyFilters = () => {
+    if (!data?.departments) return;
+
+    let filtered = [...data.departments];
+
+    // Filter by department
+    if (selectedDepartment !== 'all') {
+      filtered = filtered.filter(dept =>
+        dept.id.toLowerCase() === selectedDepartment.toLowerCase() ||
+        dept.name.toLowerCase().includes(selectedDepartment.toLowerCase())
+      );
+    }
+
+    // Filter by search query
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(dept =>
+        dept.name.toLowerCase().includes(query) ||
+        dept.keyMetrics.some(metric =>
+          metric.name.toLowerCase().includes(query) ||
+          metric.value.toLowerCase().includes(query)
+        )
+      );
+    }
+
+    setFilteredDepartments(filtered);
+  };
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+  };
+
+  const handleDepartmentChange = (department: string) => {
+    setSelectedDepartment(department);
+  };
+
+  const handleDateRangeChange = (startDate: string, endDate: string) => {
+    // Could implement date filtering in the future
+    console.log('Date range changed:', startDate, endDate);
+  };
+
+  const handleRefresh = () => {
+    fetchData();
+  };
+
+  const handleExportPDF = () => {
+    // Implement PDF export functionality
+    console.log('Exporting to PDF...');
+    alert('PDF export functionality coming soon!');
+  };
 
   const getHealthColor = (score: number) => {
     if (score >= 80) return 'text-green-400 border-green-500 bg-green-500/10';
@@ -146,6 +208,7 @@ const DashboardExecutive: React.FC = () => {
   }
 
   const { executiveSummary, departments = [], topExecutiveKPIs = [] } = data;
+  const displayDepartments = filteredDepartments.length > 0 ? filteredDepartments : departments;
 
   // Generate sample sparkline data for KPIs (in production, this would come from API)
   const generateSparklineData = () => {
@@ -213,6 +276,17 @@ const DashboardExecutive: React.FC = () => {
               </div>
             </div>
           </div>
+        </div>
+
+        {/* KPI Filters */}
+        <div className="mb-8">
+          <DashboardFilters
+            onSearch={handleSearch}
+            onDepartmentChange={handleDepartmentChange}
+            onDateRangeChange={handleDateRangeChange}
+            onRefresh={handleRefresh}
+            onExportPDF={handleExportPDF}
+          />
         </div>
 
         {/* Hero Metrics - Circular Progress Rings */}
@@ -409,7 +483,7 @@ const DashboardExecutive: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
-            {departments.map((dept, idx) => (
+            {displayDepartments.length > 0 ? displayDepartments.map((dept, idx) => (
               <Link
                 key={dept?.id || Math.random()}
                 to={dept?.url || '#'}
@@ -486,7 +560,13 @@ const DashboardExecutive: React.FC = () => {
                   </div>
                 </div>
               </Link>
-            ))}
+            )) : (
+              <div className="col-span-full text-center py-12">
+                <AlertCircle className="mx-auto mb-4 text-gray-500" size={48} />
+                <p className="text-gray-400 text-lg">No departments found matching your search criteria</p>
+                <p className="text-gray-500 text-sm mt-2">Try adjusting your filters or search query</p>
+              </div>
+            )}
           </div>
         </div>
 

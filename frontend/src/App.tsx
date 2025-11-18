@@ -24,6 +24,8 @@ import PainPointsCustomerSuccess from './pages/PainPointsCustomerSuccess';
 import DashboardMarketing from './pages/DashboardMarketing';
 import PainPointsMarketing from './pages/PainPointsMarketing';
 import DashboardExecutive from './pages/DashboardExecutive';
+import BoardReports from './pages/BoardReports';
+import Login from './pages/Login';
 import ElevareLogo from './components/ElevareLogo';
 import ErrorBoundary from './components/ErrorBoundary';
 import './App.css';
@@ -389,6 +391,13 @@ function AppContent() {
                     <span className="relative z-10">Strategic View</span>
                     <div className="absolute inset-0 bg-cyan-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   </Link>
+                  <Link
+                    to="/executive/board-reports"
+                    className="text-gray-300 hover:text-purple-400 px-4 py-2 text-sm font-medium transition-all duration-200 relative group"
+                  >
+                    <span className="relative z-10">📊 Board Reports</span>
+                    <div className="absolute inset-0 bg-purple-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                  </Link>
                 </>
               )}
             </nav>
@@ -473,6 +482,14 @@ function AppContent() {
               <DashboardExecutive />
             </ErrorBoundary>
           } />
+          <Route path="/executive/board-reports" element={
+            <ErrorBoundary fallbackMessage="Unable to load Board Reports. The page may be updating. Please refresh in a moment.">
+              <BoardReports />
+            </ErrorBoundary>
+          } />
+
+          {/* Login Route */}
+          <Route path="/login" element={<Login />} />
         </Routes>
       </main>
 
