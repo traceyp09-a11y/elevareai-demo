@@ -55,91 +55,91 @@ function AppContent() {
       <header className="bg-gray-900/80 backdrop-blur-sm border-b border-cyan-500/30 sticky top-0 z-50">
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
           {/* Department Switcher */}
-          <div className="flex items-center justify-center gap-3 py-3 border-b border-gray-700/50">
-            <span className="text-base text-gray-500 mr-2 font-medium">Department:</span>
+          <div className="flex flex-wrap items-center justify-center gap-2 py-2.5 border-b border-gray-700/50">
+            <span className="text-sm text-gray-500 mr-1 font-medium">Department:</span>
             <Link
               to="/"
-              className={`px-6 py-2.5 rounded-lg text-base font-bold transition-all ${
+              className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${
                 currentDept === 'hr'
                   ? 'bg-cyan-500 text-white shadow-lg shadow-cyan-500/50'
                   : 'bg-gray-800/50 text-gray-400 hover:bg-gray-700/50 hover:text-gray-300'
               }`}
             >
-              👥 HR Analytics
+              👥 HR
             </Link>
             <Link
               to="/hse"
-              className={`px-6 py-2.5 rounded-lg text-base font-bold transition-all ${
+              className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${
                 currentDept === 'hse'
                   ? 'bg-cyan-500 text-white shadow-lg shadow-cyan-500/50'
                   : 'bg-gray-800/50 text-gray-400 hover:bg-gray-700/50 hover:text-gray-300'
               }`}
             >
-              🦺 HSE Analytics
+              🦺 HSE
             </Link>
             <Link
               to="/ops"
-              className={`px-6 py-2.5 rounded-lg text-base font-bold transition-all ${
+              className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${
                 currentDept === 'ops'
                   ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/50'
                   : 'bg-gray-800/50 text-gray-400 hover:bg-gray-700/50 hover:text-gray-300'
               }`}
             >
-              ⚙️ Operations Analytics
+              ⚙️ Operations
             </Link>
             <Link
               to="/qc"
-              className={`px-6 py-2.5 rounded-lg text-base font-bold transition-all ${
+              className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${
                 currentDept === 'qc'
                   ? 'bg-teal-500 text-white shadow-lg shadow-teal-500/50'
                   : 'bg-gray-800/50 text-gray-400 hover:bg-gray-700/50 hover:text-gray-300'
               }`}
             >
-              ✓ Quality Control Analytics
+              ✓ Quality Control
             </Link>
             <Link
               to="/supplychain"
-              className={`px-6 py-2.5 rounded-lg text-base font-bold transition-all ${
+              className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${
                 currentDept === 'supplychain'
                   ? 'bg-orange-500 text-white shadow-lg shadow-orange-500/50'
                   : 'bg-gray-800/50 text-gray-400 hover:bg-gray-700/50 hover:text-gray-300'
               }`}
             >
-              🚚 Supply Chain Analytics
+              🚚 Supply Chain
             </Link>
             <Link
               to="/finance"
-              className={`px-6 py-2.5 rounded-lg text-base font-bold transition-all ${
+              className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${
                 currentDept === 'finance'
                   ? 'bg-green-500 text-white shadow-lg shadow-green-500/50'
                   : 'bg-gray-800/50 text-gray-400 hover:bg-gray-700/50 hover:text-gray-300'
               }`}
             >
-              💰 Finance Analytics
+              💰 Finance
             </Link>
             <Link
               to="/administration"
-              className={`px-6 py-2.5 rounded-lg text-base font-bold transition-all ${
+              className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${
                 currentDept === 'administration'
                   ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/50'
                   : 'bg-gray-800/50 text-gray-400 hover:bg-gray-700/50 hover:text-gray-300'
               }`}
             >
-              💻 IT & Admin Analytics
+              💻 IT & Admin
             </Link>
             <Link
               to="/sales"
-              className={`px-6 py-2.5 rounded-lg text-base font-bold transition-all ${
+              className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${
                 currentDept === 'sales'
                   ? 'bg-amber-500 text-white shadow-lg shadow-amber-500/50'
                   : 'bg-gray-800/50 text-gray-400 hover:bg-gray-700/50 hover:text-gray-300'
               }`}
             >
-              💰 Sales & Revenue Analytics
+              💰 Sales
             </Link>
             <Link
               to="/customer-success"
-              className={`px-6 py-2.5 rounded-lg text-base font-bold transition-all ${
+              className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${
                 currentDept === 'customer-success'
                   ? 'bg-teal-500 text-white shadow-lg shadow-teal-500/50'
                   : 'bg-gray-800/50 text-gray-400 hover:bg-gray-700/50 hover:text-gray-300'
@@ -149,59 +149,59 @@ function AppContent() {
             </Link>
             <Link
               to="/marketing"
-              className={`px-6 py-2.5 rounded-lg text-base font-bold transition-all ${
+              className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${
                 currentDept === 'marketing'
                   ? 'bg-orange-500 text-white shadow-lg shadow-orange-500/50'
                   : 'bg-gray-800/50 text-gray-400 hover:bg-gray-700/50 hover:text-gray-300'
               }`}
             >
-              📢 Marketing Analytics
+              📢 Marketing
             </Link>
             <Link
               to="/executive"
-              className={`px-6 py-2.5 rounded-lg text-base font-bold transition-all ${
+              className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${
                 currentDept === 'executive'
                   ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg shadow-purple-500/50'
                   : 'bg-gray-800/50 text-gray-400 hover:bg-gray-700/50 hover:text-gray-300'
               }`}
             >
-              💼 Executive Dashboard
+              💼 Executive
             </Link>
           </div>
 
-          <div className="flex justify-between items-center py-4">
+          <div className="flex justify-between items-center py-3">
             {/* Logo */}
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-3">
               <Link to="/" className="flex-shrink-0 hover:opacity-80 transition-opacity">
-                <ElevareLogo variant="dark" size="xl" />
+                <ElevareLogo variant="dark" size="lg" />
               </Link>
               <div className="h-8 w-px bg-gray-700"></div>
-              <span className="text-2xl font-bold text-cyan-400">
+              <span className="text-xl lg:text-2xl font-bold text-cyan-400">
                 {currentDept === 'hr' ? 'HR Analytics' : currentDept === 'hse' ? 'HSE Analytics' : currentDept === 'ops' ? 'Operations Analytics' : currentDept === 'qc' ? 'Quality Control Analytics' : currentDept === 'supplychain' ? 'Supply Chain Analytics' : currentDept === 'finance' ? 'Finance Analytics' : currentDept === 'administration' ? 'IT & Administration Analytics' : currentDept === 'sales' ? 'Sales & Revenue Analytics' : currentDept === 'customer-success' ? 'Customer Success & Experience Analytics' : currentDept === 'marketing' ? 'Marketing Analytics' : 'Executive View'}
               </span>
             </div>
 
             {/* Navigation */}
-            <nav className="flex space-x-6">
+            <nav className="flex space-x-4">
               {currentDept === 'hr' && (
                 <>
                   <Link
                     to="/"
-                    className="text-gray-300 hover:text-cyan-400 px-5 py-2 text-base font-semibold transition-all duration-200 relative group"
+                    className="text-gray-300 hover:text-cyan-400 px-4 py-2 text-sm font-semibold transition-all duration-200 relative group"
                   >
                     <span className="relative z-10">Dashboard</span>
                     <div className="absolute inset-0 bg-cyan-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   </Link>
                   <Link
                     to="/reports"
-                    className="text-gray-300 hover:text-cyan-400 px-5 py-2 text-base font-semibold transition-all duration-200 relative group"
+                    className="text-gray-300 hover:text-cyan-400 px-4 py-2 text-sm font-semibold transition-all duration-200 relative group"
                   >
                     <span className="relative z-10">Custom Reports</span>
                     <div className="absolute inset-0 bg-cyan-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   </Link>
                   <Link
                     to="/pain-points"
-                    className="text-gray-300 hover:text-cyan-400 px-5 py-2 text-base font-semibold transition-all duration-200 relative group"
+                    className="text-gray-300 hover:text-cyan-400 px-4 py-2 text-sm font-semibold transition-all duration-200 relative group"
                   >
                     <span className="relative z-10">Pain Points</span>
                     <div className="absolute inset-0 bg-cyan-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -212,28 +212,28 @@ function AppContent() {
                 <>
                   <Link
                     to="/hse"
-                    className="text-gray-300 hover:text-cyan-400 px-5 py-2 text-base font-semibold transition-all duration-200 relative group"
+                    className="text-gray-300 hover:text-cyan-400 px-4 py-2 text-sm font-semibold transition-all duration-200 relative group"
                   >
                     <span className="relative z-10">Dashboard</span>
                     <div className="absolute inset-0 bg-cyan-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   </Link>
                   <Link
                     to="/hse/predictive"
-                    className="text-gray-300 hover:text-purple-400 px-5 py-2 text-base font-semibold transition-all duration-200 relative group"
+                    className="text-gray-300 hover:text-purple-400 px-4 py-2 text-sm font-semibold transition-all duration-200 relative group"
                   >
                     <span className="relative z-10">🔮 Predictive Analytics</span>
                     <div className="absolute inset-0 bg-purple-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   </Link>
                   <Link
                     to="/hse/reports"
-                    className="text-gray-300 hover:text-cyan-400 px-5 py-2 text-base font-semibold transition-all duration-200 relative group"
+                    className="text-gray-300 hover:text-cyan-400 px-4 py-2 text-sm font-semibold transition-all duration-200 relative group"
                   >
                     <span className="relative z-10">HSE Reports</span>
                     <div className="absolute inset-0 bg-cyan-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   </Link>
                   <Link
                     to="/hse/pain-points"
-                    className="text-gray-300 hover:text-cyan-400 px-5 py-2 text-base font-semibold transition-all duration-200 relative group"
+                    className="text-gray-300 hover:text-cyan-400 px-4 py-2 text-sm font-semibold transition-all duration-200 relative group"
                   >
                     <span className="relative z-10">Pain Points</span>
                     <div className="absolute inset-0 bg-cyan-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -244,21 +244,21 @@ function AppContent() {
                 <>
                   <Link
                     to="/ops"
-                    className="text-gray-300 hover:text-blue-400 px-5 py-2 text-base font-semibold transition-all duration-200 relative group"
+                    className="text-gray-300 hover:text-blue-400 px-4 py-2 text-sm font-semibold transition-all duration-200 relative group"
                   >
                     <span className="relative z-10">Dashboard</span>
                     <div className="absolute inset-0 bg-blue-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   </Link>
                   <Link
                     to="/ops/reports"
-                    className="text-gray-300 hover:text-blue-400 px-5 py-2 text-base font-semibold transition-all duration-200 relative group"
+                    className="text-gray-300 hover:text-blue-400 px-4 py-2 text-sm font-semibold transition-all duration-200 relative group"
                   >
                     <span className="relative z-10">Operations Reports</span>
                     <div className="absolute inset-0 bg-blue-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   </Link>
                   <Link
                     to="/ops/pain-points"
-                    className="text-gray-300 hover:text-blue-400 px-5 py-2 text-base font-semibold transition-all duration-200 relative group"
+                    className="text-gray-300 hover:text-blue-400 px-4 py-2 text-sm font-semibold transition-all duration-200 relative group"
                   >
                     <span className="relative z-10">Pain Points</span>
                     <div className="absolute inset-0 bg-blue-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -269,21 +269,21 @@ function AppContent() {
                 <>
                   <Link
                     to="/qc"
-                    className="text-gray-300 hover:text-teal-400 px-5 py-2 text-base font-semibold transition-all duration-200 relative group"
+                    className="text-gray-300 hover:text-teal-400 px-4 py-2 text-sm font-semibold transition-all duration-200 relative group"
                   >
                     <span className="relative z-10">Dashboard</span>
                     <div className="absolute inset-0 bg-teal-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   </Link>
                   <Link
                     to="/qc/reports"
-                    className="text-gray-300 hover:text-teal-400 px-5 py-2 text-base font-semibold transition-all duration-200 relative group"
+                    className="text-gray-300 hover:text-teal-400 px-4 py-2 text-sm font-semibold transition-all duration-200 relative group"
                   >
                     <span className="relative z-10">QC Reports</span>
                     <div className="absolute inset-0 bg-teal-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   </Link>
                   <Link
                     to="/qc/pain-points"
-                    className="text-gray-300 hover:text-teal-400 px-5 py-2 text-base font-semibold transition-all duration-200 relative group"
+                    className="text-gray-300 hover:text-teal-400 px-4 py-2 text-sm font-semibold transition-all duration-200 relative group"
                   >
                     <span className="relative z-10">Pain Points</span>
                     <div className="absolute inset-0 bg-teal-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -294,21 +294,21 @@ function AppContent() {
                 <>
                   <Link
                     to="/supplychain"
-                    className="text-gray-300 hover:text-orange-400 px-5 py-2 text-base font-semibold transition-all duration-200 relative group"
+                    className="text-gray-300 hover:text-orange-400 px-4 py-2 text-sm font-semibold transition-all duration-200 relative group"
                   >
                     <span className="relative z-10">Dashboard</span>
                     <div className="absolute inset-0 bg-orange-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   </Link>
                   <Link
                     to="/supplychain/reports"
-                    className="text-gray-300 hover:text-orange-400 px-5 py-2 text-base font-semibold transition-all duration-200 relative group"
+                    className="text-gray-300 hover:text-orange-400 px-4 py-2 text-sm font-semibold transition-all duration-200 relative group"
                   >
                     <span className="relative z-10">SC Reports</span>
                     <div className="absolute inset-0 bg-orange-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   </Link>
                   <Link
                     to="/supplychain/pain-points"
-                    className="text-gray-300 hover:text-orange-400 px-5 py-2 text-base font-semibold transition-all duration-200 relative group"
+                    className="text-gray-300 hover:text-orange-400 px-4 py-2 text-sm font-semibold transition-all duration-200 relative group"
                   >
                     <span className="relative z-10">Pain Points</span>
                     <div className="absolute inset-0 bg-orange-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -319,21 +319,21 @@ function AppContent() {
                 <>
                   <Link
                     to="/finance"
-                    className="text-gray-300 hover:text-green-400 px-5 py-2 text-base font-semibold transition-all duration-200 relative group"
+                    className="text-gray-300 hover:text-green-400 px-4 py-2 text-sm font-semibold transition-all duration-200 relative group"
                   >
                     <span className="relative z-10">Dashboard</span>
                     <div className="absolute inset-0 bg-green-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   </Link>
                   <Link
                     to="/finance/reports"
-                    className="text-gray-300 hover:text-green-400 px-5 py-2 text-base font-semibold transition-all duration-200 relative group"
+                    className="text-gray-300 hover:text-green-400 px-4 py-2 text-sm font-semibold transition-all duration-200 relative group"
                   >
                     <span className="relative z-10">Finance Reports</span>
                     <div className="absolute inset-0 bg-green-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   </Link>
                   <Link
                     to="/finance/pain-points"
-                    className="text-gray-300 hover:text-green-400 px-5 py-2 text-base font-semibold transition-all duration-200 relative group"
+                    className="text-gray-300 hover:text-green-400 px-4 py-2 text-sm font-semibold transition-all duration-200 relative group"
                   >
                     <span className="relative z-10">Pain Points</span>
                     <div className="absolute inset-0 bg-green-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -344,21 +344,21 @@ function AppContent() {
                 <>
                   <Link
                     to="/administration"
-                    className="text-gray-300 hover:text-blue-400 px-5 py-2 text-base font-semibold transition-all duration-200 relative group"
+                    className="text-gray-300 hover:text-blue-400 px-4 py-2 text-sm font-semibold transition-all duration-200 relative group"
                   >
                     <span className="relative z-10">Dashboard</span>
                     <div className="absolute inset-0 bg-blue-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   </Link>
                   <Link
                     to="/administration/reports"
-                    className="text-gray-300 hover:text-blue-400 px-5 py-2 text-base font-semibold transition-all duration-200 relative group"
+                    className="text-gray-300 hover:text-blue-400 px-4 py-2 text-sm font-semibold transition-all duration-200 relative group"
                   >
                     <span className="relative z-10">IT Reports</span>
                     <div className="absolute inset-0 bg-blue-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   </Link>
                   <Link
                     to="/administration/pain-points"
-                    className="text-gray-300 hover:text-blue-400 px-5 py-2 text-base font-semibold transition-all duration-200 relative group"
+                    className="text-gray-300 hover:text-blue-400 px-4 py-2 text-sm font-semibold transition-all duration-200 relative group"
                   >
                     <span className="relative z-10">Pain Points</span>
                     <div className="absolute inset-0 bg-blue-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -369,21 +369,21 @@ function AppContent() {
                 <>
                   <Link
                     to="/sales"
-                    className="text-gray-300 hover:text-amber-400 px-5 py-2 text-base font-semibold transition-all duration-200 relative group"
+                    className="text-gray-300 hover:text-amber-400 px-4 py-2 text-sm font-semibold transition-all duration-200 relative group"
                   >
                     <span className="relative z-10">Dashboard</span>
                     <div className="absolute inset-0 bg-amber-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   </Link>
                   <Link
                     to="/sales/reports"
-                    className="text-gray-300 hover:text-amber-400 px-5 py-2 text-base font-semibold transition-all duration-200 relative group"
+                    className="text-gray-300 hover:text-amber-400 px-4 py-2 text-sm font-semibold transition-all duration-200 relative group"
                   >
                     <span className="relative z-10">Sales Reports</span>
                     <div className="absolute inset-0 bg-amber-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   </Link>
                   <Link
                     to="/sales/pain-points"
-                    className="text-gray-300 hover:text-amber-400 px-5 py-2 text-base font-semibold transition-all duration-200 relative group"
+                    className="text-gray-300 hover:text-amber-400 px-4 py-2 text-sm font-semibold transition-all duration-200 relative group"
                   >
                     <span className="relative z-10">Pain Points</span>
                     <div className="absolute inset-0 bg-amber-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -394,21 +394,21 @@ function AppContent() {
                 <>
                   <Link
                     to="/customer-success"
-                    className="text-gray-300 hover:text-teal-400 px-5 py-2 text-base font-semibold transition-all duration-200 relative group"
+                    className="text-gray-300 hover:text-teal-400 px-4 py-2 text-sm font-semibold transition-all duration-200 relative group"
                   >
                     <span className="relative z-10">Dashboard</span>
                     <div className="absolute inset-0 bg-teal-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   </Link>
                   <Link
                     to="/customer-success/reports"
-                    className="text-gray-300 hover:text-teal-400 px-5 py-2 text-base font-semibold transition-all duration-200 relative group"
+                    className="text-gray-300 hover:text-teal-400 px-4 py-2 text-sm font-semibold transition-all duration-200 relative group"
                   >
                     <span className="relative z-10">CS Reports</span>
                     <div className="absolute inset-0 bg-teal-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   </Link>
                   <Link
                     to="/customer-success/pain-points"
-                    className="text-gray-300 hover:text-teal-400 px-5 py-2 text-base font-semibold transition-all duration-200 relative group"
+                    className="text-gray-300 hover:text-teal-400 px-4 py-2 text-sm font-semibold transition-all duration-200 relative group"
                   >
                     <span className="relative z-10">Pain Points</span>
                     <div className="absolute inset-0 bg-teal-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -419,21 +419,21 @@ function AppContent() {
                 <>
                   <Link
                     to="/marketing"
-                    className="text-gray-300 hover:text-orange-400 px-5 py-2 text-base font-semibold transition-all duration-200 relative group"
+                    className="text-gray-300 hover:text-orange-400 px-4 py-2 text-sm font-semibold transition-all duration-200 relative group"
                   >
                     <span className="relative z-10">Dashboard</span>
                     <div className="absolute inset-0 bg-orange-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   </Link>
                   <Link
                     to="/marketing/reports"
-                    className="text-gray-300 hover:text-orange-400 px-5 py-2 text-base font-semibold transition-all duration-200 relative group"
+                    className="text-gray-300 hover:text-orange-400 px-4 py-2 text-sm font-semibold transition-all duration-200 relative group"
                   >
                     <span className="relative z-10">Marketing Reports</span>
                     <div className="absolute inset-0 bg-orange-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   </Link>
                   <Link
                     to="/marketing/pain-points"
-                    className="text-gray-300 hover:text-orange-400 px-5 py-2 text-base font-semibold transition-all duration-200 relative group"
+                    className="text-gray-300 hover:text-orange-400 px-4 py-2 text-sm font-semibold transition-all duration-200 relative group"
                   >
                     <span className="relative z-10">Pain Points</span>
                     <div className="absolute inset-0 bg-orange-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
