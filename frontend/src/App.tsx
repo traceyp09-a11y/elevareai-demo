@@ -48,46 +48,42 @@ function AppContent() {
       <header className="bg-gradient-to-r from-gray-900/95 via-gray-800/95 to-gray-900/95 backdrop-blur-md border-b border-gray-700/50 sticky top-0 z-50 shadow-2xl">
         <div className="max-w-[2000px] mx-auto px-6 lg:px-8">
           {/* Department Switcher - Refined Design */}
-          <div className="flex items-center justify-between py-3 border-b border-gray-700/30">
-            <div className="flex items-center gap-3">
-              <span className="text-xs text-gray-500 font-semibold uppercase tracking-wider">Departments</span>
-              <div className="h-4 w-px bg-gray-700"></div>
-            </div>
+          <div className="flex items-center justify-center py-3 border-b border-gray-700/30">
             <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide"
                  style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
               <style>{`.scrollbar-hide::-webkit-scrollbar { display: none; }`}</style>
-            <Link to="/" className={`px-3 py-2 rounded-lg text-xs font-semibold transition-all whitespace-nowrap ${currentDept === 'hr' ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/50 shadow-lg shadow-cyan-500/20' : 'text-gray-400 hover:text-gray-200 hover:bg-gray-800/50'}`}>
+            <Link to="/" className={`px-4 py-2.5 rounded-lg text-base font-semibold transition-all whitespace-nowrap ${currentDept === 'hr' ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/50 shadow-lg shadow-cyan-500/20' : 'text-gray-400 hover:text-gray-200 hover:bg-gray-800/50'}`}>
               👥 HR
             </Link>
-            <Link to="/hse" className={`px-3 py-2 rounded-lg text-xs font-semibold transition-all whitespace-nowrap ${currentDept === 'hse' ? 'bg-orange-500/20 text-orange-300 border border-orange-500/50 shadow-lg shadow-orange-500/20' : 'text-gray-400 hover:text-gray-200 hover:bg-gray-800/50'}`}>
+            <Link to="/hse" className={`px-4 py-2.5 rounded-lg text-base font-semibold transition-all whitespace-nowrap ${currentDept === 'hse' ? 'bg-orange-500/20 text-orange-300 border border-orange-500/50 shadow-lg shadow-orange-500/20' : 'text-gray-400 hover:text-gray-200 hover:bg-gray-800/50'}`}>
               🦺 HSE
             </Link>
-            <Link to="/ops" className={`px-3 py-2 rounded-lg text-xs font-semibold transition-all whitespace-nowrap ${currentDept === 'ops' ? 'bg-blue-500/20 text-blue-300 border border-blue-500/50 shadow-lg shadow-blue-500/20' : 'text-gray-400 hover:text-gray-200 hover:bg-gray-800/50'}`}>
+            <Link to="/ops" className={`px-4 py-2.5 rounded-lg text-base font-semibold transition-all whitespace-nowrap ${currentDept === 'ops' ? 'bg-blue-500/20 text-blue-300 border border-blue-500/50 shadow-lg shadow-blue-500/20' : 'text-gray-400 hover:text-gray-200 hover:bg-gray-800/50'}`}>
               ⚙️ Operations
             </Link>
-            <Link to="/qc" className={`px-3 py-2 rounded-lg text-xs font-semibold transition-all whitespace-nowrap ${currentDept === 'qc' ? 'bg-teal-500/20 text-teal-300 border border-teal-500/50 shadow-lg shadow-teal-500/20' : 'text-gray-400 hover:text-gray-200 hover:bg-gray-800/50'}`}>
+            <Link to="/qc" className={`px-4 py-2.5 rounded-lg text-base font-semibold transition-all whitespace-nowrap ${currentDept === 'qc' ? 'bg-teal-500/20 text-teal-300 border border-teal-500/50 shadow-lg shadow-teal-500/20' : 'text-gray-400 hover:text-gray-200 hover:bg-gray-800/50'}`}>
               ✓ Quality
             </Link>
-            <Link to="/supplychain" className={`px-3 py-2 rounded-lg text-xs font-semibold transition-all whitespace-nowrap ${currentDept === 'supplychain' ? 'bg-orange-500/20 text-orange-300 border border-orange-500/50 shadow-lg shadow-orange-500/20' : 'text-gray-400 hover:text-gray-200 hover:bg-gray-800/50'}`}>
+            <Link to="/supplychain" className={`px-4 py-2.5 rounded-lg text-base font-semibold transition-all whitespace-nowrap ${currentDept === 'supplychain' ? 'bg-orange-500/20 text-orange-300 border border-orange-500/50 shadow-lg shadow-orange-500/20' : 'text-gray-400 hover:text-gray-200 hover:bg-gray-800/50'}`}>
               🚚 Supply Chain
             </Link>
-            <Link to="/finance" className={`px-3 py-2 rounded-lg text-xs font-semibold transition-all whitespace-nowrap ${currentDept === 'finance' ? 'bg-green-500/20 text-green-300 border border-green-500/50 shadow-lg shadow-green-500/20' : 'text-gray-400 hover:text-gray-200 hover:bg-gray-800/50'}`}>
+            <Link to="/finance" className={`px-4 py-2.5 rounded-lg text-base font-semibold transition-all whitespace-nowrap ${currentDept === 'finance' ? 'bg-green-500/20 text-green-300 border border-green-500/50 shadow-lg shadow-green-500/20' : 'text-gray-400 hover:text-gray-200 hover:bg-gray-800/50'}`}>
               💰 Finance
             </Link>
-            <Link to="/administration" className={`px-3 py-2 rounded-lg text-xs font-semibold transition-all whitespace-nowrap ${currentDept === 'administration' ? 'bg-blue-500/20 text-blue-300 border border-blue-500/50 shadow-lg shadow-blue-500/20' : 'text-gray-400 hover:text-gray-200 hover:bg-gray-800/50'}`}>
+            <Link to="/administration" className={`px-4 py-2.5 rounded-lg text-base font-semibold transition-all whitespace-nowrap ${currentDept === 'administration' ? 'bg-blue-500/20 text-blue-300 border border-blue-500/50 shadow-lg shadow-blue-500/20' : 'text-gray-400 hover:text-gray-200 hover:bg-gray-800/50'}`}>
               💻 IT & Admin
             </Link>
-            <Link to="/sales" className={`px-3 py-2 rounded-lg text-xs font-semibold transition-all whitespace-nowrap ${currentDept === 'sales' ? 'bg-amber-500/20 text-amber-300 border border-amber-500/50 shadow-lg shadow-amber-500/20' : 'text-gray-400 hover:text-gray-200 hover:bg-gray-800/50'}`}>
+            <Link to="/sales" className={`px-4 py-2.5 rounded-lg text-base font-semibold transition-all whitespace-nowrap ${currentDept === 'sales' ? 'bg-amber-500/20 text-amber-300 border border-amber-500/50 shadow-lg shadow-amber-500/20' : 'text-gray-400 hover:text-gray-200 hover:bg-gray-800/50'}`}>
               💰 Sales
             </Link>
-            <Link to="/customer-success" className={`px-3 py-2 rounded-lg text-xs font-semibold transition-all whitespace-nowrap ${currentDept === 'customer-success' ? 'bg-teal-500/20 text-teal-300 border border-teal-500/50 shadow-lg shadow-teal-500/20' : 'text-gray-400 hover:text-gray-200 hover:bg-gray-800/50'}`}>
+            <Link to="/customer-success" className={`px-4 py-2.5 rounded-lg text-base font-semibold transition-all whitespace-nowrap ${currentDept === 'customer-success' ? 'bg-teal-500/20 text-teal-300 border border-teal-500/50 shadow-lg shadow-teal-500/20' : 'text-gray-400 hover:text-gray-200 hover:bg-gray-800/50'}`}>
               ❤️ Customer Success
             </Link>
-            <Link to="/marketing" className={`px-3 py-2 rounded-lg text-xs font-semibold transition-all whitespace-nowrap ${currentDept === 'marketing' ? 'bg-orange-500/20 text-orange-300 border border-orange-500/50 shadow-lg shadow-orange-500/20' : 'text-gray-400 hover:text-gray-200 hover:bg-gray-800/50'}`}>
+            <Link to="/marketing" className={`px-4 py-2.5 rounded-lg text-base font-semibold transition-all whitespace-nowrap ${currentDept === 'marketing' ? 'bg-orange-500/20 text-orange-300 border border-orange-500/50 shadow-lg shadow-orange-500/20' : 'text-gray-400 hover:text-gray-200 hover:bg-gray-800/50'}`}>
               📢 Marketing
             </Link>
             <div className="h-6 w-px bg-gray-700 mx-1"></div>
-            <Link to="/executive" className={`px-4 py-2 rounded-lg text-xs font-bold transition-all whitespace-nowrap ${currentDept === 'executive' ? 'bg-gradient-to-r from-purple-500/30 to-pink-500/30 text-transparent bg-clip-text border border-purple-500/50 shadow-lg shadow-purple-500/30' : 'text-gray-300 hover:text-white hover:bg-gradient-to-r hover:from-purple-900/20 hover:to-pink-900/20 border border-transparent hover:border-purple-500/30'}`} style={currentDept === 'executive' ? { backgroundClip: 'padding-box, text', WebkitBackgroundClip: 'padding-box, text' } : {}}>
+            <Link to="/executive" className={`px-5 py-2.5 rounded-lg text-base font-bold transition-all whitespace-nowrap ${currentDept === 'executive' ? 'bg-gradient-to-r from-purple-500/30 to-pink-500/30 text-transparent bg-clip-text border border-purple-500/50 shadow-lg shadow-purple-500/30' : 'text-gray-300 hover:text-white hover:bg-gradient-to-r hover:from-purple-900/20 hover:to-pink-900/20 border border-transparent hover:border-purple-500/30'}`} style={currentDept === 'executive' ? { backgroundClip: 'padding-box, text', WebkitBackgroundClip: 'padding-box, text' } : {}}>
               <span className={currentDept === 'executive' ? 'bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent' : ''}>
                 💼 Executive
               </span>
@@ -99,13 +95,13 @@ function AppContent() {
             {/* Logo & Context */}
             <div className="flex items-center space-x-5">
               <Link to="/executive" className="flex-shrink-0 hover:scale-105 transition-transform duration-200">
-                <ElevareLogo variant="dark" size="md" />
+                <ElevareLogo variant="dark" size="lg" />
               </Link>
               <div className="hidden md:flex items-center gap-4">
                 <div className="h-8 w-px bg-gradient-to-b from-transparent via-gray-600 to-transparent"></div>
                 <div>
-                  <div className="text-xs text-gray-500 uppercase tracking-wide font-semibold">Current View</div>
-                  <div className={`text-sm font-bold mt-0.5 ${
+                  <div className="text-sm text-gray-500 uppercase tracking-wide font-semibold">Current View</div>
+                  <div className={`text-xl font-bold mt-0.5 ${
                     currentDept === 'executive' ? 'bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent' :
                     currentDept === 'hr' ? 'text-cyan-400' :
                     currentDept === 'hse' ? 'text-orange-400' :

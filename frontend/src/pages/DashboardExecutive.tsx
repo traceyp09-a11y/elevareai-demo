@@ -243,7 +243,7 @@ const DashboardExecutive: React.FC = () => {
                   <Building2 className="text-blue-400" size={28} />
                 </div>
                 <div className="text-right">
-                  <p className="text-5xl font-bold text-white mb-1">{executiveSummary?.departmentsMonitored || 0}</p>
+                  <p className="text-3xl font-bold text-white mb-1">{executiveSummary?.departmentsMonitored || 0}</p>
                   <p className="text-xs text-blue-400 font-semibold uppercase tracking-wide">Departments</p>
                 </div>
               </div>
@@ -265,7 +265,7 @@ const DashboardExecutive: React.FC = () => {
                   <BarChart3 className="text-purple-400" size={28} />
                 </div>
                 <div className="text-right">
-                  <p className="text-5xl font-bold text-white mb-1">{executiveSummary?.totalKPIs || 0}</p>
+                  <p className="text-3xl font-bold text-white mb-1">{executiveSummary?.totalKPIs || 0}</p>
                   <p className="text-xs text-purple-400 font-semibold uppercase tracking-wide">KPIs</p>
                 </div>
               </div>
@@ -289,7 +289,7 @@ const DashboardExecutive: React.FC = () => {
                   )}
                 </div>
                 <div className="text-right">
-                  <p className="text-5xl font-bold text-white mb-1">{executiveSummary?.criticalAlerts || 0}</p>
+                  <p className="text-3xl font-bold text-white mb-1">{executiveSummary?.criticalAlerts || 0}</p>
                   <p className={`text-xs font-semibold uppercase tracking-wide ${(executiveSummary?.criticalAlerts || 0) > 0 ? 'text-red-400' : 'text-green-400'}`}>
                     {(executiveSummary?.criticalAlerts || 0) > 0 ? 'CRITICAL' : 'ALL CLEAR'}
                   </p>

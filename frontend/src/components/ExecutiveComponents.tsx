@@ -227,7 +227,7 @@ export const ExecutiveKPICard: React.FC<ExecutiveKPICardProps> = ({
 
       <div className="flex items-end justify-between">
         <div className="flex-1">
-          <p className="text-4xl font-bold text-white mb-1">{value}</p>
+          <p className="text-2xl font-bold text-white mb-1">{value}</p>
           {change && (
             <div className="flex items-center gap-2">
               <span className={`text-sm font-semibold px-2 py-1 rounded ${
