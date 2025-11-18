@@ -1,5 +1,5 @@
 interface ElevareLogoProps {
-  size?: 'sm' | 'md' | 'lg';
+  size?: 'sm' | 'md' | 'lg' | 'xl';
   variant?: 'light' | 'dark';
 }
 
@@ -7,17 +7,25 @@ export default function ElevareLogo({ size = 'md', variant = 'dark' }: ElevareLo
   const sizes = {
     sm: 'w-32 h-10',
     md: 'w-40 h-12',
-    lg: 'w-48 h-14'
+    lg: 'w-48 h-14',
+    xl: 'w-56 h-16'
   };
 
   const textColor = variant === 'dark' ? 'text-white' : 'text-gray-900';
   const accentColor = variant === 'dark' ? 'text-cyan-400' : 'text-blue-600';
 
+  const iconSizes = {
+    sm: 'w-8 h-8',
+    md: 'w-10 h-10',
+    lg: 'w-12 h-12',
+    xl: 'w-14 h-14'
+  };
+
   return (
     <div className={`flex items-center ${sizes[size]}`}>
       <svg
         viewBox="0 0 48 48"
-        className="w-10 h-10"
+        className={iconSizes[size]}
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
@@ -57,7 +65,7 @@ export default function ElevareLogo({ size = 'md', variant = 'dark' }: ElevareLo
       </svg>
 
       <div className="ml-3 flex flex-col justify-center">
-        <div className={`font-bold text-xl tracking-tight ${textColor}`}>
+        <div className={`font-bold ${size === 'xl' ? 'text-3xl' : size === 'lg' ? 'text-2xl' : 'text-xl'} tracking-tight ${textColor}`}>
           Elevare<span className={accentColor}>IQ</span>
         </div>
       </div>
