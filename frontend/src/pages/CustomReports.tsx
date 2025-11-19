@@ -608,7 +608,7 @@ export default function CustomReports() {
                     <div className="flex items-center justify-between mb-6">
                       <div>
                         <h2 className="text-3xl font-bold text-white mb-2">
-                          {REPORT_TEMPLATES.find(t => t.id === selectedTemplate)?.name}
+                          {reportTemplates.find(t => t.id === selectedTemplate)?.name}
                         </h2>
                         <p className="text-gray-400">
                           Generated on {new Date().toLocaleDateString()} at {new Date().toLocaleTimeString()}
