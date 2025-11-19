@@ -36,7 +36,27 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const login = async (email: string, password: string): Promise<{ success: boolean; error?: string }> => {
     setIsLoading(true);
     try {
-      // TODO: Replace with actual API call
+      // Demo credentials - bypass API for testing
+      const demoUsers: { [key: string]: { password: string; user: User } } = {
+        'admin@elevareai.com': {
+          password: 'Admin123!',
+          user: { id: '1', email: 'admin@elevareai.com', name: 'Admin User', role: 'admin' }
+        },
+        'manager@company.com': {
+          password: 'Manager123!',
+          user: { id: '2', email: 'manager@company.com', name: 'Manager User', role: 'manager' }
+        }
+      };
+
+      // Check demo credentials first
+      const demoUser = demoUsers[email.toLowerCase()];
+      if (demoUser && demoUser.password === password) {
+        setUser(demoUser.user);
+        localStorage.setItem('authToken', 'demo-token-' + demoUser.user.id);
+        return { success: true };
+      }
+
+      // Try API call for non-demo users
       const response = await fetch('/api/auth/login', {
         method: 'POST',
         headers: {
@@ -47,7 +67,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        return { success: false, error: errorData.message || 'Login failed' };
+        return { success: false, error: errorData.message || 'Invalid email or password' };
       }
 
       const data = await response.json();
@@ -56,7 +76,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       return { success: true };
     } catch (error) {
       console.error('Login error:', error);
-      return { success: false, error: 'An unexpected error occurred' };
+      return { success: false, error: 'Invalid email or password' };
     } finally {
       setIsLoading(false);
     }
