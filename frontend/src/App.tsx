@@ -28,6 +28,7 @@ import BoardReports from './pages/BoardReports';
 import Login from './pages/Login';
 import ElevareLogo from './components/ElevareLogo';
 import ErrorBoundary from './components/ErrorBoundary';
+import { AuthProvider } from './contexts/AuthContext';
 import './App.css';
 
 function AppContent() {
@@ -508,9 +509,11 @@ function AppContent() {
 
 function App() {
   return (
-    <Router>
-      <AppContent />
-    </Router>
+    <AuthProvider>
+      <Router>
+        <AppContent />
+      </Router>
+    </AuthProvider>
   );
 }
 
