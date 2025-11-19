@@ -43,7 +43,19 @@ function AppContent() {
   const isCustomerSuccess = location.pathname.startsWith('/customer-success');
   const isMarketing = location.pathname.startsWith('/marketing');
   const isExecutive = location.pathname.startsWith('/executive');
+  const isLogin = location.pathname === '/login';
   const currentDept = isHSE ? 'hse' : isOps ? 'ops' : isQC ? 'qc' : isSC ? 'supplychain' : isFinance ? 'finance' : isAdmin ? 'administration' : isSales ? 'sales' : isCustomerSuccess ? 'customer-success' : isMarketing ? 'marketing' : isExecutive ? 'executive' : 'hr';
+
+  // Don't show header/footer on login page
+  if (isLogin) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black">
+        <Routes>
+          <Route path="/login" element={<Login />} />
+        </Routes>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black">
