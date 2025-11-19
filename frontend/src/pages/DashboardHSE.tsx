@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { AreaChart, Area, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
-import DashboardFilters from '../components/DashboardFilters';
 import AlertBanner, { Alert } from '../components/AlertBanner';
 
 interface KPIData {
@@ -35,10 +34,6 @@ interface AllKPIsResponse {
 export default function DashboardHSE() {
   const [data, setData] = useState<AllKPIsResponse | null>(null);
   const [loading, setLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedDepartment, setSelectedDepartment] = useState('all');
-  const [startDate, setStartDate] = useState('2024-10-01');
-  const [endDate, setEndDate] = useState('2024-12-31');
   const [alerts, setAlerts] = useState<Alert[]>([]);
   const [lastRefresh, setLastRefresh] = useState<Date>(new Date());
 
@@ -243,10 +238,8 @@ export default function DashboardHSE() {
     ];
   };
 
-  // Filter and sort KPIs
-  const filteredKPIs = getKPIs()
-    .filter(kpi => kpi.name.toLowerCase().includes(searchQuery.toLowerCase()))
-    .sort((a, b) => a.priority - b.priority);
+  // Sort KPIs by priority
+  const sortedKPIs = getKPIs().sort((a, b) => a.priority - b.priority);
 
   // Sample historical data for trends
   const trendData = [
@@ -302,23 +295,9 @@ export default function DashboardHSE() {
           </div>
         )}
 
-        {/* Filters */}
-        <div className="mb-6">
-          <DashboardFilters
-            onSearch={setSearchQuery}
-            onDepartmentChange={setSelectedDepartment}
-            onDateRangeChange={(start, end) => {
-              setStartDate(start);
-              setEndDate(end);
-            }}
-            onRefresh={() => fetchKPIs()}
-            onExportPDF={() => alert('PDF export feature coming soon!')}
-          />
-        </div>
-
         {/* HSE Metrics Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          {filteredKPIs.map((kpi) => (
+          {sortedKPIs.map((kpi) => (
             <Link
               key={kpi.name}
               to={`/hse/kpi/${encodeURIComponent(kpi.name)}`}
