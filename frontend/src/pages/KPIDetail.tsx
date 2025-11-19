@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import {
   LineChart,
@@ -46,41 +46,188 @@ interface KPIDetailData {
   };
 }
 
-const KPI_CONFIG: { [key: string]: { endpoint: string; title: string; icon: string; color: string } } = {
-  turnoverRate: { endpoint: 'turnover', title: 'Employee Turnover Rate', icon: '👥', color: '#06b6d4' },
-  timeToHire: { endpoint: 'time-to-hire', title: 'Time to Hire', icon: '⏱️', color: '#3b82f6' },
-  costPerHire: { endpoint: 'cost-per-hire', title: 'Cost per Hire', icon: '💰', color: '#8b5cf6' },
-  productivity: { endpoint: 'productivity', title: 'Employee Productivity', icon: '📈', color: '#10b981' },
-  trir: { endpoint: 'safety', title: 'Safety Incident Rate (TRIR)', icon: '🛡️', color: '#f59e0b' },
-  absenteeism: { endpoint: 'absenteeism', title: 'Absenteeism Rate', icon: '📅', color: '#ef4444' },
-  trainingROI: { endpoint: 'training-roi', title: 'Training ROI', icon: '🎓', color: '#8b5cf6' },
-  engagement: { endpoint: 'engagement', title: 'Employee Engagement Score', icon: '💙', color: '#3b82f6' },
-  offerAcceptance: { endpoint: 'offer-acceptance', title: 'Offer Acceptance Rate', icon: '✅', color: '#10b981' },
-  revenuePerEmployee: { endpoint: 'revenue-per-employee', title: 'Revenue per Employee', icon: '💵', color: '#06b6d4' }
+// Department-specific KPI configurations
+const DEPARTMENT_KPI_CONFIGS: { [department: string]: { [key: string]: { endpoint: string; title: string; icon: string; color: string } } } = {
+  // HR Analytics KPIs
+  hr: {
+    turnoverRate: { endpoint: 'turnover', title: 'Employee Turnover Rate', icon: '👥', color: '#06b6d4' },
+    timeToHire: { endpoint: 'time-to-hire', title: 'Time to Hire', icon: '⏱️', color: '#3b82f6' },
+    costPerHire: { endpoint: 'cost-per-hire', title: 'Cost per Hire', icon: '💰', color: '#8b5cf6' },
+    productivity: { endpoint: 'productivity', title: 'Employee Productivity', icon: '📈', color: '#10b981' },
+    trir: { endpoint: 'safety', title: 'Safety Incident Rate (TRIR)', icon: '🛡️', color: '#f59e0b' },
+    absenteeism: { endpoint: 'absenteeism', title: 'Absenteeism Rate', icon: '📅', color: '#ef4444' },
+    trainingROI: { endpoint: 'training-roi', title: 'Training ROI', icon: '🎓', color: '#8b5cf6' },
+    engagement: { endpoint: 'engagement', title: 'Employee Engagement Score', icon: '💙', color: '#3b82f6' },
+    offerAcceptance: { endpoint: 'offer-acceptance', title: 'Offer Acceptance Rate', icon: '✅', color: '#10b981' },
+    revenuePerEmployee: { endpoint: 'revenue-per-employee', title: 'Revenue per Employee', icon: '💵', color: '#06b6d4' }
+  },
+  // HSE KPIs
+  hse: {
+    'TRIR': { endpoint: 'trir', title: 'Total Recordable Incident Rate', icon: '🛡️', color: '#ef4444' },
+    'LTIFR': { endpoint: 'ltifr', title: 'Lost Time Injury Frequency Rate', icon: '⚠️', color: '#f59e0b' },
+    'PPE Compliance': { endpoint: 'ppe-compliance', title: 'PPE Compliance Rate', icon: '🦺', color: '#10b981' },
+    'Environmental Compliance': { endpoint: 'environmental-compliance', title: 'Environmental Compliance', icon: '🌍', color: '#06b6d4' },
+    'Safety Audit Score': { endpoint: 'safety-audit', title: 'Safety Audit Score', icon: '📋', color: '#3b82f6' },
+    'Safety Training Rate': { endpoint: 'safety-training', title: 'Safety Training Completion', icon: '🎓', color: '#8b5cf6' },
+    'Near Miss Rate': { endpoint: 'near-miss', title: 'Near Miss Reporting Rate', icon: '👁️', color: '#f59e0b' },
+    'Hazard Identification Rate': { endpoint: 'hazard-id', title: 'Hazard Identification Rate', icon: '🔍', color: '#ef4444' },
+    'Emergency Preparedness': { endpoint: 'emergency-prep', title: 'Emergency Preparedness Score', icon: '🚨', color: '#06b6d4' },
+    'Investigation Closure Time': { endpoint: 'investigation-closure', title: 'Investigation Closure Time', icon: '⏱️', color: '#3b82f6' }
+  },
+  // Operations KPIs
+  ops: {
+    'On-Time Delivery': { endpoint: 'on-time-delivery', title: 'On-Time Delivery Rate', icon: '🚚', color: '#10b981' },
+    'Schedule Adherence': { endpoint: 'schedule-adherence', title: 'Schedule Adherence', icon: '📅', color: '#3b82f6' },
+    'OEE': { endpoint: 'oee', title: 'Overall Equipment Effectiveness', icon: '⚙️', color: '#06b6d4' },
+    'First Pass Yield': { endpoint: 'first-pass-yield', title: 'First Pass Yield', icon: '✅', color: '#10b981' },
+    'Inventory Turnover': { endpoint: 'inventory-turnover', title: 'Inventory Turnover', icon: '📦', color: '#8b5cf6' },
+    'Supplier OTD': { endpoint: 'supplier-otd', title: 'Supplier On-Time Delivery', icon: '🤝', color: '#f59e0b' },
+    'Cycle Time': { endpoint: 'cycle-time', title: 'Production Cycle Time', icon: '⏱️', color: '#ef4444' },
+    'Capacity Utilization': { endpoint: 'capacity-util', title: 'Capacity Utilization', icon: '📊', color: '#06b6d4' },
+    'Maintenance Compliance': { endpoint: 'maintenance-compliance', title: 'Maintenance Compliance', icon: '🔧', color: '#3b82f6' },
+    'Cost of Quality': { endpoint: 'cost-of-quality', title: 'Cost of Quality', icon: '💰', color: '#8b5cf6' }
+  },
+  // Finance KPIs
+  finance: {
+    'Gross Profit Margin': { endpoint: 'gross-profit-margin', title: 'Gross Profit Margin', icon: '💰', color: '#10b981' },
+    'Net Profit Margin': { endpoint: 'net-profit-margin', title: 'Net Profit Margin', icon: '📈', color: '#06b6d4' },
+    'Operating Cash Flow': { endpoint: 'operating-cash-flow', title: 'Operating Cash Flow Ratio', icon: '💵', color: '#3b82f6' },
+    'Current Ratio': { endpoint: 'current-ratio', title: 'Current Ratio', icon: '⚖️', color: '#8b5cf6' },
+    'Quick Ratio': { endpoint: 'quick-ratio', title: 'Quick Ratio', icon: '⚡', color: '#f59e0b' },
+    'ROA': { endpoint: 'roa', title: 'Return on Assets', icon: '🏢', color: '#10b981' },
+    'ROE': { endpoint: 'roe', title: 'Return on Equity', icon: '📊', color: '#06b6d4' },
+    'Debt-to-Equity': { endpoint: 'debt-to-equity', title: 'Debt-to-Equity Ratio', icon: '📉', color: '#ef4444' },
+    'Working Capital': { endpoint: 'working-capital', title: 'Working Capital', icon: '💼', color: '#3b82f6' },
+    'EBITDA Margin': { endpoint: 'ebitda-margin', title: 'EBITDA Margin', icon: '💹', color: '#8b5cf6' }
+  },
+  // Sales KPIs
+  sales: {
+    'Win Rate': { endpoint: 'win-rate', title: 'Win Rate', icon: '🏆', color: '#10b981' },
+    'Sales Cycle': { endpoint: 'sales-cycle', title: 'Sales Cycle Length', icon: '⏱️', color: '#3b82f6' },
+    'Pipeline Velocity': { endpoint: 'pipeline-velocity', title: 'Pipeline Velocity', icon: '🚀', color: '#06b6d4' },
+    'Quota Attainment': { endpoint: 'quota-attainment', title: 'Quota Attainment', icon: '🎯', color: '#8b5cf6' },
+    'Avg Deal Size': { endpoint: 'avg-deal-size', title: 'Average Deal Size', icon: '💰', color: '#f59e0b' },
+    'CAC': { endpoint: 'cac', title: 'Customer Acquisition Cost', icon: '💵', color: '#ef4444' },
+    'Revenue per Rep': { endpoint: 'revenue-per-rep', title: 'Revenue per Rep', icon: '👤', color: '#10b981' },
+    'Forecast Accuracy': { endpoint: 'forecast-accuracy', title: 'Forecast Accuracy', icon: '📊', color: '#06b6d4' },
+    'Lead Conversion': { endpoint: 'lead-conversion', title: 'Lead Conversion Rate', icon: '🔄', color: '#3b82f6' },
+    'MRR Growth': { endpoint: 'mrr-growth', title: 'MRR Growth', icon: '📈', color: '#8b5cf6' }
+  },
+  // Marketing KPIs
+  marketing: {
+    'Marketing ROI': { endpoint: 'marketing-roi', title: 'Marketing ROI', icon: '📈', color: '#10b981' },
+    'Cost Per Lead': { endpoint: 'cost-per-lead', title: 'Cost Per Lead', icon: '💰', color: '#3b82f6' },
+    'MQL to SQL': { endpoint: 'mql-to-sql', title: 'MQL to SQL Conversion', icon: '🔄', color: '#06b6d4' },
+    'CAC': { endpoint: 'cac', title: 'Customer Acquisition Cost', icon: '💵', color: '#8b5cf6' },
+    'MQLs Generated': { endpoint: 'mqls-generated', title: 'MQLs Generated', icon: '🎯', color: '#f59e0b' },
+    'Campaign Effectiveness': { endpoint: 'campaign-effectiveness', title: 'Campaign Effectiveness', icon: '📊', color: '#ef4444' },
+    'Lead to Customer': { endpoint: 'lead-to-customer', title: 'Lead to Customer Rate', icon: '👤', color: '#10b981' },
+    'Channel ROI': { endpoint: 'channel-roi', title: 'Channel ROI', icon: '📺', color: '#06b6d4' },
+    'Content Engagement': { endpoint: 'content-engagement', title: 'Content Engagement', icon: '📝', color: '#3b82f6' }
+  },
+  // Customer Success KPIs
+  'customer-success': {
+    'NPS': { endpoint: 'nps', title: 'Net Promoter Score', icon: '⭐', color: '#10b981' },
+    'CSAT': { endpoint: 'csat', title: 'Customer Satisfaction Score', icon: '😊', color: '#3b82f6' },
+    'CES': { endpoint: 'ces', title: 'Customer Effort Score', icon: '📊', color: '#06b6d4' },
+    'Churn Rate': { endpoint: 'churn-rate', title: 'Churn Rate', icon: '📉', color: '#ef4444' },
+    'Customer LTV': { endpoint: 'customer-ltv', title: 'Customer Lifetime Value', icon: '💰', color: '#8b5cf6' },
+    'Net Revenue Retention': { endpoint: 'nrr', title: 'Net Revenue Retention', icon: '💵', color: '#f59e0b' },
+    'Health Score': { endpoint: 'health-score', title: 'Average Health Score', icon: '❤️', color: '#10b981' },
+    'Time to Value': { endpoint: 'time-to-value', title: 'Time to First Value', icon: '⏱️', color: '#06b6d4' },
+    'Product Adoption': { endpoint: 'product-adoption', title: 'Product Adoption Rate', icon: '📈', color: '#3b82f6' },
+    'Ticket Resolution': { endpoint: 'ticket-resolution', title: 'Avg Ticket Resolution Time', icon: '🎫', color: '#8b5cf6' }
+  },
+  // Supply Chain KPIs
+  'supply-chain': {
+    'Perfect Order Rate': { endpoint: 'perfect-order-rate', title: 'Perfect Order Rate', icon: '✅', color: '#10b981' },
+    'OTIF': { endpoint: 'otif', title: 'On Time In Full', icon: '🚚', color: '#3b82f6' },
+    'Inventory Turnover': { endpoint: 'inventory-turnover', title: 'Inventory Turnover', icon: '📦', color: '#06b6d4' },
+    'DSO': { endpoint: 'dso', title: 'Days Sales Outstanding', icon: '📅', color: '#8b5cf6' },
+    'Cash-to-Cash Cycle': { endpoint: 'cash-to-cash', title: 'Cash-to-Cash Cycle Time', icon: '💵', color: '#f59e0b' },
+    'Supplier Lead Time': { endpoint: 'supplier-lead-time', title: 'Supplier Lead Time', icon: '⏱️', color: '#ef4444' },
+    'Freight Cost': { endpoint: 'freight-cost', title: 'Freight Cost %', icon: '🚢', color: '#10b981' },
+    'Warehouse Utilization': { endpoint: 'warehouse-util', title: 'Warehouse Utilization', icon: '🏭', color: '#06b6d4' },
+    'Order Accuracy': { endpoint: 'order-accuracy', title: 'Order Accuracy', icon: '🎯', color: '#3b82f6' },
+    'SC Cost': { endpoint: 'sc-cost', title: 'Supply Chain Cost %', icon: '💰', color: '#8b5cf6' }
+  },
+  // Quality Control KPIs
+  qc: {
+    'Defect Rate': { endpoint: 'defect-rate', title: 'Defect Rate PPM', icon: '🔍', color: '#ef4444' },
+    'First Pass Yield': { endpoint: 'first-pass-yield', title: 'First Pass Yield', icon: '✅', color: '#10b981' },
+    'Scrap Rate': { endpoint: 'scrap-rate', title: 'Scrap Rate', icon: '🗑️', color: '#f59e0b' },
+    'Rework Rate': { endpoint: 'rework-rate', title: 'Rework Rate', icon: '🔄', color: '#3b82f6' },
+    'Customer Return Rate': { endpoint: 'customer-return-rate', title: 'Customer Return Rate', icon: '📦', color: '#8b5cf6' },
+    'Supplier Quality Index': { endpoint: 'supplier-quality', title: 'Supplier Quality Index', icon: '🤝', color: '#06b6d4' },
+    'NCR Rate': { endpoint: 'ncr-rate', title: 'Non-Conformance Rate', icon: '⚠️', color: '#ef4444' },
+    'CAPA Effectiveness': { endpoint: 'capa-effectiveness', title: 'CAPA Effectiveness', icon: '📋', color: '#10b981' },
+    'COPQ': { endpoint: 'copq', title: 'Cost of Poor Quality', icon: '💰', color: '#f59e0b' },
+    'Quality Audit Score': { endpoint: 'quality-audit', title: 'Quality Audit Score', icon: '📊', color: '#3b82f6' }
+  },
+  // Administration/IT KPIs
+  administration: {
+    'System Uptime': { endpoint: 'system-uptime', title: 'System Uptime', icon: '🖥️', color: '#10b981' },
+    'Helpdesk Response': { endpoint: 'helpdesk-response', title: 'Helpdesk Response Time', icon: '🎫', color: '#3b82f6' },
+    'IT Cost per Employee': { endpoint: 'it-cost-per-employee', title: 'IT Cost per Employee', icon: '💰', color: '#06b6d4' },
+    'Security Incidents': { endpoint: 'security-incidents', title: 'Security Incident Rate', icon: '🔒', color: '#ef4444' },
+    'License Utilization': { endpoint: 'license-util', title: 'License Utilization', icon: '📋', color: '#8b5cf6' },
+    'Backup Success': { endpoint: 'backup-success', title: 'Backup Success Rate', icon: '💾', color: '#f59e0b' },
+    'Project On-Time': { endpoint: 'project-on-time', title: 'Project On-Time Delivery', icon: '📅', color: '#10b981' },
+    'Employee Satisfaction': { endpoint: 'employee-satisfaction', title: 'Employee Satisfaction', icon: '😊', color: '#06b6d4' },
+    'Ticket Resolution': { endpoint: 'ticket-resolution', title: 'Ticket Resolution Time', icon: '⏱️', color: '#3b82f6' },
+    'Infrastructure Util': { endpoint: 'infrastructure-util', title: 'Infrastructure Utilization', icon: '🏢', color: '#8b5cf6' }
+  }
+};
+
+// Helper to get department from URL path
+const getDepartmentFromPath = (pathname: string): { department: string; apiBase: string; backLink: string; departmentName: string } => {
+  if (pathname.startsWith('/hse/')) return { department: 'hse', apiBase: '/api/hse/kpis', backLink: '/hse', departmentName: 'HSE Analytics' };
+  if (pathname.startsWith('/ops/')) return { department: 'ops', apiBase: '/api/ops/kpis', backLink: '/ops', departmentName: 'Operations Analytics' };
+  if (pathname.startsWith('/finance/')) return { department: 'finance', apiBase: '/api/finance/kpis', backLink: '/finance', departmentName: 'Finance Analytics' };
+  if (pathname.startsWith('/sales/')) return { department: 'sales', apiBase: '/api/sales/kpis', backLink: '/sales', departmentName: 'Sales Analytics' };
+  if (pathname.startsWith('/marketing/')) return { department: 'marketing', apiBase: '/api/marketing/kpis', backLink: '/marketing', departmentName: 'Marketing Analytics' };
+  if (pathname.startsWith('/customer-success/')) return { department: 'customer-success', apiBase: '/api/customer-success/kpis', backLink: '/customer-success', departmentName: 'Customer Success' };
+  if (pathname.startsWith('/supply-chain/')) return { department: 'supply-chain', apiBase: '/api/supplychain/kpis', backLink: '/supply-chain', departmentName: 'Supply Chain' };
+  if (pathname.startsWith('/qc/')) return { department: 'qc', apiBase: '/api/qc/kpis', backLink: '/qc', departmentName: 'Quality Control' };
+  if (pathname.startsWith('/administration/')) return { department: 'administration', apiBase: '/api/administration/kpis', backLink: '/administration', departmentName: 'Administration' };
+  // Default to HR
+  return { department: 'hr', apiBase: '/api/kpis', backLink: '/', departmentName: 'HR Analytics' };
 };
 
 function KPIDetail() {
   const { kpiName } = useParams<{ kpiName: string }>();
+  const location = useLocation();
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<KPIDetailData | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [selectedView, setSelectedView] = useState<'overview' | 'trend' | 'department' | 'comparative'>('overview');
 
+  // Get department info from URL path
+  const departmentInfo = getDepartmentFromPath(location.pathname);
+  const departmentConfig = DEPARTMENT_KPI_CONFIGS[departmentInfo.department] || {};
+
+  // Decode the KPI name (it may be URL encoded)
+  const decodedKpiName = kpiName ? decodeURIComponent(kpiName) : '';
+  const config = departmentConfig[decodedKpiName];
+
   useEffect(() => {
-    if (kpiName && KPI_CONFIG[kpiName]) {
+    if (decodedKpiName && config) {
       fetchKPIDetail();
+    } else if (decodedKpiName) {
+      // KPI not found in department config - show error with helpful message
+      setError(`KPI "${decodedKpiName}" not found in ${departmentInfo.departmentName}`);
+      setLoading(false);
     } else {
       setError('Invalid KPI name');
       setLoading(false);
     }
-  }, [kpiName]);
+  }, [decodedKpiName, location.pathname]);
 
   const fetchKPIDetail = async () => {
-    if (!kpiName) return;
+    if (!decodedKpiName || !config) return;
 
     try {
-      const config = KPI_CONFIG[kpiName];
-      const response = await axios.get<KPIDetailData>(`/api/kpis/${config.endpoint}`);
+      const response = await axios.get<KPIDetailData>(`${departmentInfo.apiBase}/${config.endpoint}`);
       setData(response.data);
       setLoading(false);
     } catch (err: any) {
@@ -131,20 +278,18 @@ function KPIDetail() {
     );
   }
 
-  if (error || !data || !kpiName) {
+  if (error || !data || !config) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black p-8">
         <div className="bg-red-900/20 border border-red-500 rounded-xl p-6 backdrop-blur-sm">
           <p className="text-red-300 text-lg">⚠️ Error: {error || 'Failed to load KPI'}</p>
-          <Link to="/" className="text-cyan-400 hover:text-cyan-300 text-sm mt-4 inline-block">
-            ← Back to Dashboard
+          <Link to={departmentInfo.backLink} className="text-cyan-400 hover:text-cyan-300 text-sm mt-4 inline-block">
+            ← Back to {departmentInfo.departmentName}
           </Link>
         </div>
       </div>
     );
   }
-
-  const config = KPI_CONFIG[kpiName];
   const trendData = generateTrendData();
   const departmentData = generateDepartmentData();
   const comparativeData = generateComparativeData();
@@ -180,13 +325,13 @@ function KPIDetail() {
 
         {/* Back Button */}
         <Link
-          to="/"
+          to={departmentInfo.backLink}
           className="inline-flex items-center text-cyan-400 hover:text-cyan-300 font-medium transition-colors group"
         >
           <svg className="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
           </svg>
-          Back to Dashboard
+          Back to {departmentInfo.departmentName}
         </Link>
 
         {/* Header with Gradient */}
