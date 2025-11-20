@@ -293,28 +293,6 @@ export default function DashboardOps() {
               <div className="text-xs text-gray-500 mt-1">Auto-refresh: 30s</div>
             </div>
           </div>
-
-          {/* Period Display */}
-          <div className="bg-gray-800/50 backdrop-blur-sm rounded-lg p-4 border border-blue-500/30">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-4">
-                <div className="h-12 w-12 bg-blue-500/20 rounded-lg flex items-center justify-center">
-                  <span className="text-2xl">📊</span>
-                </div>
-                <div>
-                  <div className="text-sm text-gray-400">Reporting Period</div>
-                  <div className="text-xl font-bold text-white">{data?.period.label}</div>
-                  <div className="text-sm text-gray-500">
-                    {data?.period.startDate} to {data?.period.endDate}
-                  </div>
-                </div>
-              </div>
-              <div className="text-right">
-                <div className="text-sm text-gray-400">Total Metrics</div>
-                <div className="text-3xl font-bold text-blue-400">{filteredKPIs.length}</div>
-              </div>
-            </div>
-          </div>
         </div>
 
         {/* Alerts */}
