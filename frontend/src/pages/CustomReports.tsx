@@ -29,10 +29,11 @@ interface ReportTemplate {
 }
 
 const REPORT_TEMPLATES: ReportTemplate[] = [
+  // HR Reports
   {
     id: 'executive-summary',
-    name: 'Executive Summary',
-    description: 'High-level overview of all key HR metrics for C-suite presentations',
+    name: 'HR Executive Summary',
+    description: 'TitanBuild HR: Turnover 13.5%, Engagement 74.2%, Revenue/Employee $103K',
     icon: '📊',
     type: 'executive',
     metrics: ['turnover', 'engagement', 'productivity', 'revenue-per-employee']
@@ -40,42 +41,138 @@ const REPORT_TEMPLATES: ReportTemplate[] = [
   {
     id: 'workforce-analytics',
     name: 'Workforce Analytics',
-    description: 'Detailed workforce composition, turnover, and productivity analysis',
+    description: 'TitanBuild: 2,847 employees, 15.3% manufacturing turnover, 3.2% absenteeism',
     icon: '👥',
     type: 'operational',
     metrics: ['headcount', 'turnover', 'absenteeism', 'demographics']
   },
+  // HSE Reports
   {
-    id: 'recruitment-performance',
-    name: 'Recruitment Performance',
-    description: 'Hiring efficiency, time-to-hire, and candidate quality metrics',
-    icon: '🎯',
-    type: 'operational',
-    metrics: ['time-to-hire', 'cost-per-hire', 'offer-acceptance', 'quality-of-hire']
-  },
-  {
-    id: 'safety-compliance',
-    name: 'Safety & Compliance',
-    description: 'OSHA compliance, incident tracking, and safety training effectiveness',
+    id: 'hse-safety-report',
+    name: 'HSE Safety Report',
+    description: 'TitanBuild: TRIR 0.82, DART 0.45, 180 days incident-free, 98% training compliance',
     icon: '🛡️',
     type: 'compliance',
-    metrics: ['trir', 'incident-rate', 'safety-training', 'compliance-score']
+    metrics: ['trir', 'dart', 'near-miss', 'safety-training']
   },
   {
-    id: 'compensation-benefits',
-    name: 'Compensation & Benefits',
-    description: 'Pay equity, benefits utilization, and total rewards analysis',
+    id: 'environmental-compliance',
+    name: 'Environmental Compliance',
+    description: 'TitanBuild: 12.5 tons CO2e emissions, 87% waste diversion, 2.4M gal water usage',
+    icon: '🌱',
+    type: 'compliance',
+    metrics: ['emissions', 'waste-diversion', 'water-usage', 'energy-efficiency']
+  },
+  // Quality Control Reports
+  {
+    id: 'quality-control-report',
+    name: 'Quality Control Report',
+    description: 'TitanBuild QC: Defect rate 245 PPM, First pass yield 97.8%, Scrap 1.2%',
+    icon: '✅',
+    type: 'operational',
+    metrics: ['defect-rate', 'first-pass-yield', 'scrap-rate', 'customer-returns']
+  },
+  {
+    id: 'supplier-quality',
+    name: 'Supplier Quality Index',
+    description: 'TitanBuild: SQI 94.2%, NCR rate 1.8%, CAPA effectiveness 89%, Audit score 96%',
+    icon: '🏭',
+    type: 'operational',
+    metrics: ['supplier-quality', 'ncr-rate', 'capa-effectiveness', 'audit-score']
+  },
+  // Operations Reports
+  {
+    id: 'operations-performance',
+    name: 'Operations Performance',
+    description: 'TitanBuild Ops: OEE 84.5%, OTIF 96.2%, Schedule adherence 92%, Capacity 87%',
+    icon: '⚙️',
+    type: 'operational',
+    metrics: ['oee', 'otif', 'schedule-adherence', 'capacity-utilization']
+  },
+  {
+    id: 'manufacturing-efficiency',
+    name: 'Manufacturing Efficiency',
+    description: 'TitanBuild: Cycle time 4.2 days, Maintenance compliance 94%, Throughput 12.4K units',
+    icon: '🔧',
+    type: 'operational',
+    metrics: ['cycle-time', 'maintenance-compliance', 'downtime', 'throughput']
+  },
+  // Supply Chain Reports
+  {
+    id: 'supply-chain-performance',
+    name: 'Supply Chain Performance',
+    description: 'TitanBuild SC: Perfect order rate 94.8%, Inventory turnover 8.2x, Freight 4.2%',
+    icon: '📦',
+    type: 'operational',
+    metrics: ['perfect-order-rate', 'inventory-turnover', 'supplier-otd', 'freight-cost']
+  },
+  {
+    id: 'logistics-analytics',
+    name: 'Logistics Analytics',
+    description: 'TitanBuild: DSO 38 days, Warehouse utilization 89%, Order accuracy 99.2%',
+    icon: '🚚',
+    type: 'operational',
+    metrics: ['dso', 'warehouse-utilization', 'order-accuracy', 'lead-time']
+  },
+  // Finance Reports
+  {
+    id: 'finance-performance',
+    name: 'Finance Performance',
+    description: 'TitanBuild: Gross margin 42.5%, Net margin 12.8%, ROE 18.2%, Current ratio 2.1',
     icon: '💰',
-    type: 'operational',
-    metrics: ['compensation-ratio', 'benefits-cost', 'pay-equity', 'retention']
+    type: 'executive',
+    metrics: ['gross-margin', 'net-margin', 'roe', 'current-ratio']
   },
   {
-    id: 'learning-development',
-    name: 'Learning & Development',
-    description: 'Training ROI, skill development, and career progression metrics',
-    icon: '🎓',
+    id: 'cost-analysis',
+    name: 'Cost Analysis Report',
+    description: 'TitanBuild: EBITDA margin 24.8%, Working capital $18.4M, D/E 0.42',
+    icon: '📈',
     type: 'operational',
-    metrics: ['training-roi', 'completion-rate', 'skill-gap', 'career-progression']
+    metrics: ['ebitda', 'working-capital', 'debt-to-equity', 'cash-flow']
+  },
+  // IT & Admin Reports
+  {
+    id: 'it-performance',
+    name: 'IT & Admin Performance',
+    description: 'TitanBuild IT: System uptime 99.8%, Ticket resolution 4.2 hrs, 0 security incidents',
+    icon: '💻',
+    type: 'operational',
+    metrics: ['uptime', 'ticket-resolution', 'security-incidents', 'project-delivery']
+  },
+  // Sales Reports
+  {
+    id: 'sales-performance',
+    name: 'Sales Performance',
+    description: 'TitanBuild: Revenue $48.2M, Win rate 34%, Pipeline $125M, Avg deal $284K',
+    icon: '💼',
+    type: 'executive',
+    metrics: ['revenue', 'win-rate', 'pipeline', 'avg-deal-size']
+  },
+  {
+    id: 'sales-productivity',
+    name: 'Sales Productivity',
+    description: 'TitanBuild: Quota attainment 108%, CAC $12.4K, Sales cycle 68 days',
+    icon: '🎯',
+    type: 'operational',
+    metrics: ['quota-attainment', 'cac', 'sales-cycle', 'conversion-rate']
+  },
+  // Customer Success Reports
+  {
+    id: 'customer-success',
+    name: 'Customer Success Report',
+    description: 'TitanBuild: NPS 72, CSAT 94%, Retention 96.8%, Churn 3.2%',
+    icon: '🌟',
+    type: 'executive',
+    metrics: ['nps', 'csat', 'retention', 'churn']
+  },
+  {
+    id: 'customer-health',
+    name: 'Customer Health Analysis',
+    description: 'TitanBuild: CLV $284K, Support tickets 2.3/month, Expansion revenue 24%',
+    icon: '❤️',
+    type: 'operational',
+    metrics: ['clv', 'support-tickets', 'expansion-revenue', 'time-to-value']
   }
 ];
 
@@ -124,7 +221,7 @@ export default function CustomReports() {
             <h1 className="text-4xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent mb-2">
               Custom Reports
             </h1>
-            <p className="text-gray-400 text-lg">Generate comprehensive HR analytics reports</p>
+            <p className="text-gray-400 text-lg">Generate comprehensive analytics reports for all TitanBuild departments</p>
           </div>
           <Link
             to="/"

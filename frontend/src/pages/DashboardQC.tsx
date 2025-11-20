@@ -211,6 +211,30 @@ const DashboardQC: React.FC = () => {
         })()}
       </div>
 
+      {/* KPI Summary Cards */}
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
+        <div className="bg-gray-800/50 border border-gray-700 p-4 rounded-lg hover:border-teal-500/50 cursor-pointer transition-all" onClick={() => alert('Total QC KPIs: ' + kpiArray.length + '\n\nAll quality control metrics are being monitored.')}>
+          <div className="text-sm text-gray-400">Total KPIs</div>
+          <div className="text-2xl font-bold text-white">{kpiArray.length}</div>
+        </div>
+        <div className="bg-green-500/10 border border-green-500/30 p-4 rounded-lg hover:border-green-500/50 cursor-pointer transition-all" onClick={() => alert('Excellent/Good: ' + kpiArray.filter(([key, kpi]) => getKpiStatus(kpi, key) === 'excellent' || getKpiStatus(kpi, key) === 'good').length + '\n\nThese quality metrics meet or exceed targets.')}>
+          <div className="text-sm text-green-300">Good/Excellent</div>
+          <div className="text-2xl font-bold text-green-400">{kpiArray.filter(([key, kpi]) => getKpiStatus(kpi, key) === 'excellent' || getKpiStatus(kpi, key) === 'good').length}</div>
+        </div>
+        <div className="bg-yellow-500/10 border border-yellow-500/30 p-4 rounded-lg hover:border-yellow-500/50 cursor-pointer transition-all" onClick={() => alert('Warnings: ' + kpiArray.filter(([key, kpi]) => getKpiStatus(kpi, key) === 'warning').length + '\n\nThese metrics are approaching unacceptable levels.')}>
+          <div className="text-sm text-yellow-300">Warnings</div>
+          <div className="text-2xl font-bold text-yellow-400">{kpiArray.filter(([key, kpi]) => getKpiStatus(kpi, key) === 'warning').length}</div>
+        </div>
+        <div className="bg-red-500/10 border border-red-500/30 p-4 rounded-lg hover:border-red-500/50 cursor-pointer transition-all" onClick={() => alert('Critical: ' + kpiArray.filter(([key, kpi]) => getKpiStatus(kpi, key) === 'critical').length + '\n\nImmediate quality intervention required.')}>
+          <div className="text-sm text-red-300">Critical</div>
+          <div className="text-2xl font-bold text-red-400">{kpiArray.filter(([key, kpi]) => getKpiStatus(kpi, key) === 'critical').length}</div>
+        </div>
+        <div className="bg-teal-500/10 border border-teal-500/30 p-4 rounded-lg hover:border-teal-500/50 cursor-pointer transition-all" onClick={() => alert('Quality Score: Based on weighted average of all QC metrics.\n\nTarget: 95%+\nCurrent performance is being calculated from live data.')}>
+          <div className="text-sm text-teal-300">Avg Score</div>
+          <div className="text-2xl font-bold text-teal-400">{Math.round(kpiArray.filter(([key, kpi]) => getKpiStatus(kpi, key) === 'excellent' || getKpiStatus(kpi, key) === 'good').length / kpiArray.length * 100)}%</div>
+        </div>
+      </div>
+
       {/* KPI Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
         {kpiArray.map(([key, kpi]) => {

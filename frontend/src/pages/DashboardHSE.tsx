@@ -313,7 +313,32 @@ export default function DashboardHSE() {
             }}
             onRefresh={() => fetchKPIs()}
             onExportPDF={() => alert('PDF export feature coming soon!')}
+            hideDepartmentFilter={true}
           />
+        </div>
+
+        {/* KPI Summary Cards */}
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
+          <div className="bg-gray-800/50 border border-gray-700 p-4 rounded-lg hover:border-orange-500/50 cursor-pointer transition-all" onClick={() => alert('Total HSE KPIs: ' + filteredKPIs.length + '\n\nAll safety and environmental metrics are being tracked.')}>
+            <div className="text-sm text-gray-400">Total KPIs</div>
+            <div className="text-2xl font-bold text-white">{filteredKPIs.length}</div>
+          </div>
+          <div className="bg-green-500/10 border border-green-500/30 p-4 rounded-lg hover:border-green-500/50 cursor-pointer transition-all" onClick={() => alert('Excellent/Good: ' + filteredKPIs.filter(kpi => kpi.status === 'excellent' || kpi.status === 'good').length + '\n\nThese safety metrics are performing well.')}>
+            <div className="text-sm text-green-300">Good/Excellent</div>
+            <div className="text-2xl font-bold text-green-400">{filteredKPIs.filter(kpi => kpi.status === 'excellent' || kpi.status === 'good').length}</div>
+          </div>
+          <div className="bg-yellow-500/10 border border-yellow-500/30 p-4 rounded-lg hover:border-yellow-500/50 cursor-pointer transition-all" onClick={() => alert('Warnings: ' + filteredKPIs.filter(kpi => kpi.status === 'warning').length + '\n\nThese metrics need attention to prevent incidents.')}>
+            <div className="text-sm text-yellow-300">Warnings</div>
+            <div className="text-2xl font-bold text-yellow-400">{filteredKPIs.filter(kpi => kpi.status === 'warning').length}</div>
+          </div>
+          <div className="bg-red-500/10 border border-red-500/30 p-4 rounded-lg hover:border-red-500/50 cursor-pointer transition-all" onClick={() => alert('Critical: ' + filteredKPIs.filter(kpi => kpi.status === 'critical').length + '\n\nImmediate safety intervention required.')}>
+            <div className="text-sm text-red-300">Critical</div>
+            <div className="text-2xl font-bold text-red-400">{filteredKPIs.filter(kpi => kpi.status === 'critical').length}</div>
+          </div>
+          <div className="bg-orange-500/10 border border-orange-500/30 p-4 rounded-lg hover:border-orange-500/50 cursor-pointer transition-all" onClick={() => alert('Active Alerts: ' + alerts.length + '\n\n' + (alerts.length > 0 ? alerts.map(a => '- ' + a.title).join('\n') : 'No active alerts'))}>
+            <div className="text-sm text-orange-300">Active Alerts</div>
+            <div className="text-2xl font-bold text-orange-400">{alerts.length}</div>
+          </div>
         </div>
 
         {/* HSE Metrics Grid */}

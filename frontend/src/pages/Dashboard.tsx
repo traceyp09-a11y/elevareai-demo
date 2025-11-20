@@ -331,7 +331,7 @@ function Dashboard() {
             <div className="flex items-center justify-between mb-6">
               <div>
                 <h1 className="text-4xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent mb-2">
-                  HR Analytics Command Center
+                  HR Analytics Dashboard
                 </h1>
                 <p className="text-gray-400 text-lg">TitanBuild Manufacturing & Logistics</p>
               </div>
@@ -400,6 +400,30 @@ function Dashboard() {
         {/* Alerts */}
         <AlertBanner alerts={alerts} onDismiss={(id) => setAlerts(alerts.filter(a => a.id !== id))} />
 
+        {/* KPI Summary Cards */}
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
+          <div className="bg-gray-800/50 border border-gray-700 p-4 rounded-lg hover:border-cyan-500/50 cursor-pointer transition-all" onClick={() => alert('Total KPIs: ' + kpiCards.length + '\n\nAll HR metrics are being tracked and monitored in real-time.')}>
+            <div className="text-sm text-gray-400">Total KPIs</div>
+            <div className="text-2xl font-bold text-white">{kpiCards.length}</div>
+          </div>
+          <div className="bg-green-500/10 border border-green-500/30 p-4 rounded-lg hover:border-green-500/50 cursor-pointer transition-all" onClick={() => alert('Excellent/Good KPIs: ' + kpiCards.filter(kpi => kpi.data.benchmark?.status === 'above' && !kpi.inverse || kpi.data.benchmark?.status === 'below' && kpi.inverse).length + '\n\nThese metrics are performing at or above benchmark levels.')}>
+            <div className="text-sm text-green-300">Good/Excellent</div>
+            <div className="text-2xl font-bold text-green-400">{kpiCards.filter(kpi => (kpi.data.benchmark?.status === 'above' && !kpi.inverse) || (kpi.data.benchmark?.status === 'below' && kpi.inverse)).length}</div>
+          </div>
+          <div className="bg-yellow-500/10 border border-yellow-500/30 p-4 rounded-lg hover:border-yellow-500/50 cursor-pointer transition-all" onClick={() => alert('Warning KPIs: ' + kpiCards.filter(kpi => kpi.data.benchmark?.status === 'at').length + '\n\nThese metrics are at benchmark levels but should be monitored.')}>
+            <div className="text-sm text-yellow-300">Warnings</div>
+            <div className="text-2xl font-bold text-yellow-400">{kpiCards.filter(kpi => kpi.data.benchmark?.status === 'at').length}</div>
+          </div>
+          <div className="bg-red-500/10 border border-red-500/30 p-4 rounded-lg hover:border-red-500/50 cursor-pointer transition-all" onClick={() => alert('Critical KPIs: ' + kpiCards.filter(kpi => (kpi.data.benchmark?.status === 'below' && !kpi.inverse) || (kpi.data.benchmark?.status === 'above' && kpi.inverse)).length + '\n\nThese metrics require immediate attention and action.')}>
+            <div className="text-sm text-red-300">Critical</div>
+            <div className="text-2xl font-bold text-red-400">{kpiCards.filter(kpi => (kpi.data.benchmark?.status === 'below' && !kpi.inverse) || (kpi.data.benchmark?.status === 'above' && kpi.inverse)).length}</div>
+          </div>
+          <div className="bg-cyan-500/10 border border-cyan-500/30 p-4 rounded-lg hover:border-cyan-500/50 cursor-pointer transition-all" onClick={() => alert('Active Alerts: ' + alerts.length + '\n\n' + (alerts.length > 0 ? alerts.map(a => '- ' + a.metric + ': ' + a.message).join('\n') : 'No active alerts'))}>
+            <div className="text-sm text-cyan-300">Active Alerts</div>
+            <div className="text-2xl font-bold text-cyan-400">{alerts.length}</div>
+          </div>
+        </div>
+
         {/* Filters */}
         <DashboardFilters
           onDateRangeChange={(start, end) => console.log('Date range:', start, end)}
@@ -407,6 +431,7 @@ function Dashboard() {
           onSearch={(query) => setSearchQuery(query)}
           onRefresh={() => fetchKPIs()}
           onExportPDF={handleExportPDF}
+          hideDepartmentFilter={true}
         />
 
         {/* Historical Trends Charts */}

@@ -177,6 +177,30 @@ export default function DashboardSupplyChain() {
         </div>
       </div>
 
+      {/* KPI Summary Cards */}
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
+        <div className="bg-gray-800/50 border border-gray-700 p-4 rounded-lg hover:border-orange-500/50 cursor-pointer transition-all" onClick={() => alert('Total Supply Chain KPIs: ' + kpiArray.length + '\n\nAll logistics and supply chain metrics are being tracked.')}>
+          <div className="text-sm text-gray-400">Total KPIs</div>
+          <div className="text-2xl font-bold text-white">{kpiArray.length}</div>
+        </div>
+        <div className="bg-green-500/10 border border-green-500/30 p-4 rounded-lg hover:border-green-500/50 cursor-pointer transition-all" onClick={() => alert('Excellent: ' + kpiArray.filter(([key, kpi]) => getKpiStatus(kpi, key) === 'excellent').length + '\n\nThese supply chain metrics exceed targets.')}>
+          <div className="text-sm text-green-300">Excellent</div>
+          <div className="text-2xl font-bold text-green-400">{kpiArray.filter(([key, kpi]) => getKpiStatus(kpi, key) === 'excellent').length}</div>
+        </div>
+        <div className="bg-blue-500/10 border border-blue-500/30 p-4 rounded-lg hover:border-blue-500/50 cursor-pointer transition-all" onClick={() => alert('Good: ' + kpiArray.filter(([key, kpi]) => getKpiStatus(kpi, key) === 'good').length + '\n\nThese metrics are meeting targets.')}>
+          <div className="text-sm text-blue-300">Good</div>
+          <div className="text-2xl font-bold text-blue-400">{kpiArray.filter(([key, kpi]) => getKpiStatus(kpi, key) === 'good').length}</div>
+        </div>
+        <div className="bg-yellow-500/10 border border-yellow-500/30 p-4 rounded-lg hover:border-yellow-500/50 cursor-pointer transition-all" onClick={() => alert('Warning: ' + kpiArray.filter(([key, kpi]) => getKpiStatus(kpi, key) === 'warning').length + '\n\nThese metrics need monitoring.')}>
+          <div className="text-sm text-yellow-300">Warning</div>
+          <div className="text-2xl font-bold text-yellow-400">{kpiArray.filter(([key, kpi]) => getKpiStatus(kpi, key) === 'warning').length}</div>
+        </div>
+        <div className="bg-red-500/10 border border-red-500/30 p-4 rounded-lg hover:border-red-500/50 cursor-pointer transition-all" onClick={() => alert('Critical: ' + kpiArray.filter(([key, kpi]) => getKpiStatus(kpi, key) === 'critical').length + '\n\nImmediate supply chain intervention required.')}>
+          <div className="text-sm text-red-300">Critical</div>
+          <div className="text-2xl font-bold text-red-400">{kpiArray.filter(([key, kpi]) => getKpiStatus(kpi, key) === 'critical').length}</div>
+        </div>
+      </div>
+
       {/* KPI Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 mb-8">
         {kpiArray.map(([key, kpi]) => {

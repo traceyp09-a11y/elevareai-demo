@@ -6,6 +6,7 @@ interface FilterProps {
   onSearch: (query: string) => void;
   onRefresh: () => void;
   onExportPDF: () => void;
+  hideDepartmentFilter?: boolean;
 }
 
 export default function DashboardFilters({
@@ -13,7 +14,8 @@ export default function DashboardFilters({
   onDepartmentChange,
   onSearch,
   onRefresh,
-  onExportPDF
+  onExportPDF,
+  hideDepartmentFilter = false
 }: FilterProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedDepartment, setSelectedDepartment] = useState('all');
@@ -76,22 +78,24 @@ export default function DashboardFilters({
         </div>
 
         {/* Department Filter */}
-        <div>
-          <label className="block text-xs font-medium text-gray-400 mb-2">
-            Department
-          </label>
-          <select
-            value={selectedDepartment}
-            onChange={handleDepartmentChange}
-            className="w-full bg-gray-900/50 border border-gray-600 rounded-lg px-4 py-2.5 text-gray-100 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all"
-          >
-            {departments.map((dept) => (
-              <option key={dept.value} value={dept.value}>
-                {dept.label}
-              </option>
-            ))}
-          </select>
-        </div>
+        {!hideDepartmentFilter && (
+          <div>
+            <label className="block text-xs font-medium text-gray-400 mb-2">
+              Department
+            </label>
+            <select
+              value={selectedDepartment}
+              onChange={handleDepartmentChange}
+              className="w-full bg-gray-900/50 border border-gray-600 rounded-lg px-4 py-2.5 text-gray-100 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all"
+            >
+              {departments.map((dept) => (
+                <option key={dept.value} value={dept.value}>
+                  {dept.label}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
 
         {/* Date Range */}
         <div>

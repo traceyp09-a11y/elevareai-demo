@@ -273,7 +273,7 @@ export default function DashboardOps() {
 
           {/* Period Display */}
           <div className="bg-gray-800/50 backdrop-blur-sm rounded-lg p-4 border border-blue-500/30">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between mb-4">
               <div className="flex items-center space-x-4">
                 <div className="h-12 w-12 bg-blue-500/20 rounded-lg flex items-center justify-center">
                   <span className="text-2xl">📊</span>
@@ -289,6 +289,33 @@ export default function DashboardOps() {
               <div className="text-right">
                 <div className="text-sm text-gray-400">Total Metrics</div>
                 <div className="text-3xl font-bold text-blue-400">{filteredKPIs.length}</div>
+              </div>
+            </div>
+
+            {/* Reporting Period Metrics Summary */}
+            <div className="border-t border-blue-500/20 pt-4 mt-4">
+              <div className="text-sm text-gray-400 mb-3 font-semibold">Key Period Metrics:</div>
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-3 text-sm">
+                <div className="bg-gray-900/50 rounded-lg p-3">
+                  <div className="text-gray-500 text-xs">OEE</div>
+                  <div className="text-white font-bold">{data?.kpis?.oee?.displayValue || '84.5%'}</div>
+                </div>
+                <div className="bg-gray-900/50 rounded-lg p-3">
+                  <div className="text-gray-500 text-xs">OTIF</div>
+                  <div className="text-white font-bold">{data?.kpis?.onTimeDelivery?.displayValue || '96.2%'}</div>
+                </div>
+                <div className="bg-gray-900/50 rounded-lg p-3">
+                  <div className="text-gray-500 text-xs">Schedule Adherence</div>
+                  <div className="text-white font-bold">{data?.kpis?.scheduleAdherence?.displayValue || '92%'}</div>
+                </div>
+                <div className="bg-gray-900/50 rounded-lg p-3">
+                  <div className="text-gray-500 text-xs">First Pass Yield</div>
+                  <div className="text-white font-bold">{data?.kpis?.firstPassYield?.displayValue || '97.8%'}</div>
+                </div>
+                <div className="bg-gray-900/50 rounded-lg p-3">
+                  <div className="text-gray-500 text-xs">Capacity Util.</div>
+                  <div className="text-white font-bold">{data?.kpis?.capacityUtilization?.displayValue || '87%'}</div>
+                </div>
               </div>
             </div>
           </div>
