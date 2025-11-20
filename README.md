@@ -3,9 +3,10 @@
 <div align="center">
 
 ![ElevareIQ](https://img.shields.io/badge/ElevareIQ-Analytics%20Platform-0891b2?style=for-the-badge)
-![Modules](https://img.shields.io/badge/Modules-5-06b6d4?style=for-the-badge)
-![KPIs](https://img.shields.io/badge/KPIs-46-3b82f6?style=for-the-badge)
+![Modules](https://img.shields.io/badge/Modules-11-06b6d4?style=for-the-badge)
+![KPIs](https://img.shields.io/badge/KPIs-100+-3b82f6?style=for-the-badge)
 ![Status](https://img.shields.io/badge/Status-Production%20Ready-10b981?style=for-the-badge)
+![Docker](https://img.shields.io/badge/Docker-Available-2496ED?style=for-the-badge)
 
 </div>
 
@@ -254,6 +255,20 @@ docker-compose up -d
 # Backend API: http://localhost:3001
 ```
 
+### Docker Hub Deployment
+
+Pull and run directly from Docker Hub:
+
+```bash
+# Pull the frontend image
+docker pull traceyp/elevareai-demo:latest
+
+# Run the frontend container
+docker run -d -p 5173:5173 --name elevareai-frontend traceyp/elevareai-demo:latest
+
+# Access at: http://localhost:5173
+```
+
 ### Manual Build (without Docker)
 
 ```bash
@@ -301,6 +316,36 @@ npm run dev         # Start on port 5173
 **Supply Chain**
 - Dashboard: `http://localhost:5173/supplychain`
 - Pain Points: `http://localhost:5173/supplychain/pain-points`
+- Custom Reports: `http://localhost:5173/supplychain/reports`
+
+**Finance**
+- Dashboard: `http://localhost:5173/finance`
+- Pain Points: `http://localhost:5173/finance/pain-points`
+- Custom Reports: `http://localhost:5173/finance/reports`
+
+**IT & Administration**
+- Dashboard: `http://localhost:5173/administration`
+- Pain Points: `http://localhost:5173/administration/pain-points`
+- Custom Reports: `http://localhost:5173/administration/reports`
+
+**Sales**
+- Dashboard: `http://localhost:5173/sales`
+- Pain Points: `http://localhost:5173/sales/pain-points`
+- Custom Reports: `http://localhost:5173/sales/reports`
+
+**Marketing**
+- Dashboard: `http://localhost:5173/marketing`
+- Pain Points: `http://localhost:5173/marketing/pain-points`
+- Custom Reports: `http://localhost:5173/marketing/reports`
+
+**Customer Success**
+- Dashboard: `http://localhost:5173/customer-success`
+- Pain Points: `http://localhost:5173/customer-success/pain-points`
+- Custom Reports: `http://localhost:5173/customer-success/reports`
+
+**Executive**
+- Dashboard: `http://localhost:5173/executive`
+- Custom Reports: `http://localhost:5173/executive/reports`
 
 ### Key Features
 
@@ -312,6 +357,21 @@ npm run dev         # Start on port 5173
 **📊 Real-Time Data**
 - Dashboards auto-refresh every 30 seconds
 - Live KPI status updates (Excellent/Good/Warning/Critical)
+
+**🎯 Clickable KPI Cards**
+- All KPI cards are clickable and display alerts with all department KPIs
+- Shows comprehensive list of all KPIs by name for each department
+- Interactive navigation to detailed KPI views
+
+**📈 KPI Status Summary Cards**
+- 5-card summary section on each dashboard
+- Shows Total KPIs, Excellent, Good, Warning, and Critical counts
+- Quick visual overview of department health
+
+**📋 Custom Reports**
+- Department-specific report templates
+- Executive, Performance, Financial, and Strategic reports
+- Pre-populated with Titan company data
 
 **💼 C-Suite Pain Points**
 - Actionable recommendations
@@ -325,6 +385,8 @@ npm run dev         # Start on port 5173
 - Operations: Blue
 - QC: Teal/Green
 - Supply Chain: Orange/Amber
+- Finance: Green/Emerald
+- Executive: Purple/Pink
 
 ## 📊 Data & Statistics
 
@@ -408,7 +470,7 @@ Status: Above 85% = Excellent, 75-85% = Good, 60-75% = Warning, <60% = Critical
 
 ## 🛣️ Roadmap
 
-### Phase 1 (Current - Completed ✅)
+### Phase 1 (Completed ✅)
 - [x] HR Analytics Module
 - [x] HSE Analytics Module
 - [x] Predictive Analytics Engine
@@ -417,16 +479,25 @@ Status: Above 85% = Excellent, 75-85% = Good, 60-75% = Warning, <60% = Critical
 - [x] Quality Control Analytics Module
 - [x] Supply Chain Analytics Module
 
-### Phase 2 (Planned)
-- [ ] Executive Dashboard (unified view)
-- [ ] Finance Analytics Module
-- [ ] Sales & Marketing Analytics
+### Phase 2 (Completed ✅)
+- [x] Executive Dashboard (unified view)
+- [x] Finance Analytics Module
+- [x] Sales Analytics Module
+- [x] Marketing Analytics Module
+- [x] Customer Success Analytics Module
+- [x] IT & Administration Analytics Module
+- [x] Custom Reports (all departments)
+- [x] Clickable KPI Cards with Alerts
+- [x] KPI Status Summary Cards
+- [x] Docker Hub Deployment
+
+### Phase 3 (Planned)
 - [ ] PDF Report Generation
 - [ ] Excel/CSV Export
 - [ ] Email Alerts & Notifications
 - [ ] Custom KPI Builder
 
-### Phase 3 (Future)
+### Phase 4 (Future)
 - [ ] Machine Learning Models
 - [ ] Advanced Forecasting
 - [ ] Multi-tenant Architecture
