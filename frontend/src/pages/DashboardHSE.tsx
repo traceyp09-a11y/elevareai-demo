@@ -317,6 +317,38 @@ export default function DashboardHSE() {
           </div>
         )}
 
+        {/* KPI Status Summary */}
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
+          <div className="bg-gray-800/50 border border-gray-700 p-4 rounded-lg">
+            <div className="text-sm text-gray-400">Total KPIs</div>
+            <div className="text-2xl font-bold text-white">{sortedKPIs.length}</div>
+          </div>
+          <div className="bg-green-500/10 border border-green-500/30 p-4 rounded-lg">
+            <div className="text-sm text-green-300">Excellent</div>
+            <div className="text-2xl font-bold text-green-400">
+              {sortedKPIs.filter(kpi => kpi.status === 'excellent').length}
+            </div>
+          </div>
+          <div className="bg-blue-500/10 border border-blue-500/30 p-4 rounded-lg">
+            <div className="text-sm text-blue-300">Good</div>
+            <div className="text-2xl font-bold text-blue-400">
+              {sortedKPIs.filter(kpi => kpi.status === 'good').length}
+            </div>
+          </div>
+          <div className="bg-yellow-500/10 border border-yellow-500/30 p-4 rounded-lg">
+            <div className="text-sm text-yellow-300">Warning</div>
+            <div className="text-2xl font-bold text-yellow-400">
+              {sortedKPIs.filter(kpi => kpi.status === 'warning').length}
+            </div>
+          </div>
+          <div className="bg-red-500/10 border border-red-500/30 p-4 rounded-lg">
+            <div className="text-sm text-red-300">Critical</div>
+            <div className="text-2xl font-bold text-red-400">
+              {sortedKPIs.filter(kpi => kpi.status === 'critical').length}
+            </div>
+          </div>
+        </div>
+
         {/* HSE Metrics Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           {sortedKPIs.map((kpi) => (

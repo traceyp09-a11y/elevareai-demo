@@ -438,6 +438,41 @@ function Dashboard() {
           </div>
         </div>
 
+        {/* KPI Status Summary */}
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
+          <div className="bg-gray-800/50 border border-gray-700 p-4 rounded-lg">
+            <div className="text-sm text-gray-400">Total KPIs</div>
+            <div className="text-2xl font-bold text-white">{sortedKPIs.length}</div>
+          </div>
+          <div className="bg-blue-500/10 border border-blue-500/30 p-4 rounded-lg">
+            <div className="text-sm text-blue-300">Excellent</div>
+            <div className="text-2xl font-bold text-blue-400">
+              {sortedKPIs.filter(kpi => kpi.data.benchmark?.status === 'above' && !kpi.inverse || kpi.data.benchmark?.status === 'below' && kpi.inverse).length}
+            </div>
+          </div>
+          <div className="bg-green-500/10 border border-green-500/30 p-4 rounded-lg">
+            <div className="text-sm text-green-300">Good</div>
+            <div className="text-2xl font-bold text-green-400">
+              {sortedKPIs.filter(kpi => kpi.data.benchmark?.status === 'at').length}
+            </div>
+          </div>
+          <div className="bg-yellow-500/10 border border-yellow-500/30 p-4 rounded-lg">
+            <div className="text-sm text-yellow-300">Warning</div>
+            <div className="text-2xl font-bold text-yellow-400">
+              {sortedKPIs.filter(kpi =>
+                (kpi.data.benchmark?.status === 'below' && !kpi.inverse) ||
+                (kpi.data.benchmark?.status === 'above' && kpi.inverse)
+              ).length}
+            </div>
+          </div>
+          <div className="bg-red-500/10 border border-red-500/30 p-4 rounded-lg">
+            <div className="text-sm text-red-300">Critical</div>
+            <div className="text-2xl font-bold text-red-400">
+              {alerts.filter(a => a.type === 'critical').length}
+            </div>
+          </div>
+        </div>
+
         {/* Alerts */}
         <AlertBanner alerts={alerts} onDismiss={(id) => setAlerts(alerts.filter(a => a.id !== id))} />
 
