@@ -531,7 +531,7 @@ const DashboardExecutive: React.FC = () => {
                             </defs>
                           </svg>
                           <div className="absolute inset-0 flex items-center justify-center">
-                            <span className="text-lg font-bold text-white">{dept?.healthScore || 0}</span>
+                            <span className="text-lg font-bold text-white">{typeof dept?.healthScore === 'number' ? dept.healthScore.toFixed(2) : (dept?.healthScore || 0)}</span>
                           </div>
                         </div>
                       </div>

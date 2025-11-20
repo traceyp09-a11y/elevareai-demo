@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 interface KPIData {
@@ -344,6 +345,42 @@ export default function DashboardSupplyChain() {
             {kpiArray.filter(([key, kpi]) => getKpiStatus(kpi, key) === 'critical').length}
           </div>
         </div>
+      </div>
+
+      {/* Quick Links */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+        <Link
+          to="/supply-chain/reports"
+          className="bg-gradient-to-r from-orange-500/20 to-amber-500/20 backdrop-blur-sm rounded-lg p-6 border border-orange-500/30 hover:border-orange-500 hover:shadow-lg hover:shadow-orange-500/20 transition-all duration-300 group"
+        >
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-3xl">📊</span>
+          </div>
+          <h3 className="text-lg font-semibold text-white mb-2">Custom Reports</h3>
+          <p className="text-gray-400 text-sm">Generate detailed Supply Chain reports</p>
+        </Link>
+
+        <Link
+          to="/supply-chain/pain-points"
+          className="bg-gradient-to-r from-red-500/20 to-orange-500/20 backdrop-blur-sm rounded-lg p-6 border border-red-500/30 hover:border-red-500 hover:shadow-lg hover:shadow-red-500/20 transition-all duration-300 group"
+        >
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-3xl">🔥</span>
+          </div>
+          <h3 className="text-lg font-semibold text-white mb-2">Pain Points</h3>
+          <p className="text-gray-400 text-sm">View critical supply chain challenges</p>
+        </Link>
+
+        <Link
+          to="/supply-chain/predictive"
+          className="bg-gradient-to-r from-purple-500/20 to-pink-500/20 backdrop-blur-sm rounded-lg p-6 border border-purple-500/30 hover:border-purple-500 hover:shadow-lg hover:shadow-purple-500/20 transition-all duration-300 group"
+        >
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-3xl">🔮</span>
+          </div>
+          <h3 className="text-lg font-semibold text-white mb-2">Predictive Analytics</h3>
+          <p className="text-gray-400 text-sm">AI-powered supply chain forecasting</p>
+        </Link>
       </div>
 
       {/* Transparency Message */}
