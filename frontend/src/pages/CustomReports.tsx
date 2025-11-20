@@ -430,7 +430,7 @@ const getDepartmentFromPath = (pathname: string): { department: string; backLink
   if (pathname.includes('/sales/')) return { department: 'sales', backLink: '/sales', departmentName: 'Sales' };
   if (pathname.includes('/marketing/')) return { department: 'marketing', backLink: '/marketing', departmentName: 'Marketing' };
   if (pathname.includes('/customer-success/')) return { department: 'customer-success', backLink: '/customer-success', departmentName: 'Customer Success' };
-  if (pathname.includes('/supply-chain/')) return { department: 'supply-chain', backLink: '/supply-chain', departmentName: 'Supply Chain' };
+  if (pathname.includes('/supplychain/')) return { department: 'supply-chain', backLink: '/supplychain', departmentName: 'Supply Chain' };
   if (pathname.includes('/qc/')) return { department: 'qc', backLink: '/qc', departmentName: 'Quality Control' };
   if (pathname.includes('/administration/')) return { department: 'administration', backLink: '/administration', departmentName: 'Administration' };
   if (pathname.includes('/executive/')) return { department: 'executive', backLink: '/executive', departmentName: 'Executive' };

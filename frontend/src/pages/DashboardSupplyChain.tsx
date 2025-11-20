@@ -350,7 +350,7 @@ export default function DashboardSupplyChain() {
       {/* Quick Links */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
         <Link
-          to="/supply-chain/reports"
+          to="/supplychain/reports"
           className="bg-gradient-to-r from-orange-500/20 to-amber-500/20 backdrop-blur-sm rounded-lg p-6 border border-orange-500/30 hover:border-orange-500 hover:shadow-lg hover:shadow-orange-500/20 transition-all duration-300 group"
         >
           <div className="flex items-center justify-between mb-3">
@@ -361,7 +361,7 @@ export default function DashboardSupplyChain() {
         </Link>
 
         <Link
-          to="/supply-chain/pain-points"
+          to="/supplychain/pain-points"
           className="bg-gradient-to-r from-red-500/20 to-orange-500/20 backdrop-blur-sm rounded-lg p-6 border border-red-500/30 hover:border-red-500 hover:shadow-lg hover:shadow-red-500/20 transition-all duration-300 group"
         >
           <div className="flex items-center justify-between mb-3">
@@ -372,7 +372,7 @@ export default function DashboardSupplyChain() {
         </Link>
 
         <Link
-          to="/supply-chain/predictive"
+          to="/supplychain/predictive"
           className="bg-gradient-to-r from-purple-500/20 to-pink-500/20 backdrop-blur-sm rounded-lg p-6 border border-purple-500/30 hover:border-purple-500 hover:shadow-lg hover:shadow-purple-500/20 transition-all duration-300 group"
         >
           <div className="flex items-center justify-between mb-3">
