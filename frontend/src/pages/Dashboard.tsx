@@ -62,6 +62,28 @@ function Dashboard() {
   const [alerts, setAlerts] = useState<Alert[]>([]);
   const [lastRefresh, setLastRefresh] = useState<Date>(new Date());
 
+  // HR KPI names for this department
+  const hrKPINames = [
+    'Employee Turnover Rate',
+    'Time to Hire',
+    'Cost per Hire',
+    'Employee Productivity',
+    'Safety Incident Rate (TRIR)',
+    'Absenteeism Rate',
+    'Training ROI',
+    'Employee Engagement Score',
+    'Offer Acceptance Rate',
+    'Revenue per Employee'
+  ];
+
+  // Function to show all KPIs for this department
+  const showAllKPIs = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const kpiList = hrKPINames.map((name, i) => `${i + 1}. ${name}`).join('\n');
+    alert(`HR Analytics Department KPIs:\n\n${kpiList}`);
+  };
+
   useEffect(() => {
     fetchKPIs();
     // Auto-refresh every 30 seconds
@@ -486,6 +508,7 @@ function Dashboard() {
                 key={kpi.key}
                 to={`/kpi/${kpi.key}`}
                 className="group relative"
+                onClick={showAllKPIs}
               >
                 {/* Priority Badge */}
                 <div className="absolute -top-2 -left-2 z-10 w-8 h-8 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-full flex items-center justify-center text-xs font-bold text-white shadow-lg">

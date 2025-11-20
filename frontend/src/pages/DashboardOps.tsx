@@ -32,6 +32,20 @@ interface AllKPIsResponse {
   kpis: { [key: string]: any };
 }
 
+// Operations KPI names for display
+const operationsKPINames = [
+  'On-Time Delivery Rate',
+  'Schedule Adherence',
+  'Overall Equipment Effectiveness (OEE)',
+  'First Pass Yield',
+  'Inventory Turnover',
+  'Supplier On-Time Delivery',
+  'Production Cycle Time',
+  'Capacity Utilization',
+  'Maintenance Compliance',
+  'Cost of Quality'
+];
+
 export default function DashboardOps() {
   const [data, setData] = useState<AllKPIsResponse | null>(null);
   const [loading, setLoading] = useState(true);
@@ -41,6 +55,15 @@ export default function DashboardOps() {
   const [endDate, setEndDate] = useState('2024-12-31');
   const [alerts, setAlerts] = useState<Alert[]>([]);
   const [lastRefresh, setLastRefresh] = useState<Date>(new Date());
+
+  const showAllKPIs = (e?: React.MouseEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    const kpiList = operationsKPINames.map((name, i) => `${i + 1}. ${name}`).join('\n');
+    alert(`Operations Department KPIs:\n\n${kpiList}`);
+  };
 
   // Fetch Operations KPIs
   const fetchKPIs = async (isAutoRefresh = false) => {
@@ -364,6 +387,7 @@ export default function DashboardOps() {
           {filteredKPIs.map((kpi) => (
             <div
               key={kpi.name}
+              onClick={showAllKPIs}
               className={`bg-gray-800/50 backdrop-blur-sm rounded-lg p-6 border ${
                 kpi.status === 'critical'
                   ? 'border-red-500/50 shadow-lg shadow-red-500/20'
@@ -448,7 +472,7 @@ export default function DashboardOps() {
                       : 'text-red-400'
                   }`}
                 >
-                  {kpi.trend.change > 0 ? '↑' : '↓'} {Math.abs(kpi.trend.changePercent).toFixed(1)}% vs previous period
+                  {kpi.trend.change > 0 ? '↑' : '↓'} {Math.abs(kpi.trend.changePercent).toFixed(2)}% vs previous period
                 </div>
               )}
             </div>

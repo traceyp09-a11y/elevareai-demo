@@ -54,12 +54,35 @@ interface PainPointsResponse {
   painPoints: PainPoint[];
 }
 
+// Customer Success KPI names for display
+const customerSuccessKPINames = [
+  'Net Promoter Score (NPS)',
+  'Customer Satisfaction (CSAT)',
+  'Customer Effort Score (CES)',
+  'Churn Rate',
+  'Customer Lifetime Value',
+  'Net Revenue Retention',
+  'Average Health Score',
+  'Time to First Value',
+  'Product Adoption Rate',
+  'Ticket Resolution Time'
+];
+
 const DashboardCustomerSuccess: React.FC = () => {
   const [kpiData, setKpiData] = useState<KPIResponse | null>(null);
   const [painPoints, setPainPoints] = useState<PainPointsResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [expandedKPI, setExpandedKPI] = useState<string | null>(null);
+
+  const showAllKPIs = (e?: React.MouseEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    const kpiList = customerSuccessKPINames.map((name, i) => `${i + 1}. ${name}`).join('\n');
+    alert(`Customer Success Department KPIs:\n\n${kpiList}`);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -127,7 +150,8 @@ const DashboardCustomerSuccess: React.FC = () => {
     return (
       <div
         key={kpiKey}
-        className={`bg-gray-800 rounded-lg border-2 ${getStatusColor(kpi.status)} p-6 hover:shadow-lg transition-all duration-200`}
+        onClick={showAllKPIs}
+        className={`bg-gray-800 rounded-lg border-2 ${getStatusColor(kpi.status)} p-6 hover:shadow-lg transition-all duration-200 cursor-pointer`}
       >
         <div className="flex items-start justify-between mb-4">
           <div className={`p-3 rounded-lg bg-gradient-to-br ${bgGradient}`}>

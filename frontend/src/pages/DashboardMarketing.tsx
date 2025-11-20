@@ -54,12 +54,34 @@ interface PainPointsResponse {
   painPoints: PainPoint[];
 }
 
+// Marketing KPI names for display
+const marketingKPINames = [
+  'Marketing ROI',
+  'Cost Per Lead',
+  'MQL to SQL Conversion',
+  'Customer Acquisition Cost',
+  'MQLs Generated',
+  'Campaign Effectiveness',
+  'Lead to Customer Rate',
+  'Channel ROI',
+  'Content Engagement'
+];
+
 const DashboardMarketing: React.FC = () => {
   const [kpiData, setKpiData] = useState<KPIResponse | null>(null);
   const [painPoints, setPainPoints] = useState<PainPointsResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [expandedKPI, setExpandedKPI] = useState<string | null>(null);
+
+  const showAllKPIs = (e?: React.MouseEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    const kpiList = marketingKPINames.map((name, i) => `${i + 1}. ${name}`).join('\n');
+    alert(`Marketing Department KPIs:\n\n${kpiList}`);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -127,7 +149,8 @@ const DashboardMarketing: React.FC = () => {
     return (
       <div
         key={kpiKey}
-        className={`bg-gray-800 rounded-lg border-2 ${getStatusColor(kpi.status)} p-6 hover:shadow-lg transition-all duration-200`}
+        onClick={showAllKPIs}
+        className={`bg-gray-800 rounded-lg border-2 ${getStatusColor(kpi.status)} p-6 hover:shadow-lg transition-all duration-200 cursor-pointer`}
       >
         <div className="flex items-start justify-between mb-4">
           <div className={`p-3 rounded-lg bg-gradient-to-br ${bgGradient}`}>

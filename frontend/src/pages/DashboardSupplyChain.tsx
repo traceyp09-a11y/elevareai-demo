@@ -37,11 +37,34 @@ interface KPIResponse {
   };
 }
 
+// Supply Chain KPI names for display
+const supplyChainKPINames = [
+  'Perfect Order Rate',
+  'On Time In Full (OTIF)',
+  'Inventory Turnover',
+  'Days Sales Outstanding',
+  'Cash-to-Cash Cycle Time',
+  'Supplier Lead Time',
+  'Freight Cost Percentage',
+  'Warehouse Utilization',
+  'Order Accuracy',
+  'Supply Chain Cost Percentage'
+];
+
 export default function DashboardSupplyChain() {
   const [kpiData, setKpiData] = useState<KPIResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedKPI, setSelectedKPI] = useState<string | null>(null);
+
+  const showAllKPIs = (e?: React.MouseEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    const kpiList = supplyChainKPINames.map((name, i) => `${i + 1}. ${name}`).join('\n');
+    alert(`Supply Chain Department KPIs:\n\n${kpiList}`);
+  };
 
   useEffect(() => {
     fetchKPIData();
@@ -187,7 +210,10 @@ export default function DashboardSupplyChain() {
           return (
             <div
               key={key}
-              onClick={() => setSelectedKPI(selectedKPI === key ? null : key)}
+              onClick={(e) => {
+                showAllKPIs(e);
+                setSelectedKPI(selectedKPI === key ? null : key);
+              }}
               className={`border-2 rounded-lg p-6 cursor-pointer transition-all hover:scale-105 ${statusColor}`}
             >
               <div className="flex items-start justify-between mb-2">

@@ -47,6 +47,27 @@ const DashboardQC: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
+  const [showAlertDetails, setShowAlertDetails] = useState(false);
+
+  // Quality Control KPI names for this department
+  const qcKPINames = [
+    'Defect Rate PPM',
+    'First Pass Yield',
+    'Scrap Rate',
+    'Rework Rate',
+    'Customer Return Rate',
+    'Supplier Quality Index',
+    'NCR Rate',
+    'CAPA Effectiveness',
+    'Cost of Poor Quality (COPQ)',
+    'Quality Audit Score'
+  ];
+
+  // Function to show all KPIs for this department
+  const showAllKPIs = () => {
+    const kpiList = qcKPINames.map((name, i) => `${i + 1}. ${name}`).join('\n');
+    alert(`Quality Control Department KPIs:\n\n${kpiList}`);
+  };
 
   const fetchKPIData = async () => {
     try {
@@ -129,9 +150,9 @@ const DashboardQC: React.FC = () => {
     if (Math.abs(changePercent) < 1) {
       return { icon: <Minus className="w-4 h-4" />, color: 'text-gray-400', text: 'Stable' };
     } else if (changePercent > 0) {
-      return { icon: <TrendingUp className="w-4 h-4" />, color: 'text-green-400', text: `+${changePercent.toFixed(1)}%` };
+      return { icon: <TrendingUp className="w-4 h-4" />, color: 'text-green-400', text: `+${changePercent.toFixed(2)}%` };
     } else {
-      return { icon: <TrendingDown className="w-4 h-4" />, color: 'text-red-400', text: `${changePercent.toFixed(1)}%` };
+      return { icon: <TrendingDown className="w-4 h-4" />, color: 'text-red-400', text: `${changePercent.toFixed(2)}%` };
     }
   };
 
@@ -195,17 +216,71 @@ const DashboardQC: React.FC = () => {
       {/* Alert Banner */}
       <div className="mb-6">
         {(() => {
-          const criticalCount = kpiArray.filter(([key, kpi]) => getKpiStatus(kpi, key) === 'critical').length;
-          const warningCount = kpiArray.filter(([key, kpi]) => getKpiStatus(kpi, key) === 'warning').length;
+          const criticalKPIs = kpiArray.filter(([key, kpi]) => getKpiStatus(kpi, key) === 'critical');
+          const warningKPIs = kpiArray.filter(([key, kpi]) => getKpiStatus(kpi, key) === 'warning');
+          const criticalCount = criticalKPIs.length;
+          const warningCount = warningKPIs.length;
+
+          // Generate specific alert details
+          const alertDetails = [
+            ...criticalKPIs.map(([key, kpi]) => ({
+              type: 'critical',
+              name: key.replace(/([A-Z])/g, ' $1').replace(/_/g, ' ').trim(),
+              value: kpi.displayValue,
+              message: `${key.replace(/([A-Z])/g, ' $1').replace(/_/g, ' ').trim()} is at ${kpi.displayValue} - requires immediate attention`
+            })),
+            ...warningKPIs.map(([key, kpi]) => ({
+              type: 'warning',
+              name: key.replace(/([A-Z])/g, ' $1').replace(/_/g, ' ').trim(),
+              value: kpi.displayValue,
+              message: `${key.replace(/([A-Z])/g, ' $1').replace(/_/g, ' ').trim()} is at ${kpi.displayValue} - monitoring recommended`
+            }))
+          ];
+
           return (criticalCount + warningCount) > 0 && (
-            <div className="bg-yellow-500/10 border border-yellow-500/50 rounded-lg p-4 flex items-start gap-3">
-              <AlertTriangle className="w-6 h-6 text-yellow-400 flex-shrink-0 mt-1" />
-              <div>
-                <h3 className="text-yellow-400 font-semibold mb-1">Quality Alerts Detected</h3>
-                <p className="text-gray-300 text-sm">
-                  {criticalCount} critical and {warningCount} warning metrics require attention.
-                </p>
+            <div>
+              <div
+                className="bg-yellow-500/10 border border-yellow-500/50 rounded-lg p-4 flex items-start gap-3 cursor-pointer hover:bg-yellow-500/20 transition-all"
+                onClick={() => setShowAlertDetails(!showAlertDetails)}
+              >
+                <AlertTriangle className="w-6 h-6 text-yellow-400 flex-shrink-0 mt-1" />
+                <div className="flex-1">
+                  <h3 className="text-yellow-400 font-semibold mb-1">Quality Alerts Detected - Click to View Details</h3>
+                  <p className="text-gray-300 text-sm">
+                    {criticalCount} critical and {warningCount} warning metrics require attention.
+                  </p>
+                </div>
+                <div className="text-yellow-400">
+                  {showAlertDetails ? '▲' : '▼'}
+                </div>
               </div>
+
+              {showAlertDetails && (
+                <div className="mt-3 bg-gray-800/50 border border-yellow-500/30 rounded-lg p-4 space-y-3">
+                  <h4 className="text-white font-semibold mb-3">Alert Details:</h4>
+                  {alertDetails.map((alert, idx) => (
+                    <div
+                      key={idx}
+                      className={`p-3 rounded-lg border ${
+                        alert.type === 'critical'
+                          ? 'bg-red-500/10 border-red-500/30'
+                          : 'bg-yellow-500/10 border-yellow-500/30'
+                      }`}
+                    >
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className={`px-2 py-0.5 rounded text-xs font-semibold ${
+                          alert.type === 'critical' ? 'bg-red-500 text-white' : 'bg-yellow-500 text-black'
+                        }`}>
+                          {alert.type.toUpperCase()}
+                        </span>
+                        <span className="font-semibold text-white">{alert.name}</span>
+                        <span className="ml-auto text-sm font-mono text-gray-300">{alert.value}</span>
+                      </div>
+                      <p className="text-sm text-gray-400">{alert.message}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           );
         })()}
@@ -219,7 +294,8 @@ const DashboardQC: React.FC = () => {
           return (
             <div
               key={key}
-              className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm border border-teal-500/30 rounded-xl p-6 hover:border-teal-400/50 transition-all duration-300 hover:shadow-lg hover:shadow-teal-500/20"
+              className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm border border-teal-500/30 rounded-xl p-6 hover:border-teal-400/50 transition-all duration-300 hover:shadow-lg hover:shadow-teal-500/20 cursor-pointer"
+              onClick={showAllKPIs}
             >
               {/* KPI Header */}
               <div className="flex items-start justify-between mb-4">

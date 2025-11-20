@@ -37,6 +37,28 @@ export default function DashboardHSE() {
   const [alerts, setAlerts] = useState<Alert[]>([]);
   const [lastRefresh, setLastRefresh] = useState<Date>(new Date());
 
+  // HSE KPI names for this department
+  const hseKPINames = [
+    'TRIR (Total Recordable Incident Rate)',
+    'LTIFR (Lost Time Injury Frequency Rate)',
+    'PPE Compliance',
+    'Environmental Compliance',
+    'Safety Audit Score',
+    'Safety Training Rate',
+    'Near Miss Rate',
+    'Hazard Identification Rate',
+    'Emergency Preparedness',
+    'Investigation Closure Time'
+  ];
+
+  // Function to show all KPIs for this department
+  const showAllKPIs = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const kpiList = hseKPINames.map((name, i) => `${i + 1}. ${name}`).join('\n');
+    alert(`HSE Department KPIs:\n\n${kpiList}`);
+  };
+
   // Fetch HSE KPIs
   const fetchKPIs = async (isAutoRefresh = false) => {
     try {
@@ -302,6 +324,7 @@ export default function DashboardHSE() {
               key={kpi.name}
               to={`/hse/kpi/${encodeURIComponent(kpi.name)}`}
               className="group"
+              onClick={showAllKPIs}
             >
               <div className={`
                 relative overflow-hidden rounded-2xl p-6 transition-all duration-300

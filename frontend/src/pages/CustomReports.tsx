@@ -377,6 +377,48 @@ const DEPARTMENT_REPORT_TEMPLATES: { [department: string]: ReportTemplate[] } = 
       type: 'compliance',
       metrics: ['security-incidents', 'vulnerabilities', 'patch-compliance', 'access-reviews']
     }
+  ],
+  executive: [
+    {
+      id: 'executive-summary',
+      name: 'Company Executive Summary',
+      description: 'High-level overview of all departments and key business metrics',
+      icon: '📊',
+      type: 'executive',
+      metrics: ['company-health', 'revenue', 'profit-margin', 'employee-engagement']
+    },
+    {
+      id: 'department-performance',
+      name: 'Department Performance Report',
+      description: 'Cross-functional performance analysis across all departments',
+      icon: '🏢',
+      type: 'operational',
+      metrics: ['dept-health-scores', 'kpi-performance', 'goal-attainment', 'trends']
+    },
+    {
+      id: 'strategic-initiatives',
+      name: 'Strategic Initiatives Report',
+      description: 'Progress on strategic goals and company-wide initiatives',
+      icon: '🎯',
+      type: 'operational',
+      metrics: ['initiative-progress', 'milestones', 'risks', 'resources']
+    },
+    {
+      id: 'board-report',
+      name: 'Board Report',
+      description: 'Comprehensive report for board presentations',
+      icon: '👔',
+      type: 'executive',
+      metrics: ['financial-summary', 'growth-metrics', 'market-position', 'risks']
+    },
+    {
+      id: 'risk-assessment',
+      name: 'Enterprise Risk Assessment',
+      description: 'Company-wide risk analysis and mitigation strategies',
+      icon: '⚠️',
+      type: 'compliance',
+      metrics: ['risk-score', 'compliance-status', 'incidents', 'mitigation-plans']
+    }
   ]
 };
 
@@ -391,6 +433,7 @@ const getDepartmentFromPath = (pathname: string): { department: string; backLink
   if (pathname.includes('/supply-chain/')) return { department: 'supply-chain', backLink: '/supply-chain', departmentName: 'Supply Chain' };
   if (pathname.includes('/qc/')) return { department: 'qc', backLink: '/qc', departmentName: 'Quality Control' };
   if (pathname.includes('/administration/')) return { department: 'administration', backLink: '/administration', departmentName: 'Administration' };
+  if (pathname.includes('/executive/')) return { department: 'executive', backLink: '/executive', departmentName: 'Executive' };
   return { department: 'hr', backLink: '/', departmentName: 'HR Analytics' };
 };
 
@@ -503,6 +546,12 @@ const getDepartmentMetrics = (department: string) => {
       { label: 'Helpdesk Response', value: '2.5h', change: '-1.5h', positive: true },
       { label: 'IT Cost/Employee', value: '$4,200', change: '-8%', positive: true },
       { label: 'Ticket Resolution', value: '8h', change: '-4h', positive: true }
+    ],
+    executive: [
+      { label: 'Company Health Score', value: '82%', change: '+5%', positive: true },
+      { label: 'Total Revenue', value: '$87.5M', change: '+4.9%', positive: true },
+      { label: 'Profit Margin', value: '22%', change: '+3%', positive: true },
+      { label: 'Employee Engagement', value: '74%', change: '+2.5%', positive: true }
     ]
   };
   return metricsMap[department] || metricsMap.hr;

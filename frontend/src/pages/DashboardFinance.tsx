@@ -48,6 +48,26 @@ const DashboardFinance: React.FC = () => {
   const [selectedKPI, setSelectedKPI] = useState<KPIResult | null>(null);
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
 
+  // Finance KPI names for this department
+  const financeKPINames = [
+    'Gross Profit Margin',
+    'Net Profit Margin',
+    'Operating Cash Flow Ratio',
+    'Current Ratio',
+    'Quick Ratio',
+    'Return on Assets (ROA)',
+    'Return on Equity (ROE)',
+    'Debt-to-Equity Ratio',
+    'Working Capital Ratio',
+    'EBITDA Margin'
+  ];
+
+  // Function to show all KPIs for this department
+  const showAllKPIs = () => {
+    const kpiList = financeKPINames.map((name, i) => `${i + 1}. ${name}`).join('\n');
+    alert(`Finance Department KPIs:\n\n${kpiList}`);
+  };
+
   useEffect(() => {
     fetchFinanceData();
     const interval = setInterval(fetchFinanceData, 30000); // Refresh every 30 seconds
@@ -222,7 +242,10 @@ const DashboardFinance: React.FC = () => {
           <div
             key={index}
             className={`border-2 rounded-lg p-6 cursor-pointer transition-all hover:scale-105 ${getStatusColor(kpi.status)}`}
-            onClick={() => setSelectedKPI(selectedKPI?.kpiName === kpi.kpiName ? null : kpi)}
+            onClick={() => {
+              showAllKPIs();
+              setSelectedKPI(selectedKPI?.kpiName === kpi.kpiName ? null : kpi);
+            }}
           >
             <div className="flex items-start justify-between mb-2">
               <h3 className="text-sm font-semibold text-gray-300 uppercase tracking-wide flex-1">

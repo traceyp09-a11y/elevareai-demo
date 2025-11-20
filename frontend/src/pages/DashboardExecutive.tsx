@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import {
   TrendingUp, AlertTriangle, Building2, BarChart3, ArrowRight,
   CheckCircle, XCircle, AlertCircle, Activity, Zap, DollarSign,
-  Users, Target, TrendingDown, Sparkles, Brain, ChevronRight
+  Users, Target, TrendingDown, Sparkles, Brain, ChevronRight, FileText
 } from 'lucide-react';
 import {
   CircularProgress,
@@ -567,6 +567,59 @@ const DashboardExecutive: React.FC = () => {
                 <p className="text-gray-500 text-sm mt-2">Try adjusting your filters or search query</p>
               </div>
             )}
+          </div>
+        </div>
+
+        {/* Quick Actions - Custom Reports */}
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-gradient-to-br from-green-500/20 to-emerald-500/20 rounded-xl border border-green-500/30">
+                <FileText className="text-green-400" size={24} />
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold text-white">Executive Reports</h2>
+                <p className="text-sm text-gray-400">Generate comprehensive analytics reports</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <Link
+              to="/executive/reports"
+              className="bg-gradient-to-br from-purple-500/10 via-pink-500/10 to-purple-500/10 border border-purple-500/30 rounded-xl p-6 hover:border-purple-400/60 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-purple-500/20"
+            >
+              <div className="text-3xl mb-3">📊</div>
+              <h3 className="text-lg font-semibold text-white mb-2">Custom Reports</h3>
+              <p className="text-gray-400 text-sm">Generate executive summary and custom reports</p>
+            </Link>
+
+            <Link
+              to="/executive/reports"
+              className="bg-gradient-to-br from-cyan-500/10 to-blue-500/10 border border-cyan-500/30 rounded-xl p-6 hover:border-cyan-400/60 transition-all duration-300 hover:scale-105"
+            >
+              <div className="text-3xl mb-3">📈</div>
+              <h3 className="text-lg font-semibold text-white mb-2">Performance Report</h3>
+              <p className="text-gray-400 text-sm">Company-wide performance metrics</p>
+            </Link>
+
+            <Link
+              to="/executive/reports"
+              className="bg-gradient-to-br from-green-500/10 to-emerald-500/10 border border-green-500/30 rounded-xl p-6 hover:border-green-400/60 transition-all duration-300 hover:scale-105"
+            >
+              <div className="text-3xl mb-3">💰</div>
+              <h3 className="text-lg font-semibold text-white mb-2">Financial Summary</h3>
+              <p className="text-gray-400 text-sm">Financial KPIs and ROI analysis</p>
+            </Link>
+
+            <Link
+              to="/executive/reports"
+              className="bg-gradient-to-br from-orange-500/10 to-red-500/10 border border-orange-500/30 rounded-xl p-6 hover:border-orange-400/60 transition-all duration-300 hover:scale-105"
+            >
+              <div className="text-3xl mb-3">🎯</div>
+              <h3 className="text-lg font-semibold text-white mb-2">Strategic Goals</h3>
+              <p className="text-gray-400 text-sm">Track progress against objectives</p>
+            </Link>
           </div>
         </div>
 

@@ -44,12 +44,35 @@ interface PainPointsResponse {
   pain_points: PainPoint[];
 }
 
+// Sales KPI names for display
+const salesKPINames = [
+  'Win Rate',
+  'Sales Cycle Length',
+  'Pipeline Velocity',
+  'Quota Attainment',
+  'Average Deal Size',
+  'Customer Acquisition Cost (CAC)',
+  'Revenue per Rep',
+  'Forecast Accuracy',
+  'Lead Conversion Rate',
+  'MRR Growth'
+];
+
 export default function DashboardSales() {
   const [kpiData, setKpiData] = useState<KPIResponse | null>(null);
   const [painPointsCount, setPainPointsCount] = useState<number>(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [expandedKPI, setExpandedKPI] = useState<string | null>(null);
+
+  const showAllKPIs = (e?: React.MouseEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    const kpiList = salesKPINames.map((name, i) => `${i + 1}. ${name}`).join('\n');
+    alert(`Sales Department KPIs:\n\n${kpiList}`);
+  };
 
   useEffect(() => {
     fetchKPIs();
@@ -181,7 +204,10 @@ export default function DashboardSales() {
           <div
             key={kpi.key}
             className={`border-2 rounded-lg p-6 cursor-pointer transition-all hover:scale-105 ${getStatusColor(kpi.status)}`}
-            onClick={() => setExpandedKPI(expandedKPI === kpi.key ? null : kpi.key)}
+            onClick={(e) => {
+              showAllKPIs(e);
+              setExpandedKPI(expandedKPI === kpi.key ? null : kpi.key);
+            }}
           >
             {/* Icon and Name */}
             <div className="flex items-center justify-between mb-4">
