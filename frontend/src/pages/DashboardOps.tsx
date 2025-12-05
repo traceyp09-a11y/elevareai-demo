@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { AreaChart, Area, BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
-import DashboardFilters from '../components/DashboardFilters';
 import AlertBanner, { Alert } from '../components/AlertBanner';
 
 interface KPIData {
