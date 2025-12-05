@@ -3719,6 +3719,7 @@ app.get('/api/executive/dashboard', (req: Request, res: Response) => {
     });
 
   } catch (error: any) {
+    console.error('Executive dashboard error:', error.stack);
     res.status(500).json({ success: false, error: error.message });
   }
 });

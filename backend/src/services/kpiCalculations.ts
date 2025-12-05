@@ -264,11 +264,12 @@ export class KPICalculationService {
     `).get(startDate, endDate) as any;
 
     const laborHours = this.db.prepare(`
-      SELECT SUM(total_hours) as hours FROM labor_hours
+      SELECT COALESCE(SUM(total_hours), 0) as hours FROM labor_hours
       WHERE record_date BETWEEN ? AND ?
     `).get(startDate, endDate) as any;
 
-    const trir = (incidents.count * 200000) / laborHours.hours;
+    const totalHours = laborHours.hours || 0;
+    const trir = totalHours > 0 ? (incidents.count * 200000) / totalHours : 0;
 
     // Breakdown by type
     const byType = this.db.prepare(`
@@ -286,13 +287,15 @@ export class KPICalculationService {
     // Cost impact
     const costs = this.db.prepare(`
       SELECT
-        SUM(direct_cost) as direct,
-        SUM(estimated_indirect_cost) as indirect
+        COALESCE(SUM(direct_cost), 0) as direct,
+        COALESCE(SUM(estimated_indirect_cost), 0) as indirect
       FROM safety_incidents
       WHERE incident_date BETWEEN ? AND ?
     `).get(startDate, endDate) as any;
 
-    const totalSafetyCost = costs.direct + costs.indirect;
+    const directCosts = costs.direct || 0;
+    const indirectCosts = costs.indirect || 0;
+    const totalSafetyCost = directCosts + indirectCosts;
 
     return {
       value: trir,
@@ -301,20 +304,20 @@ export class KPICalculationService {
         formula: 'TRIR = (Number of Recordable Incidents × 200,000) / Total Hours Worked',
         components: {
           recordableIncidents: incidents.count,
-          totalHours: laborHours.hours,
+          totalHours: totalHours,
           trir: trir,
           byType: typeBreakdown,
-          directCosts: costs.direct,
-          indirectCosts: costs.indirect,
+          directCosts: directCosts,
+          indirectCosts: indirectCosts,
           totalCost: totalSafetyCost,
           period: `${startDate} to ${endDate}`
         },
         steps: [
           `Step 1: Count recordable incidents = ${incidents.count}`,
-          `Step 2: Sum total labor hours = ${laborHours.hours.toLocaleString()}`,
-          `Step 3: Calculate TRIR = (${incidents.count} × 200,000) / ${laborHours.hours.toLocaleString()} = ${trir.toFixed(2)}`,
-          `Step 4: Direct costs = $${costs.direct.toLocaleString()}`,
-          `Step 5: Indirect costs (estimated) = $${costs.indirect.toLocaleString()}`,
+          `Step 2: Sum total labor hours = ${totalHours.toLocaleString()}`,
+          `Step 3: Calculate TRIR = (${incidents.count} × 200,000) / ${totalHours.toLocaleString()} = ${trir.toFixed(2)}`,
+          `Step 4: Direct costs = $${directCosts.toLocaleString()}`,
+          `Step 5: Indirect costs (estimated) = $${indirectCosts.toLocaleString()}`,
           `Step 6: Total safety cost = $${totalSafetyCost.toLocaleString()}`
         ]
       },
@@ -328,7 +331,7 @@ export class KPICalculationService {
   // 6. Absenteeism Rate
   calculateAbsenteeismRate(startDate: string, endDate: string): KPIResult {
     const absences = this.db.prepare(`
-      SELECT SUM(hours_missed) / 8.0 as days FROM absences
+      SELECT COALESCE(SUM(hours_missed) / 8.0, 0) as days FROM absences
       WHERE absence_date BETWEEN ? AND ?
     `).get(startDate, endDate) as any;
 
@@ -343,7 +346,8 @@ export class KPICalculationService {
     const workDays = Math.floor(daysDiff * (5/7)); // Approximate work days
 
     const totalAvailableDays = avgEmployees.count * workDays;
-    const absenteeismRate = (absences.days / totalAvailableDays) * 100;
+    const absentDays = absences.days || 0;
+    const absenteeismRate = totalAvailableDays > 0 ? (absentDays / totalAvailableDays) * 100 : 0;
 
     // Breakdown by type
     const byType = this.db.prepare(`
@@ -355,16 +359,17 @@ export class KPICalculationService {
 
     const typeBreakdown: { [key: string]: any } = {};
     (byType as any[]).forEach(t => {
+      const typeDays = t.days || 0;
       typeBreakdown[t.absence_type] = {
         count: t.count,
-        days: parseFloat(t.days.toFixed(1)),
-        percentage: ((t.days / absences.days) * 100).toFixed(1)
+        days: parseFloat(typeDays.toFixed(1)),
+        percentage: absentDays > 0 ? ((typeDays / absentDays) * 100).toFixed(1) : '0.0'
       };
     });
 
     // Cost calculation
     const avgDailyWage = 185; // Estimate based on workforce mix
-    const directCost = absences.days * avgDailyWage;
+    const directCost = absentDays * avgDailyWage;
     const productivityLoss = directCost * 0.20;
     const overtimePremium = directCost * 0.30;
     const totalCost = directCost + productivityLoss + overtimePremium;
@@ -378,7 +383,7 @@ export class KPICalculationService {
           totalEmployees: avgEmployees.count,
           workDaysInPeriod: workDays,
           totalAvailableDays: totalAvailableDays,
-          absentDays: parseFloat(absences.days.toFixed(1)),
+          absentDays: parseFloat(absentDays.toFixed(1)),
           absenteeismRate: absenteeismRate,
           byType: typeBreakdown,
           costImpact: {
@@ -392,8 +397,8 @@ export class KPICalculationService {
         steps: [
           `Step 1: Calculate work days in period = ${workDays} days`,
           `Step 2: Total available work days = ${avgEmployees.count} employees × ${workDays} days = ${totalAvailableDays.toLocaleString()} days`,
-          `Step 3: Sum absent days = ${absences.days.toFixed(1)} days`,
-          `Step 4: Absenteeism rate = (${absences.days.toFixed(1)} / ${totalAvailableDays.toLocaleString()}) × 100 = ${absenteeismRate.toFixed(2)}%`,
+          `Step 3: Sum absent days = ${absentDays.toFixed(1)} days`,
+          `Step 4: Absenteeism rate = (${absentDays.toFixed(1)} / ${totalAvailableDays.toLocaleString()}) × 100 = ${absenteeismRate.toFixed(2)}%`,
           `Step 5: Calculate cost impact = $${totalCost.toLocaleString()}`
         ]
       },
